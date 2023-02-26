@@ -1,0 +1,56 @@
+/* .inputs {
+  display: flex;
+  padding: 10px;
+  width: 100%;
+} */
+
+.inputs > div > select {
+  border-radius: 0px;
+  border: 1px solid var(--grey);
+  padding: 10px;
+  max-width: 300px;
+  margin-top: 10px;
+}
+
+.categoriesContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  /* flex-wrap: wrap; */
+
+
+}
+.categoriesContainer > select > option {
+  padding: 10px;
+  color: rgb(0, 0, 0);
+  background-color: rgb(255, 255, 255);
+}
+.categoriesContainer > select {
+  margin: 10px;
+  border-radius: 0px;
+  border: 1px solid var(--grey);
+  padding: 10px;
+  max-width: 300px;
+}
+
+@media only screen and (max-width: 600px) {
+  .inputs {
+    width: 100%;
+    overflow: hidden;
+  }
+  .categoriesContainer {
+    /* width: 100%; */
+    display: flex;
+    overflow: scroll;
+    justify-content: flex-start;
+    /* max-width: 100px;  */
+    /* background-color: rgb(153, 16, 16); */
+  }
+}
+
+
+.categoriesContainer::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
+}

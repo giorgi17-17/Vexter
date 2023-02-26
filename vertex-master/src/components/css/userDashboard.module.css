@@ -1,0 +1,16 @@
+.container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .btn  {
+    padding: 10px 20px;
+    background-color: var(--orange);
+    border: none;
+    border-radius: 0px;
+    margin: 10px 0;
+    color: white;
+  }

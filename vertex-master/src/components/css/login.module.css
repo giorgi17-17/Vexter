@@ -1,0 +1,40 @@
+.container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+
+.btn {
+    padding: 10px 20px;
+    background-color: var(--orange);
+    border: none;
+    border-radius: 0px;
+    margin: 10px 0;
+}
+.container > form > div {
+    margin: 10px 0px;
+}
+.container > form > div >label  {
+    display: block;
+    /* margin: 10px 0px; */
+    /* background-color: aqua; */
+}
+
+.container > form > div > input {
+    border-radius: 0px;
+    border: 1px solid var(--grey);
+    padding: 10px;
+    width: 300px;
+}
+
+.location > select {
+    border-radius: 0px;
+    border: 1px solid var(--grey);
+    padding: 10px;
+    max-width: 300px;
+    margin-top: 10px;
+}
+

@@ -1,0 +1,17 @@
+/* .nav_active {
+    font-weight: 900;
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    background-color: var(--orange);
+} */
+
+.nav_item {
+    /* text-decoration: none; */
+    color: rgb(0, 0, 0);
+    
+}
+
+
+.footer {
+    height: 50vh;
+}
