@@ -16,7 +16,6 @@ const FavoriteProducts = () => {
         <div>
           {favoriteItems.map((item, i) => {
             const productQuantity = getPoductQuantity(item.id);
-            console.log(item.size);
             return (
               <div className={styles.productContainer} key={i}>
                 <Link
