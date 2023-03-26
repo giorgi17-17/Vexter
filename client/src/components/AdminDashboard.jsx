@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styles from "../components/css/adminDashboard.module.css";
+import styles from "./css/adminDashboard.module.css";
 import { UserAuth } from "../Context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import AddProduct from "./AddProduct";
@@ -25,13 +25,11 @@ const AdminDashboard = () => {
   const { setStoreLocation, getStoreLocation } = ShoppingCart();
 
   const navigate = useNavigate();
-  useEffect(()=>{
-
-    
-    if(!user) {
-      navigate('/login')
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
     }
-  },[navigate,user])
+  }, [navigate, user]);
 
   useEffect(() => {
     let storeName;
@@ -153,8 +151,12 @@ const AdminDashboard = () => {
                   <p>{getStoreLocation || "ლოკაცია"}</p>
                 </div>
                 <div className={styles.additionalInfo}>
-                  <Link className={styles.link} to="/storeInfo">დამატებითი ინფორმაცია</Link>
-                  <Link className={styles.link} to="/orders">შეკვეთები</Link>
+                  <Link className={styles.link} to="/storeInfo">
+                    დამატებითი ინფორმაცია
+                  </Link>
+                  <Link className={styles.link} to="/orders">
+                    შეკვეთები
+                  </Link>
                 </div>
               </div>
               <div className={styles.btn}>

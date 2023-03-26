@@ -2,7 +2,7 @@ import React from "react";
 import { UserAuth } from "../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import AdminDashboard from "./AdminDashboard";
-import styles from "../components/css/userDashboard.module.css";
+import styles from "./css/userDashboard.module.css";
 
 const UserDashboard = ({ user }) => {
   const navigate = useNavigate();
@@ -30,8 +30,10 @@ const UserDashboard = ({ user }) => {
             <p>Orders</p>
             <p>Return an item</p>
           </div>
-          <div >
-            <button className={styles.btn} onClick={handleLogOut}>Sign out</button>
+          <div>
+            <button className={styles.btn} onClick={handleLogOut}>
+              Sign out
+            </button>
           </div>
         </div>
       )}

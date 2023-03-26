@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { UserAuth } from "../Context/AuthContext";
-import styles from "../components/css/account.module.css";
+import styles from "./css/account.module.css";
 import { db } from "../firebase/firebase";
 import uniqid from "uniqid";
 import {

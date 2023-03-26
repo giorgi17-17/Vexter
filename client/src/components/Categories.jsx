@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import styles from "../components/css/categories.module.css";
+import styles from "./css/categories.module.css";
 
 import { db } from "../firebase/firebase";
 import {
@@ -42,7 +42,6 @@ const Categories = ({ setProducts }) => {
     if (thirdPath)
       q = query(q, where("category.subType", "==", `${thirdPath}`));
 
-
     if (sortBy === "asc" || sortBy === "desc") {
       if (sortBy) q = query(q, orderBy("price", `${sortBy}`));
     } else if (sortBy === "axali") {
@@ -83,7 +82,6 @@ const Categories = ({ setProducts }) => {
       <select
         onChange={(e) => {
           setSortBy(e.target.value);
-        
         }}
       >
         <option value="">Sort By</option>

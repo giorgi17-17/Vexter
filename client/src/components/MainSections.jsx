@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../components/css/mainSections.module.css";
+import styles from "./css/mainSections.module.css";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { ShoppingCart } from "../Context/CartContext";
 import { useEffect, useState } from "react";
@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 const MainSections = ({ type }) => {
   const [products, setProducts] = useState([]);
   const { firstPath } = ShoppingCart();
-  
+
   const localgender = localStorage.getItem("gender");
 
   if (localgender) {
@@ -41,7 +41,7 @@ const MainSections = ({ type }) => {
     return () => {
       getProducts();
     };
-  }, [localgender,path, type]);
+  }, [localgender, path, type]);
 
   var gender;
   if (firstPath === "man") {
@@ -64,9 +64,11 @@ const MainSections = ({ type }) => {
   return (
     <div className={styles.container}>
       <div className={styles.sectionName}>
-        <p>{gender} {apperelType}</p>
+        <p>
+          {gender} {apperelType}
+        </p>
         <Link className={styles.seeMore} to={`/${path}/${type}`}>
-        მეტის ნახვა
+          მეტის ნახვა
         </Link>
       </div>
       <div className={styles.products}>

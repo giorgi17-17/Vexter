@@ -1,4 +1,4 @@
-import styles from "../components/css/product.module.css";
+import styles from "./css/product.module.css";
 import { AiOutlineCheck, AiOutlineHeart } from "react-icons/ai";
 // import { ShoppingCart } from "../Context/CartContext";
 import { Link, useLocation } from "react-router-dom";
@@ -12,7 +12,7 @@ const Product = ({ title, name, img, price, id, storeLocation, size }) => {
   const productQuantity = getFavoritesQuantity(id);
   // console.log(items)
 
-  const eventClick = (title,price,img) => {
+  const eventClick = (title, price, img) => {
     ReactGA.event({
       category: "favotites",
       action: "added to favotites",
@@ -60,7 +60,7 @@ const Product = ({ title, name, img, price, id, storeLocation, size }) => {
                   <div
                     onClick={() => {
                       addOneToFavorites(id, title, img, price, name, size);
-                      eventClick(title,price,img);
+                      eventClick(title, price, img);
                     }}
                     className={styles.addIcon}
                   >

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 // import { useRef } from "react";
 import "../App.css";
-import styles from "../components/css/imageCarousel.module.css";
+import styles from "./css/imageCarousel.module.css";
 
 const ImageCarousel = ({ images }) => {
   const [mainImage, setMainImage] = useState(images[0]);
