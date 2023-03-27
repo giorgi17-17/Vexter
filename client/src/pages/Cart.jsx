@@ -20,7 +20,7 @@ const Cart = () => {
   },[link])
 
   const handleSendInfo = async () => {
-    await fetch("http://localhost:4000/checkout", {
+    await fetch("https://vexter.onrender.com/checkout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
