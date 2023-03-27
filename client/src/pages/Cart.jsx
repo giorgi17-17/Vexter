@@ -15,7 +15,8 @@ const Cart = () => {
     // navigate(link);
     if(link) {
 
-      window.open(link);
+      // window.open(link);
+      window.location.href = link
     }
   },[link])
 
