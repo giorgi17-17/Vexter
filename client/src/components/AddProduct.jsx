@@ -137,7 +137,7 @@ const AddProduct = () => {
         transition={Slide}
       />
       <div className={styles.inputs}>
-        <label>Title</label>
+        <label>დასახელება</label>
         <input
           type="text"
           placeholder="title"
@@ -146,7 +146,7 @@ const AddProduct = () => {
           }}
           value={title}
         />
-        <label>Choose Images</label>
+        <label>სურათის ატვირთვა</label>
         <input
           onChange={(event) => {
             setImageUpload(event.target.files);
@@ -157,7 +157,7 @@ const AddProduct = () => {
           multiple
         />
 
-        <label>Price</label>
+        <label>ფასი</label>
         <input
           type="number"
           placeholder="price"
@@ -166,7 +166,7 @@ const AddProduct = () => {
           }}
           value={price}
         />
-        <label>quantity</label>
+        <label>რაოდენობა</label>
         <input
           type="number"
           placeholder="quantity"
@@ -175,59 +175,26 @@ const AddProduct = () => {
           }}
           value={quantity}
         />
-        <label>Categories</label>
+        <label>კატეგორიები</label>
         <div className={styles.categoriesContainer}>
           <select
             onChange={(e) => {
               setType(e.target.value);
             }}
           >
-            <option value="type">Type</option>
-            <option value="clothe">Clothe</option>
-            <option value="shoe">Shoe</option>
-            <option value="bags">Bags</option>
-            <option value="accessories">Accessories</option>
+            <option value="type">კატეგორია</option>
+            <option value="clothe">ტანსაცმელი</option>
+            <option value="shoe">ფეხსაცმელი</option>
+            <option value="bags">ჩანთა</option>
+            <option value="accessories">აქსესუარები</option>
           </select>
-          <select
-            onChange={(e) => {
-              setBrand(e.target.value);
-            }}
-          >
-            <option value="brand">Brand</option>
-            <option value="nike">Nike</option>
-            <option value="addidas">Adiddas</option>
-            <option value="puma">Puma</option>
-            <option value="hand-made">Hand made</option>
-            <option value="New Balance">New Balance</option>
-          </select>
-          <select
-            onChange={(e) => {
-              setColor(e.target.value);
-            }}
-          >
-            <option value="color">Color</option>
-            <option value="white">White</option>
-            <option value="red">Red</option>
-            <option value="blue">Blue</option>
-          </select>
-          <select
-            onChange={(e) => {
-              setGender(e.target.value);
-            }}
-          >
-            <option value="gender">Gender</option>
-            <option value="man">Man</option>
-            <option value="woman">Woman</option>
-            <option value="kids">Kids</option>
-          </select>
-
           {type === "shoe" ? (
             <select
               onChange={(e) => {
                 setSubType(e.target.value);
               }}
             >
-              <option value="subType">Sub Type</option>
+              <option value="subType">ქვე კატეგორია</option>
               <option value="sneakers">Sneakers</option>
               <option value="boots">Boots</option>
               <option value="loafers">Loafers</option>
@@ -238,7 +205,7 @@ const AddProduct = () => {
                 setSubType(e.target.value);
               }}
             >
-              <option value="subType">Sub Type</option>
+              <option value="subType">ქვე კატეგორია</option>
               <option value="shirt">Shirt</option>
               <option value="sweater">Sweater</option>
               <option value="jeans">Jeans</option>
@@ -249,8 +216,8 @@ const AddProduct = () => {
                 setSubType(e.target.value);
               }}
             >
-              <option value="subType">Sub Type</option>
-              <option value="handMade">Hand Made</option>
+              <option value="subType">ქვე კატეგორია</option>
+              <option value="handMade">ხელნაკეთი</option>
               <option value="Zara">Zara</option>
               <option value="Nike">Nike</option>
             </select>
@@ -260,9 +227,47 @@ const AddProduct = () => {
                 setSubType(e.target.value);
               }}
             >
-              <option value="subType">Sub Type</option>
+              <option value="subType">ქვე კატეგორია</option>
             </select>
           )}
+          <select
+            onChange={(e) => {
+              setBrand(e.target.value);
+            }}
+          >
+            <option value="brand">ბრენდი</option>
+            <option value="nike">Nike</option>
+            <option value="addidas">Adiddas</option>
+            <option value="puma">Puma</option>
+            <option value="hand-made">ხელნაკეთი</option>
+            <option value="New Balance">New Balance</option>
+          </select>
+          <select
+            onChange={(e) => {
+              setColor(e.target.value);
+            }}
+          >
+            <option value="color">ფერი</option>
+            <option value="white">თეთრი</option>
+            <option value="red">წითელი</option>
+            <option value="blue">ლურჯი</option>
+            <option value="black">შავი</option>
+            <option value="yellow">ყვითელი</option>
+            <option value="orange">ნარინჯისფერი</option>
+            <option value="green">მწვანე</option>
+          </select>
+          <select
+            onChange={(e) => {
+              setGender(e.target.value);
+            }}
+          >
+            <option value="gender">სქესი</option>
+            <option value="man">კაცი</option>
+            <option value="woman">ქალი</option>
+            <option value="kids">ბავშვი</option>
+          </select>
+
+          
 
           {type !== "shoe" ? (
             <select

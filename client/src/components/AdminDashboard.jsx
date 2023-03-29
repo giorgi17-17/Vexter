@@ -78,7 +78,6 @@ const AdminDashboard = () => {
       unsubb();
     };
   }, [setStoreLocation, user]);
-  // console.log(location);
 
   const handleLogOut = async () => {
     try {
@@ -170,9 +169,15 @@ const AdminDashboard = () => {
               {store.map((item, i) => {
                 return (
                   <div key={i} className={styles.prodContainer}>
-                    <div className={styles.image}>
-                      <img src={item.image} alt="" />
-                    </div>
+                    <Link
+                      className={styles.imageContainer}
+                      to={`/detail/${item.id}`}
+                    >
+                      <div className={styles.image}>
+                        <img src={item.image} alt="" />
+                      </div>
+                    </Link>
+
                     <div className={styles.info}>
                       <div className={styles.upPart}>
                         <div className={styles.left}>

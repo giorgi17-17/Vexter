@@ -19,15 +19,23 @@ const Categories = ({ setProducts }) => {
   const [size, setSize] = useState("");
   // const [price, setPrice] = useState("");
   const [subType, setSubType] = useState("");
-  const [gender, setGender] = useState("");
+  // const [gender, setGender] = useState("");
   const [sortBy, setSortBy] = useState("");
   // const [name, setName] = useState("");
+  const gender = localStorage.getItem("gender");
+  if (gender) {
+    //'splited' make gender to array and removes first and last charaqter
+    const splited = gender.split("").slice(1, -1);
+    //'path' joins array items into string
+    var path = splited.join("");
+  }
+
 
   //   const [products, setProducts] = useState([]);
   //   console.log(products)
   useEffect(() => {
     const collRef = collection(db, "products");
-    setGender(firstPath);
+    // setGender(firstPath);
     setType(secondPath);
     let q = query(collRef);
     if (subType !== "")
@@ -35,12 +43,17 @@ const Categories = ({ setProducts }) => {
     if (brand !== "") q = query(q, where("category.brand", "==", `${brand}`));
     // if (price !== "") q = query(q, where("price", "==", `${price}`));
     if (size !== "") q = query(q, where("category.size", "==", `${size}`));
-    if (type !== "") q = query(q, where("category.type", "==", `${type}`));
+    // if (type !== "") q = query(q, where("category.type", "==", `${type}`));
     if (color !== "") q = query(q, where("category.color", "==", `${color}`));
-    if (gender !== "")
-      q = query(q, where("category.gender", "==", `${gender}`));
-    if (thirdPath)
-      q = query(q, where("category.subType", "==", `${thirdPath}`));
+    if (path !== "")
+      q = query(q, where("category.gender", "==", `${path}`));
+
+      if (firstPath === "man" || firstPath === "woman" || firstPath === "kids") {
+        if (type !== "") q = query(q, where("category.type", "==", `${type}`));
+      }
+
+    // if (thirdPath)
+    //   q = query(q, where("category.subType", "==", `${thirdPath}`));
 
     if (sortBy === "asc" || sortBy === "desc") {
       if (sortBy) q = query(q, orderBy("price", `${sortBy}`));
@@ -73,7 +86,8 @@ const Categories = ({ setProducts }) => {
     // price,
     firstPath,
     secondPath,
-    gender,
+    // gender,
+    path,
     type,
     thirdPath,
   ]);
@@ -84,7 +98,7 @@ const Categories = ({ setProducts }) => {
           setSortBy(e.target.value);
         }}
       >
-        <option value="">Sort By</option>
+        <option value="">დალაგება</option>
         <option id="priceUp" value="asc">
           ფასი ზრდადი
         </option>
@@ -98,6 +112,18 @@ const Categories = ({ setProducts }) => {
           ძველი
         </option>
       </select>
+      {thirdPath === undefined ? (
+        <select
+          onChange={(e) => {
+            setSubType(e.target.value);
+          }}
+        >
+          <option value="">ქვე კატეგორია</option>
+          <option value="shirt">Shirt</option>
+          <option value="sweater">Sweater</option>
+          <option value="jeans">Jeans</option>
+        </select>
+      ) : null}
       <select
         onChange={(e) => {
           setBrand(e.target.value);
@@ -120,18 +146,7 @@ const Categories = ({ setProducts }) => {
         <option value="red">Red</option>
         <option value="blue">Blue</option>
       </select>
-      {thirdPath === undefined ? (
-        <select
-          onChange={(e) => {
-            setSubType(e.target.value);
-          }}
-        >
-          <option value="">Sub Type</option>
-          <option value="shirt">Shirt</option>
-          <option value="sweater">Sweater</option>
-          <option value="jeans">Jeans</option>
-        </select>
-      ) : null}
+      
 
       {secondPath !== "shoe" ? (
         <select

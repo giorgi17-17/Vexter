@@ -23,9 +23,9 @@ app.post("/checkout", (req, res) => {
     apiSecret: process.env.API_SECRET,
     data: {
       amount: req.body.item,
-      currency: "USD",
-      callback: "https://corp.com/success_callback",
-      callbackError: "https://corp.com/fail_url",
+      currency: "GEL",
+      callback: "https://vertex-ecommerce.web.app",
+      callbackError: "https://vertex-ecommerce.web.app/cart",
       preauthorize: false,
       lang: "EN",
       hookUrl: "https://corp.com/payze_hook?authorization_token=token",

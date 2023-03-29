@@ -10,6 +10,7 @@ const Main = () => {
         <Baner />
       </div>
       <div className={styles.productsList}>
+        <MainSections type="bags" />
         <MainSections type="shoe" />
         <MainSections type="clothe" />
       </div>

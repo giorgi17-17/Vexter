@@ -1,26 +1,38 @@
 import { ShoppingCart } from "../Context/CartContext";
+
 // import Product from "../components/Product";
 import styles from "../components/css/cart.module.css";
 import { useEffect, useState } from "react";
 // import { Link } from "react-router-dom";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const Cart = () => {
   const { items, deleteOneFromCart, totalAmount, cost, delivery } =
     ShoppingCart();
   const [link, setLink] = useState("");
+  let [loading, setLoading] = useState(false);
+  let [open, setOpen] = useState(false);
+
+  const override = {
+    display: "block",
+    margin: "0 auto",
+    borderColor: "red",
+  };
 
   useEffect(() => {
-  //  redirect("/login");
-  //  window.location.href = link
+    //  redirect("/login");
+    //  window.location.href = link
     // navigate(link);
-    if(link) {
-
+    if (link) {
       // window.open(link);
-      window.location.href = link
+      window.location.href = link;
     }
-  },[link])
+    // setOpen(false);
+  }, [link, open]);
 
   const handleSendInfo = async () => {
+    setOpen(true)
+    setLoading(true);
     await fetch("https://vexter.onrender.com/checkout", {
       method: "POST",
       headers: {
@@ -38,13 +50,23 @@ const Cart = () => {
       .catch((error) => {
         console.log(error);
       });
-
-  
   };
 
   //
   return (
     <div className={styles.container}>
+      {open && (
+        <div className={styles.spinner}>
+          <ClipLoader
+            color="#ffffff"
+            loading={loading}
+            cssOverride={override}
+            size={150}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
+      )}
       {items.length > 0 ? (
         <div className={styles.cartCont}>
           <div className={styles.cartProducts}>

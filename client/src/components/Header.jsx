@@ -1,7 +1,7 @@
 import { CgProfile } from "react-icons/cg";
 import { AiOutlineHeart } from "react-icons/ai";
 import { BiMenuAltRight } from "react-icons/bi";
-// import { IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowDown } from "react-icons/io";
 import { BsBag } from "react-icons/bs";
 import { VscClose } from "react-icons/vsc";
 
@@ -11,22 +11,22 @@ import { Link, NavLink } from "react-router-dom";
 import "./css/head.css";
 import "../App.css";
 import { ShoppingCart } from "../Context/CartContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Favorites } from "../Context/FavoritesContext";
 // import ReactGA from "react-ga"
-
+import { useLocation } from "react-router-dom";
 const nav_link = [
   {
     path: "man",
-    display: "Man",
+    display: "კაცი",
   },
   {
     path: "woman",
-    display: "Woman",
+    display: "ქალი",
   },
   {
     path: "kids",
-    display: "Kids",
+    display: "ბავშვი",
   },
 ];
 
@@ -35,6 +35,11 @@ const Header = () => {
   const { favoriteItems } = Favorites();
 
   const [open, setOpen] = useState(false);
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    setOpen(() => !open); // close menu if path changes!
+  }, [pathname]);
 
   const hamburgerIcon = (
     <BiMenuAltRight
@@ -74,79 +79,131 @@ const Header = () => {
   let apparelTypes = [
     {
       path: `${path}/clothe`,
-      display: "Clothing",
+      display: "ტანსაცმელი",
       subMenu: [
         {
-          title: "T-shirt",
+          title: "მაისური",
           path: "t-shirt",
         },
         {
-          title: "Shirt",
+          title: "პერანგი",
           path: "shirt",
         },
         {
-          title: "Jeans",
+          title: "ჯინსი",
           path: "jeans",
         },
         {
-          title: "Shorts",
+          title: "შორტები",
           path: "shorts",
         },
         {
-          title: "Sweater",
+          title: "სვიტრი",
           path: "sweater",
         },
         {
-          title: "Hoodies",
+          title: "ჰუდი",
           path: "hoodies",
         },
         {
-          title: "Jackets",
+          title: "ჟაკეტი",
           path: "jackets",
         },
         {
-          title: "Trousers",
+          title: "შარვალი",
           path: "trousers",
         },
         {
-          title: "Shorts",
-          path: "shorts",
+          title: "ქურტუკი",
+          path: "coat",
+        },
+        {
+          title: "ჯემპრი",
+          path: "sweatshirts",
         },
       ],
     },
     {
       path: `${path}/shoe`,
-      display: "Shoes",
+      display: "ფეხსაცმელი",
       subMenu: [
         {
-          title: "Sneakers",
+          title: "სპორტული/კედი",
           path: "sneakers",
         },
         {
-          title: "Boots",
+          title: "ბათინკი",
           path: "boots",
         },
         {
-          title: "Loafers",
+          title: "კლასიკური",
+          path: "clasicShoes",
+        },
+        {
+          title: "ყოველდღიური",
+          path: "dailyShoes",
+        },
+        {
+          title: "სანდალი/ჩუსტი",
           path: "loafers",
         },
       ],
     },
     {
       path: `${path}/sport`,
-      display: "Sports",
-    },
-    {
-      path: `${path}/streetwear`,
-      display: "Streetwear",
+      display: "სპორტული",
+      subMenu: [
+        {
+          title: "სპორტული მაისური",
+          path: "sportsShirts",
+        },
+        {
+          title: "სპორტული შარვალი",
+          path: "sportsTrousers",
+        },
+        {
+          title: "სპორტული ჟაკეტი",
+          path: "sportsJacket",
+        },
+        {
+          title: "სპორტული ფეხსაცმელი",
+          path: "sportsShoes",
+        },
+      ],
     },
     {
       path: `${path}/accessories`,
-      display: "Accessories",
-    },
-    {
-      path: `${path}/sale`,
-      display: "Sale %",
+      display: "აქსესუარები",
+      subMenu: [
+        {
+          title: "ჩანთა",
+          path: "sportsShoes",
+        },
+        {
+          title: "შარფი",
+          path: "sportsShoes",
+        },
+        {
+          title: "წინდები",
+          path: "sportsShoes",
+        },
+        {
+          title: "ხელთათმანი",
+          path: "sportsShoes",
+        },
+        {
+          title: "სამაჯური",
+          path: "sportsShoes",
+        },
+        {
+          title: "ქუდი",
+          path: "sportsShoes",
+        },
+        {
+          title: "ქამარი",
+          path: "sportsShoes",
+        },
+      ],
     },
   ];
 
@@ -162,17 +219,18 @@ const Header = () => {
 
   return (
     <div className={styles.container}>
+      <div className={styles.demo}>საიტი არის ტესტირების რეჟიმში</div>
       {open && (
         <div className={styles.sideBar}>
           <div className={styles.topBar}>
-            <h5>Browse by category</h5>
+            {/* <h5>დაყავი კატეგორიებად</h5> */}
             <div className={styles.closeIcon}>
               {open ? closeIcon : hamburgerIcon}
             </div>
           </div>
           <div className={styles.gendreButtons}>
             {nav_link.map((item, i) => (
-              <button key={i} className={styles.nav_item} >
+              <button key={i} className={styles.nav_item}>
                 <NavLink
                   to={item.path}
                   className={(navClass) =>
@@ -191,30 +249,30 @@ const Header = () => {
             {apparelTypes.map((item, i) => {
               return (
                 <div key={i} className={styles.nav_items}>
-                  <div className={styles.linkk} >
+                  <div className={styles.mobileCat}>
                     <Link className={styles.link} to={item.path}>
                       {item.display}
                     </Link>
-                    {/* <span>
-                      <IoIosArrowDown />
-                    </span> */}
+                    <span className={styles.arrowDown}>
+                      <IoIosArrowDown size={"1.5rem"} />
+                    </span>
                   </div>
-                  <div>
-                    {/* {item.subMenu
-                    ? item.subMenu.map((e, i) => {
-                        // console.log(e.title)
-                        return (
-                          <div className={styles.items} key={i}>
-                            <Link
-                              className={styles.linkItems}
-                              to={`${item.path}/${e.path}`}
-                            >
-                              <p>{e.title}</p>
-                            </Link>
-                          </div>
-                        );
-                      }) 
-                    : null} */}
+                  <div className={styles.mobileItemsCont}>
+                    {item.subMenu
+                      ? item.subMenu.map((e, i) => {
+                          // console.log(e.title)
+                          return (
+                            <div className={styles.items} key={i}>
+                              <Link
+                                className={styles.linkItems}
+                                to={`${item.path}/${e.path}`}
+                              >
+                                <p>{e.title}</p>
+                              </Link>
+                            </div>
+                          );
+                        })
+                      : null}
                   </div>
                 </div>
               );
@@ -277,8 +335,8 @@ const Header = () => {
         <div className={styles.categories}>
           {apparelTypes.map((item, i) => {
             return (
-              <div key={i} className={styles.nav_items}>
-                <div className={styles.link}>
+              <div key={i} className={styles.appaerlItems}>
+                <div className={styles.apparelCategories}>
                   <Link className={styles.link} to={item.path}>
                     {item.display}
                   </Link>
@@ -305,13 +363,13 @@ const Header = () => {
           })}
         </div>
 
-        <div className={styles.search}>
+        {/* <div className={styles.search}>
           <input
             className={styles.searchBar}
             type="text"
             placeholder="Search"
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );

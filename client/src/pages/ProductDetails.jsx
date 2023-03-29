@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { db } from "../firebase/firebase";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import styles from "../components/css/productDetails.module.css";
@@ -65,6 +65,10 @@ const Productdetails = () => {
                 <p className={styles.price}>₾ {item.price}</p>
                 <p className={styles.color}>ფერი: {item.category.color}</p>
                 <p className={styles.color}>ზომა: {item.category.size}</p>
+                <Link className={styles.link} to={`/storepage/${item.name}`}>
+                <p className={styles.color}>მაღაზია: {item.name}</p>
+                </Link>
+                
               </div>
               {/* <div className={styles.input}>
                 {!size && <p className={styles.sizeError}>{error}</p>}

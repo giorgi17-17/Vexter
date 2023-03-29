@@ -52,20 +52,22 @@ const MainSections = ({ type }) => {
     gender = "ბავშვის";
   }
 
-  var apperelType;
+  var apparelType;
   if (type === "shoe") {
-    apperelType = "ფეხსაცმელი";
+    apparelType = "ფეხსაცმელი";
   } else if (type === "clothe") {
-    apperelType = "ტანსაცმელი";
+    apparelType = "ტანსაცმელი";
   } else if (type === "sport") {
-    apperelType = "სპორტული ჩასაცმელი";
+    apparelType = "სპორტული ჩასაცმელი";
+  }else if(type === "bags") {
+    apparelType = "ჩანთები";
   }
 
   return (
     <div className={styles.container}>
       <div className={styles.sectionName}>
         <p>
-          {gender} {apperelType}
+          {gender} {apparelType}
         </p>
         <Link className={styles.seeMore} to={`/${path}/${type}`}>
           მეტის ნახვა

@@ -5,7 +5,6 @@
     flex-direction: column  ;
 }
 
-
 .productsTrue {
     position: relative;
     display: flex;
@@ -32,4 +31,9 @@
     position: absolute;
     top: -30px;
     left: 30px;
+}
+
+.container > h1 {
+    margin-bottom: 30px;
+    font-size: 50px;
 }

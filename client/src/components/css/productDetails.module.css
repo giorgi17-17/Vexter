@@ -146,6 +146,12 @@
   align-items: center;justify-content: space-between;
 }
 
+.link {
+  color: black;
+}
+.link:hover {
+  color: var(--brightOrange);
+}
 
 @media only screen and (max-width: 600px) {
   .cont {
