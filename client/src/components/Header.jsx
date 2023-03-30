@@ -38,7 +38,7 @@ const Header = () => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    setOpen(() => !open); // close menu if path changes!
+    setOpen(() => false); // close menu if path changes!
   }, [pathname]);
 
   const hamburgerIcon = (
