@@ -5,6 +5,10 @@ import styles from "../components/css/cart.module.css";
 import { useEffect, useState } from "react";
 // import { Link } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
+
+if(!localStorage.getItem("transactionId")){
+  localStorage.setItem("transactionId", JSON.stringify([]));
+}
 const tra = JSON.parse(localStorage.getItem("transactionId") || "");
 
 const Cart = () => {
@@ -102,7 +106,7 @@ const Cart = () => {
         setTransactionId(data.transactionUrl.transactionId);
         setCartItemsToChange(data.cartItems);
         // setCartItemsToChange()
-        console.log(data);
+        // console.log(data);
       })
       .catch((error) => {
         console.log(error);

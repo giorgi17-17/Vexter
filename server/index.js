@@ -79,6 +79,7 @@ app.post("/cart", (req, res) => {
       // console.log(req.body.data);
       if (response.data.response.status === "Committed") {
         console.log("succ");
+        // res.send("working")
       }
     })
     .catch((error) => {
