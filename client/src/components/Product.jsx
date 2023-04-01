@@ -39,7 +39,7 @@ const Product = ({ title, name, img, price, id, storeLocation, size }) => {
           </div>
           <div className={styles.right}>
             <p>{name}</p>
-            <p>{storeLocation}</p>
+            {/* <p>{storeLocation}</p> */}
           </div>
         </div>
         <div className={styles.down}>

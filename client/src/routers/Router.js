@@ -14,6 +14,7 @@ import Favorites from "../pages/FavoriteProducts";
 import Orders from "../pages/Orders";
 import StoreInformation from "../pages/StoreInformation";
 import StorePage from "../pages/StorePage";
+import Success from "../pages/Success";
 // import { useEffect } from "react";
 // import ReactGA from "react-ga"
 
@@ -40,6 +41,7 @@ const Router = () => {
         <Route path="orders" element={<Orders />} />
         <Route path="storeInfo" element={<StoreInformation />} />
         <Route path="storepage/:storename" element={<StorePage />} />
+        <Route path="/success" element={<Success />} />
         <Route path="*" element={<h1>Page Not Found</h1>} />
       </Routes>
   );

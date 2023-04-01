@@ -1,47 +1,89 @@
 // import express from "express";
+const sdk = require("api")("@payze/v1.0#393a6dmpll2ka4sgp");
 const express = require("express");
 const axios = require("axios");
 const app = express();
-const cors = require('cors')
-const bodyParser = require('body-parser')
-const dotenv = require('dotenv').config();
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const dotenv = require("dotenv").config();
 
 const port = 4000;
 
 app.use(express.json());
-app.use(cors())
-app.use(bodyParser.json())
+app.use(cors());
+app.use(bodyParser.json());
 // Define a route
 
 app.post("/checkout", (req, res) => {
   // Call the justPay function from the API module
-
+  console.log('checkout')
   const url = "https://payze.io/api/v1";
   const data = {
     method: "justPay",
     apiKey: process.env.API_KEY,
     apiSecret: process.env.API_SECRET,
     data: {
-      amount: req.body.item,
+      amount: req.body.amount,
       currency: "GEL",
       callback: "https://vertex-ecommerce.web.app",
       callbackError: "https://vertex-ecommerce.web.app/cart",
       preauthorize: false,
       lang: "EN",
-      hookUrl: "https://corp.com/payze_hook?authorization_token=token",
-      hookRefund: false,
+      hookUrl: "https://vexter.onrender.com/cart",
+      hookRefund: false,  
     },
   };
 
   axios
     .post(url, data)
     .then((response) => {
-      res.json(response.data.response)
-      console.log(response.data)
+      let prods = req.body.cartItems;
+      let result = prods.map((item) => {
+        return { itemId: item.id, itemQuantity: item.quantity - 1 };
+      });
+
+      res.json({
+        transactionUrl: response.data.response,
+        cartItems: result,
+        transactionId: response.data.transactionId 
+      });
+      // console.log(response.data.response);
+      if (response.data.status === "Committed") {
+        console.log("succ");
+      }
+      // res.json(req.body.cartItems)
+      // console.log(req.body.cartItems)
     })
     .catch((error) => {
       console.error(error);
       res.status(500).send("Error processing payment.");
+    });
+});
+
+app.post("/cart", (req, res) => {
+  console.log('cart')
+  const transactionData = {
+    method: "getTransactionInfo",
+    apiKey: process.env.API_KEY,
+    apiSecret: process.env.API_SECRET,
+    data: { transactionId: req.body.transactionId },
+  };
+
+  axios
+    .post("https://payze.io/api/v1", transactionData)
+    .then((response) => {
+      // console.log(response.data.)
+      console.log('transa')
+      console.log(req.body.transactionId);
+      console.log(response.data.response.status)
+      // console.log(req.body.data);
+      if (response.data.response.status === "Committed") {
+        console.log("succ");
+      }
+    })
+    .catch((error) => {
+      console.error("transaction not finished");
+      res.status(500).send("transaction not finished 500");
     });
 });
 

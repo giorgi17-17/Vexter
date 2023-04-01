@@ -5,52 +5,117 @@ import styles from "../components/css/cart.module.css";
 import { useEffect, useState } from "react";
 // import { Link } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
+const tra = JSON.parse(localStorage.getItem("transactionId") || "");
 
 const Cart = () => {
   const { items, deleteOneFromCart, totalAmount, cost, delivery } =
     ShoppingCart();
   const [link, setLink] = useState("");
+  const [transactionID, setTransactionId] = useState(tra);
+  const [cartItemsToChange, setCartItemsToChange] = useState([]);
   let [loading, setLoading] = useState(false);
   let [open, setOpen] = useState(false);
-
+  // console.log(transactionID)
+  // console.log(cartItemsToChange)
   const override = {
     display: "block",
     margin: "0 auto",
     borderColor: "red",
   };
 
+
+  localStorage.setItem("purchasedItems", JSON.stringify(cartItemsToChange));
+  // const itemsFromlocalstoreage = JSON.parse(
+  //   localStorage.getItem("purchasedItems")
+  // );
+
+  // if (!localStorage.getItem("purchasedItems")) {
+  //   localStorage.setItem("purchasedItems", JSON.stringify([]));
+  // }
+
+  localStorage.setItem("transactionId", JSON.stringify(transactionID));
+
+
+  // let id = localStorage.getItem("transactionId")
+  // console.log(id)
+
   useEffect(() => {
     //  redirect("/login");
     //  window.location.href = link
     // navigate(link);
     if (link) {
+      setLoading(false);
+      setOpen(false);
       // window.open(link);
       window.location.href = link;
     }
     // setOpen(false);
-  }, [link, open]);
+    // console.log(items);
+    
+  }, [link, transactionID,open]);
+
+  // console.log(`out ${transactionID}`)
+
+ 
+
+  function purchasedCart() {
+
+      console.log("started");
+      console.log(`func ${transactionID}`)
+      fetch("https://vexter.onrender.com/cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ transactionId: transactionID }),
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+        console.log('end')
+     
+}
+
+// purchasedCart()
 
   const handleSendInfo = async () => {
-    setOpen(true)
+    setOpen(true);
     setLoading(true);
     await fetch("https://vexter.onrender.com/checkout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ item: totalAmount }),
+      body: JSON.stringify({ amount: totalAmount, cartItems: items }),
     })
       .then((res) => {
         return res.json();
       })
       .then((data) => {
-        // console.log(data)
-        setLink(data.transactionUrl);
+        setLink(data.transactionUrl.transactionUrl);
+        setTransactionId(data.transactionUrl.transactionId);
+        setCartItemsToChange(data.cartItems);
+        // setCartItemsToChange()
+        console.log(data);
       })
       .catch((error) => {
         console.log(error);
       });
-  };
+
+      // const timer = setTimeout(() => {
+      //   // console.log(transactionID)
+      //   purchasedCart();
+
+      // }, 3000);
+      // return () => clearTimeout(timer);      
+      
+    };
 
   //
   return (
@@ -114,6 +179,9 @@ const Cart = () => {
             {/* <Link to="/checkout"> */}
             <button onClick={handleSendInfo} className={styles.btn}>
               Go To Checkout
+            </button>
+            <button onClick={purchasedCart} className={styles.btn}>
+              check transaction
             </button>
             {/* </Link> */}
           </div>
