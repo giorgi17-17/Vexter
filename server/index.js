@@ -59,18 +59,19 @@ app.post("/checkout", (req, res) => {
     });
 });
 
-
+var id
 app.post("/test", (req, res) => {
-  console.log('test')
+  console.log(`test ${id}`)
 } )
 
 app.post("/cart", (req, res) => {
   console.log('cart')
+  id = req.body.transactionId
   const transactionData = {
     method: "getTransactionInfo",
     apiKey: process.env.API_KEY,
     apiSecret: process.env.API_SECRET,
-    data: { transactionId: req.body.transactionId },
+    data: { transactionId: id },  
   };
 
   axios
