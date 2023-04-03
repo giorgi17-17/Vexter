@@ -1,5 +1,4 @@
-// import express from "express";
-const sdk = require("api")("@payze/v1.0#393a6dmpll2ka4sgp");
+// const sdk = require("api")("@payze/v1.0#393a6dmpll2ka4sgp");
 const express = require("express");
 const axios = require("axios");
 const app = express();
@@ -29,7 +28,7 @@ app.post("/checkout", (req, res) => {
       callbackError: "https://vertex-ecommerce.web.app/cart",
       preauthorize: false,
       lang: "EN",
-      hookUrl: "https://vexter.onrender.com/cart",
+      hookUrl: "https://vexter.onrender.com/test",
       hookRefund: false,  
     },
   };
@@ -37,6 +36,7 @@ app.post("/checkout", (req, res) => {
   axios
     .post(url, data)
     .then((response) => {
+      console.log('paymant')
       let prods = req.body.cartItems;
       let result = prods.map((item) => {
         return { itemId: item.id, itemQuantity: item.quantity - 1 };
@@ -49,16 +49,20 @@ app.post("/checkout", (req, res) => {
       });
       // console.log(response.data.response);
       if (response.data.status === "Committed") {
-        console.log("succ");
+        console.log("succ from checkout");
       }
       // res.json(req.body.cartItems)
-      // console.log(req.body.cartItems)
     })
     .catch((error) => {
       console.error(error);
       res.status(500).send("Error processing payment.");
     });
 });
+
+
+app.post("/test", (req, res) => {
+  console.log('test')
+} )
 
 app.post("/cart", (req, res) => {
   console.log('cart')
@@ -73,9 +77,12 @@ app.post("/cart", (req, res) => {
     .post("https://payze.io/api/v1", transactionData)
     .then((response) => {
       // console.log(response.data.)
-      console.log('transa')
+      console.log('transaction')
       console.log(req.body.transactionId);
       console.log(response.data.response.status)
+      res.json({
+       status: response.data.response.status
+      })
       // console.log(req.body.data);
       if (response.data.response.status === "Committed") {
         console.log("succ");

@@ -62,29 +62,30 @@ const Cart = () => {
 
  
 
-  function purchasedCart() {
+//   function purchasedCart() {
 
-      console.log("started");
-      console.log(`func ${transactionID}`)
-      fetch("https://vexter.onrender.com/cart", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ transactionId: transactionID }),
-      })
-        .then((res) => {
-          return res.json();
-        })
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-        console.log('end')
+//       console.log("started");
+//       console.log(`func ${transactionID}`)
+//       fetch("http://localhost:4000/test", {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({ transactionId: transactionID }),
+//       })
+//         .then((res) => {
+//           return res.json();
+//         })
+//         .then((data) => {
+//           console.log('data')
+//           console.log(data);
+//         })
+//         .catch((error) => {
+//           console.log(error);
+//         });
+//         console.log('end')
      
-}
+// }
 
 // purchasedCart()
 
@@ -184,9 +185,9 @@ const Cart = () => {
             <button onClick={handleSendInfo} className={styles.btn}>
               Go To Checkout
             </button>
-            <button onClick={purchasedCart} className={styles.btn}>
+            {/* <button onClick={purchasedCart} className={styles.btn}>
               check transaction
-            </button>
+            </button> */}
             {/* </Link> */}
           </div>
         </div>
