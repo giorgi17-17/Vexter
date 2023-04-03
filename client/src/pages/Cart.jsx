@@ -60,32 +60,49 @@ const Cart = () => {
 
   // console.log(`out ${transactionID}`)
 
- 
+ function hook() {
+  console.log('hook')
+  fetch("https://vexter.onrender.com/cart", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .then((data) => {
+      console.log(data)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+ }
 
-//   function purchasedCart() {
+  function sendId() {
 
-//       console.log("started");
-//       console.log(`func ${transactionID}`)
-//       fetch("http://localhost:4000/test", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({ transactionId: transactionID }),
-//       })
-//         .then((res) => {
-//           return res.json();
-//         })
-//         .then((data) => {
-//           console.log('data')
-//           console.log(data);
-//         })
-//         .catch((error) => {
-//           console.log(error);
-//         });
-//         console.log('end')
+      console.log("started");
+      console.log(`func ${transactionID}`)
+      fetch("https://vexter.onrender.com/sendId", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ transactionId: transactionID }),
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          console.log('data')
+          console.log(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+        console.log('end')
      
-// }
+}
 
 // purchasedCart()
 
@@ -113,12 +130,11 @@ const Cart = () => {
         console.log(error);
       });
 
-      // const timer = setTimeout(() => {
-      //   // console.log(transactionID)
-      //   purchasedCart();
+      const timer = setTimeout(() => {
+        sendId();
 
-      // }, 3000);
-      // return () => clearTimeout(timer);      
+      }, 3000);
+      return () => clearTimeout(timer);      
       
     };
 
@@ -185,9 +201,6 @@ const Cart = () => {
             <button onClick={handleSendInfo} className={styles.btn}>
               Go To Checkout
             </button>
-            {/* <button onClick={purchasedCart} className={styles.btn}>
-              check transaction
-            </button> */}
             {/* </Link> */}
           </div>
         </div>

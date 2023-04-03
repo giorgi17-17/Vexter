@@ -28,7 +28,7 @@ app.post("/checkout", (req, res) => {
       callbackError: "https://vertex-ecommerce.web.app/cart",
       preauthorize: false,
       lang: "EN",
-      hookUrl: "https://vexter.onrender.com/test",
+      hookUrl: "https://vexter.onrender.com/cart",
       hookRefund: false,  
     },
   };
@@ -60,13 +60,14 @@ app.post("/checkout", (req, res) => {
 });
 
 var id
-app.post("/test", (req, res) => {
-  console.log(`test ${id}`)
+app.post("/sendId", (req, res) => {
+  id = req.body.transactionId
+  console.log(`sent id:  ${id}`)
 } )
 
 app.post("/cart", (req, res) => {
   console.log('cart')
-  id = req.body.transactionId
+  console.log(`id: ${id}`)
   const transactionData = {
     method: "getTransactionInfo",
     apiKey: process.env.API_KEY,
@@ -79,7 +80,6 @@ app.post("/cart", (req, res) => {
     .then((response) => {
       // console.log(response.data.)
       console.log('transaction')
-      console.log(req.body.transactionId);
       console.log(response.data.response.status)
       res.json({
        status: response.data.response.status
