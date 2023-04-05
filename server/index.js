@@ -5,14 +5,31 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv").config();
-
+const http = require("http")
+const { Server } = require("socket.io")
+ 
 const port = 4000;
 
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
+const server = http.createServer(app)
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"]
+  }
+})
 // Define a route
 let transactionId;
+
+// io.on("connection", (socket) => {
+//   console.log(`user ${socket.id}`)
+//   socket.on("send_message", (data) => {
+//     console.log(data)
+//   });
+//   socket.emit("recieveData", {info: "sdsdsd"})
+// })
 
 
 
@@ -73,36 +90,39 @@ app.post("/cart", (req, res) => {
   console.log('cart')
   console.log(`id: ${transactionId}`)
   console.log(req.body)
-  const transactionData = {
-    method: "getTransactionInfo",
-    apiKey: process.env.API_KEY,
-    apiSecret: process.env.API_SECRET,
-    data: { transactionId: transactionId },  
-  };
+  io.on("connection", (socket) => {
+    socket.emit("recieveData", {info: req.body, test: "test"})
+  })
+  // const transactionData = {
+  //   method: "getTransactionInfo",
+  //   apiKey: process.env.API_KEY,
+  //   apiSecret: process.env.API_SECRET,
+  //   data: { transactionId: transactionId },  
+  // };
 
-  axios
-    .post("https://payze.io/api/v1", transactionData)
-    .then((response) => {
-      // console.log(response.data.)
-      console.log('transaction')
-      console.log(response.data.response.status)
-      res.json({
-       status: response.data.response.status,
-       body: req.body
-      })
-      // console.log(req.body.data);
-      if (response.data.response.status === "Committed") {
-        console.log("succ");
-        // res.send("working")
-      }
-    })
-    .catch((error) => {
-      console.error("transaction not finished");
-      res.status(500).send("transaction not finished 500");
-    });
+  // axios
+  //   .post("https://payze.io/api/v1", transactionData)
+  //   .then((response) => {
+  //     // console.log(response.data.)
+  //     console.log('transaction')
+  //     console.log(response.data.response.status)
+  //     res.json({
+  //      status: response.data.response.status,
+  //      body: req.body
+  //     })
+  //     // console.log(req.body.data);
+  //     if (response.data.response.status === "Committed") {
+  //       console.log("succ");
+  //       // res.send("working")
+  //     }
+  //   })
+  //   .catch((error) => {
+  //     console.error("transaction not finished");
+  //     res.status(500).send("transaction not finished 500");
+  //   });
 });
 
 // Start the server
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });

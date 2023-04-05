@@ -1,10 +1,16 @@
 import { ShoppingCart } from "../Context/CartContext";
-
 // import Product from "../components/Product";
 import styles from "../components/css/cart.module.css";
 import { useEffect, useState } from "react";
 // import { Link } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
+import io from "socket.io-client"
+
+//change this with render url
+const socket = io.connect("http://localhost:4000")
+socket.on("connect_error", (err) => {
+  console.log(err.message); // prints the message associated with the error
+});
 
 if(!localStorage.getItem("transactionId")){
   localStorage.setItem("transactionId", JSON.stringify([]));
@@ -15,6 +21,8 @@ const Cart = () => {
   const { items, deleteOneFromCart, totalAmount, cost, delivery } =
     ShoppingCart();
   const [link, setLink] = useState("");
+  const [data, setData] = useState("");
+  const [test, setTest] = useState("");
   const [transactionID, setTransactionId] = useState(tra);
   const [cartItemsToChange, setCartItemsToChange] = useState([]);
   let [loading, setLoading] = useState(false);
@@ -46,40 +54,59 @@ const Cart = () => {
   // let id = localStorage.getItem("transactionId")
   // console.log(id)
 
+  socket.on("recieveData", (data) => {
+    // console.log(data.info)
+    setData(data.info)
+    setTest(data.test)
+    // alert(data.info)
+  })
+  
   useEffect(() => {
-    //  redirect("/login");
-    //  window.location.href = link
-    // navigate(link);
+  
+    
+    console.log(data)
+    console.log(test)
+
     if (link) {
       setLoading(false);
       setOpen(false);
-      // window.open(link);
-      window.location.href = link;
+      window.open(link);
+      // window.location.href = link;
     }
     // setOpen(false);
     // console.log(items);
     
-  }, [link, transactionID,open]);
+  }, [link,,test,data, transactionID,open,]);
 
   // console.log(`out ${transactionID}`)
 
+//  function get() {
+//   socket.on("recieveData", (data) => {
+//     console.log(data.info)
+//     // alert(data.info)
+//   })
+//  }
+ 
+ 
+
  function hook() {
   console.log('hook')
-  fetch("https://vexter.onrender.com/cart", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then((res) => {
-      return res.json();
-    })
-    .then((data) => {
-      console.log(data)
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  socket.emit("send_message", { message: "from client"} );
+  // fetch("https://vexter.onrender.com/cart", {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  // })
+  //   .then((res) => {
+  //     return res.json();
+  //   })
+  //   .then((data) => {
+  //     console.log(data)
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
  }
 
 //   function sendId() {
@@ -214,6 +241,9 @@ const Cart = () => {
             <button onClick={hook} className={styles.btn}>
               hook
             </button>
+            {/* <button onClick={get} className={styles.btn}>
+              get
+            </button> */}
             {/* </Link> */}
           </div>
         </div>
