@@ -12,6 +12,9 @@ app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
 // Define a route
+let transactionId;
+
+
 
 app.post("/checkout", (req, res) => {
   // Call the justPay function from the API module
@@ -41,7 +44,8 @@ app.post("/checkout", (req, res) => {
       let result = prods.map((item) => {
         return { itemId: item.id, itemQuantity: item.quantity - 1 };
       });
-
+      // console.log(response.data.response.transactionId)
+      transactionId = response.data.response.transactionId
       res.json({
         transactionUrl: response.data.response,
         cartItems: result,
@@ -59,20 +63,21 @@ app.post("/checkout", (req, res) => {
     });
 });
 
-var id
-app.post("/sendId", (req, res) => {
-  id = req.body.transactionId
-  console.log(`sent id:  ${id}`)
-} )
+// var id
+// app.post("/sendId", (req, res) => {
+//   id = req.body.transactionId
+//   console.log(`sent id:  ${id}`)
+// } )
 
 app.post("/cart", (req, res) => {
   console.log('cart')
-  console.log(`id: ${id}`)
+  console.log(`id: ${transactionId}`)
+  console.log(req.body)
   const transactionData = {
     method: "getTransactionInfo",
     apiKey: process.env.API_KEY,
     apiSecret: process.env.API_SECRET,
-    data: { transactionId: id },  
+    data: { transactionId: transactionId },  
   };
 
   axios
@@ -82,7 +87,8 @@ app.post("/cart", (req, res) => {
       console.log('transaction')
       console.log(response.data.response.status)
       res.json({
-       status: response.data.response.status
+       status: response.data.response.status,
+       body: req.body
       })
       // console.log(req.body.data);
       if (response.data.response.status === "Committed") {

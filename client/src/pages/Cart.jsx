@@ -27,6 +27,9 @@ const Cart = () => {
     borderColor: "red",
   };
 
+  // let tenMinutes = 600000
+  // let fiveMinutes = 300000
+  // let one = 60000
 
   localStorage.setItem("purchasedItems", JSON.stringify(cartItemsToChange));
   // const itemsFromlocalstoreage = JSON.parse(
@@ -79,30 +82,30 @@ const Cart = () => {
     });
  }
 
-  function sendId() {
+//   function sendId() {
 
-      console.log("started");
-      console.log(`func ${transactionID}`)
-      fetch("https://vexter.onrender.com/sendId", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ transactionId: transactionID }),
-      })
-        .then((res) => {
-          return res.json();
-        })
-        .then((data) => {
-          console.log('data')
-          console.log(data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-        console.log('end')
+//       console.log("started");
+//       console.log(`func ${transactionID}`)
+//       fetch("https://vexter.onrender.com/sendId", {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({ transactionId: transactionID }),
+//       })
+//         .then((res) => {
+//           return res.json();
+//         })
+//         .then((data) => {
+//           console.log('data')
+//           console.log(data);
+//         })
+//         .catch((error) => {
+//           console.log(error);
+//         });
+//         console.log('end')
      
-}
+// }
 
 // purchasedCart()
 
@@ -130,11 +133,18 @@ const Cart = () => {
         console.log(error);
       });
 
-      const timer = setTimeout(() => {
-        sendId();
+      // const timer = setTimeout(() => {
+      //   hook();
 
-      }, 3000);
-      return () => clearTimeout(timer);      
+      // }, 3000);
+      // return () => clearTimeout(timer);     
+      
+      // const interval = setInterval(() => {
+      //   console.log('This will run every second!');
+      //   hook();
+
+      // }, 10000);
+      // return () => clearInterval(interval);
       
     };
 
@@ -200,6 +210,9 @@ const Cart = () => {
             {/* <Link to="/checkout"> */}
             <button onClick={handleSendInfo} className={styles.btn}>
               Go To Checkout
+            </button>
+            <button onClick={hook} className={styles.btn}>
+              hook
             </button>
             {/* </Link> */}
           </div>
