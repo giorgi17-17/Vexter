@@ -22,8 +22,8 @@ app.use(bodyParser.json());
 //   },
 // });
 // Define a route
-let transactionId;
-let email 
+let email;
+let newOrder
 
 // io.on("connection", (socket) => {
 //   console.log(`user ${socket.id}`)
@@ -36,7 +36,7 @@ let email
 app.post("/checkout", (req, res) => {
   // Call the justPay function from the API module
   console.log("checkout");
-  email = req.body.email
+  email = req.body.email;
   const url = "https://payze.io/api/v1";
   const data = {
     method: "justPay",
@@ -59,7 +59,7 @@ app.post("/checkout", (req, res) => {
     .then(async (response) => {
       console.log("paymant");
       let prods = req.body.cartItems;
-      let newOrder = prods.map((item) => {
+     newOrder = prods.map((item) => {
         return {
           id: item.id,
           quantity: item.quantity,
@@ -78,7 +78,7 @@ app.post("/checkout", (req, res) => {
         cartItems: newOrder,
         transactionId: response.data.transactionId,
       });
-     
+
       // console.log(response.data.response);
       if (response.data.status === "Committed") {
         console.log("succ from checkout");
@@ -90,13 +90,16 @@ app.post("/checkout", (req, res) => {
     });
 });
 
+app.post("/test", async (req, res) => {
+  console.log(`test email ${email}`);
+});
+
 app.post("/cart", async (req, res) => {
-  //when transaction successfull decrement quantity of product
+  //when transaction successfull decrement quantity  of product
 
   console.log("cart");
-  console.log(`id: ${transactionId}`);
   console.log(req.body);
-  console.log('--------------------')
+  console.log("--------------------");
   console.log(email);
   const citiesRef = db.collection("users");
   const snap = await citiesRef.where("email", "==", email).get();
@@ -106,12 +109,13 @@ app.post("/cart", async (req, res) => {
     // console.log(userData.order);
     // console.log('-----------------------')
     let orders = userData.order;
-    let arraysToSpread = [...newOrder,...orders];
+    let arraysToSpread = [...newOrder, ...orders];
     console.log(arraysToSpread);
     db.collection("users").doc(doc.id).update({
       order: arraysToSpread,
     });
   });
+  console.log('done')
 });
 
 // Start the server

@@ -60,7 +60,7 @@ const Cart = () => {
   const handleSendInfo = async () => {
     setOpen(true);
     setLoading(true);
-    await fetch("https://vexter.onrender.com/checkout", {
+    await fetch("http://localhost:4000/checkout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -80,6 +80,27 @@ const Cart = () => {
         setCartItemsToChange(data.cartItems);
         // setCartItemsToChange()
         // console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+   
+  };
+
+  const test = async () => {
+    
+    await fetch("http://localhost:4000/test", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.log('data')
       })
       .catch((error) => {
         console.log(error);
@@ -150,6 +171,9 @@ const Cart = () => {
             {/* <Link to="/checkout"> */}
             <button onClick={handleSendInfo} className={styles.btn}>
               Go To Checkout
+            </button>
+            <button onClick={test} className={styles.btn}>
+              test
             </button>
             {/* </Link> */}
           </div>
