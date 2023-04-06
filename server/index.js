@@ -109,7 +109,12 @@ app.post("/cart", async (req, res) => {
     // console.log(userData.order);
     // console.log('-----------------------')
     let orders = userData.order;
-    let arraysToSpread = [...newOrder, ...orders];
+    let arraysToSpread
+    if(orders === null){
+      arraysToSpread = [...newOrder];
+    }else {
+      arraysToSpread = [...newOrder, ...orders];
+    }
     console.log(arraysToSpread);
     db.collection("users").doc(doc.id).update({
       order: arraysToSpread,
