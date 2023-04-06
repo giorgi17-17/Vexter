@@ -5,21 +5,22 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv").config();
-const http = require("http")
-const { Server } = require("socket.io")
- 
+// const http = require("http");
+// const { Server } = require("socket.io");
+const { db } = require("./firebase.js");
+// const { updateDoc, doc } = require("firebase-admin/firestore");
 const port = 4000;
 
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
-const server = http.createServer(app)
-const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"]
-  }
-})
+// const server = http.createServer(app);
+// const io = new Server(server, {
+//   cors: {
+//     origin: "http://localhost:3000",
+//     methods: ["GET", "POST"],
+//   },
+// });
 // Define a route
 let transactionId;
 
@@ -31,11 +32,9 @@ let transactionId;
 //   socket.emit("recieveData", {info: "sdsdsd"})
 // })
 
-
-
 app.post("/checkout", (req, res) => {
   // Call the justPay function from the API module
-  console.log('checkout')
+  console.log("checkout");
   const url = "https://payze.io/api/v1";
   const data = {
     method: "justPay",
@@ -49,30 +48,39 @@ app.post("/checkout", (req, res) => {
       preauthorize: false,
       lang: "EN",
       hookUrl: "https://vexter.onrender.com/cart",
-      hookRefund: false,  
+      hookRefund: false,
     },
   };
 
   axios
     .post(url, data)
-    .then((response) => {
-      console.log('paymant')
+    .then(async (response) => {
+      console.log("paymant");
       let prods = req.body.cartItems;
-      let result = prods.map((item) => {
-        return { itemId: item.id, itemQuantity: item.quantity - 1 };
+      let newOrder = prods.map((item) => {
+        return {
+          id: item.id,
+          quantity: item.quantity,
+          title: item.title,
+          img: item.img,
+          price: item.price,
+          name: item.name,
+          size: item.size,
+        };
       });
-      // console.log(response.data.response.transactionId)
-      transactionId = response.data.response.transactionId
+
+      transactionId = response.data.response.transactionId;
+
       res.json({
         transactionUrl: response.data.response,
-        cartItems: result,
-        transactionId: response.data.transactionId 
+        cartItems: newOrder,
+        transactionId: response.data.transactionId,
       });
+     
       // console.log(response.data.response);
       if (response.data.status === "Committed") {
         console.log("succ from checkout");
       }
-      // res.json(req.body.cartItems)
     })
     .catch((error) => {
       console.error(error);
@@ -80,49 +88,31 @@ app.post("/checkout", (req, res) => {
     });
 });
 
-// var id
-// app.post("/sendId", (req, res) => {
-//   id = req.body.transactionId
-//   console.log(`sent id:  ${id}`)
-// } )
+app.post("/cart", async (req, res) => {
+  //when transaction successfull decrement quantity of product
 
-app.post("/cart", (req, res) => {
-  console.log('cart')
-  console.log(`id: ${transactionId}`)
-  console.log(req.body)
-  io.on("connection", (socket) => {
-    socket.emit("recieveData", {info: req.body, test: "test"})
-  })
-  // const transactionData = {
-  //   method: "getTransactionInfo",
-  //   apiKey: process.env.API_KEY,
-  //   apiSecret: process.env.API_SECRET,
-  //   data: { transactionId: transactionId },  
-  // };
+  console.log("cart");
+  console.log(`id: ${transactionId}`);
+  console.log(req.body);
+  console.log('--------------------')
+  console.log(req.body.email);
+  const citiesRef = db.collection("users");
+  const snap = await citiesRef.where("email", "==", req.body.email).get();
 
-  // axios
-  //   .post("https://payze.io/api/v1", transactionData)
-  //   .then((response) => {
-  //     // console.log(response.data.)
-  //     console.log('transaction')
-  //     console.log(response.data.response.status)
-  //     res.json({
-  //      status: response.data.response.status,
-  //      body: req.body
-  //     })
-  //     // console.log(req.body.data);
-  //     if (response.data.response.status === "Committed") {
-  //       console.log("succ");
-  //       // res.send("working")
-  //     }
-  //   })
-  //   .catch((error) => {
-  //     console.error("transaction not finished");
-  //     res.status(500).send("transaction not finished 500");
-  //   });
+  snap.forEach((doc) => {
+    let userData = doc.data();
+    // console.log(userData.order);
+    // console.log('-----------------------')
+    let orders = userData.order;
+    let arraysToSpread = [...newOrder,...orders];
+    console.log(arraysToSpread);
+    db.collection("users").doc(doc.id).update({
+      order: arraysToSpread,
+    });
+  });
 });
 
 // Start the server
-server.listen(port, () => {
+app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });

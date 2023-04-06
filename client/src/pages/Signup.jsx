@@ -24,6 +24,7 @@ const Signup = () => {
       await addDoc(collRef, {
         email,
         createdAt: serverTimestamp(),
+        order: null
       });
 
       toast.success("წარმატებით დარეგისტრირდით");

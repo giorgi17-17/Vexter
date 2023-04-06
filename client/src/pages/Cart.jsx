@@ -4,15 +4,16 @@ import styles from "../components/css/cart.module.css";
 import { useEffect, useState } from "react";
 // import { Link } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
-import io from "socket.io-client"
+// import io from "socket.io-client"
+import { UserAuth } from "../Context/AuthContext";
 
 //change this with render url
-const socket = io.connect("http://localhost:4000")
-socket.on("connect_error", (err) => {
-  console.log(err.message); // prints the message associated with the error
-});
+// const socket = io.connect("https://vertex-ecommerce.web.app")
+// socket.on("connect_error", (err) => {
+//   console.log(err.message); // prints the message associated with the error
+// });
 
-if(!localStorage.getItem("transactionId")){
+if (!localStorage.getItem("transactionId")) {
   localStorage.setItem("transactionId", JSON.stringify([]));
 }
 const tra = JSON.parse(localStorage.getItem("transactionId") || "");
@@ -21,120 +22,40 @@ const Cart = () => {
   const { items, deleteOneFromCart, totalAmount, cost, delivery } =
     ShoppingCart();
   const [link, setLink] = useState("");
-  const [data, setData] = useState("");
-  const [test, setTest] = useState("");
+  // const [data, setData] = useState("");
+  // const [test, setTest] = useState("");
   const [transactionID, setTransactionId] = useState(tra);
   const [cartItemsToChange, setCartItemsToChange] = useState([]);
   let [loading, setLoading] = useState(false);
   let [open, setOpen] = useState(false);
   // console.log(transactionID)
   // console.log(cartItemsToChange)
+  const { user } = UserAuth();
   const override = {
     display: "block",
     margin: "0 auto",
     borderColor: "red",
   };
 
-  // let tenMinutes = 600000
-  // let fiveMinutes = 300000
-  // let one = 60000
 
   localStorage.setItem("purchasedItems", JSON.stringify(cartItemsToChange));
-  // const itemsFromlocalstoreage = JSON.parse(
-  //   localStorage.getItem("purchasedItems")
-  // );
-
-  // if (!localStorage.getItem("purchasedItems")) {
-  //   localStorage.setItem("purchasedItems", JSON.stringify([]));
-  // }
-
   localStorage.setItem("transactionId", JSON.stringify(transactionID));
 
+  // socket.on("recieveData", (data) => {
+  //   // console.log(data.info)
+  //   setData(data.info)
+  //   setTest(data.test)
+  //   // alert(data.info)
+  // })
 
-  // let id = localStorage.getItem("transactionId")
-  // console.log(id)
-
-  socket.on("recieveData", (data) => {
-    // console.log(data.info)
-    setData(data.info)
-    setTest(data.test)
-    // alert(data.info)
-  })
-  
   useEffect(() => {
-  
-    
-    console.log(data)
-    console.log(test)
-
     if (link) {
       setLoading(false);
       setOpen(false);
-      window.open(link);
-      // window.location.href = link;
+      // window.open(link);
+      window.location.href = link;
     }
-    // setOpen(false);
-    // console.log(items);
-    
-  }, [link,,test,data, transactionID,open,]);
-
-  // console.log(`out ${transactionID}`)
-
-//  function get() {
-//   socket.on("recieveData", (data) => {
-//     console.log(data.info)
-//     // alert(data.info)
-//   })
-//  }
- 
- 
-
- function hook() {
-  console.log('hook')
-  socket.emit("send_message", { message: "from client"} );
-  // fetch("https://vexter.onrender.com/cart", {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  // })
-  //   .then((res) => {
-  //     return res.json();
-  //   })
-  //   .then((data) => {
-  //     console.log(data)
-  //   })
-  //   .catch((error) => {
-  //     console.log(error);
-  //   });
- }
-
-//   function sendId() {
-
-//       console.log("started");
-//       console.log(`func ${transactionID}`)
-//       fetch("https://vexter.onrender.com/sendId", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({ transactionId: transactionID }),
-//       })
-//         .then((res) => {
-//           return res.json();
-//         })
-//         .then((data) => {
-//           console.log('data')
-//           console.log(data);
-//         })
-//         .catch((error) => {
-//           console.log(error);
-//         });
-//         console.log('end')
-     
-// }
-
-// purchasedCart()
+  }, [link, transactionID, open]);
 
   const handleSendInfo = async () => {
     setOpen(true);
@@ -144,7 +65,11 @@ const Cart = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ amount: totalAmount, cartItems: items }),
+      body: JSON.stringify({
+        amount: totalAmount,
+        cartItems: items,
+        email: user.email,
+      }),
     })
       .then((res) => {
         return res.json();
@@ -160,20 +85,8 @@ const Cart = () => {
         console.log(error);
       });
 
-      // const timer = setTimeout(() => {
-      //   hook();
-
-      // }, 3000);
-      // return () => clearTimeout(timer);     
-      
-      // const interval = setInterval(() => {
-      //   console.log('This will run every second!');
-      //   hook();
-
-      // }, 10000);
-      // return () => clearInterval(interval);
-      
-    };
+   
+  };
 
   //
   return (
@@ -238,12 +151,6 @@ const Cart = () => {
             <button onClick={handleSendInfo} className={styles.btn}>
               Go To Checkout
             </button>
-            <button onClick={hook} className={styles.btn}>
-              hook
-            </button>
-            {/* <button onClick={get} className={styles.btn}>
-              get
-            </button> */}
             {/* </Link> */}
           </div>
         </div>
