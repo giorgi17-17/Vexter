@@ -23,6 +23,7 @@ app.use(bodyParser.json());
 // });
 // Define a route
 let transactionId;
+let email 
 
 // io.on("connection", (socket) => {
 //   console.log(`user ${socket.id}`)
@@ -35,6 +36,7 @@ let transactionId;
 app.post("/checkout", (req, res) => {
   // Call the justPay function from the API module
   console.log("checkout");
+  email = req.body.email
   const url = "https://payze.io/api/v1";
   const data = {
     method: "justPay",
@@ -95,9 +97,9 @@ app.post("/cart", async (req, res) => {
   console.log(`id: ${transactionId}`);
   console.log(req.body);
   console.log('--------------------')
-  console.log(req.body.email);
+  console.log(email);
   const citiesRef = db.collection("users");
-  const snap = await citiesRef.where("email", "==", req.body.email).get();
+  const snap = await citiesRef.where("email", "==", email).get();
 
   snap.forEach((doc) => {
     let userData = doc.data();
