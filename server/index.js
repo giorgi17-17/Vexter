@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 // });
 // Define a route
 let email;
-let newOrder
+let newOrder;
 
 // io.on("connection", (socket) => {
 //   console.log(`user ${socket.id}`)
@@ -59,7 +59,7 @@ app.post("/checkout", (req, res) => {
     .then(async (response) => {
       console.log("paymant");
       let prods = req.body.cartItems;
-     newOrder = prods.map((item) => {
+      newOrder = prods.map((item) => {
         return {
           id: item.id,
           quantity: item.quantity,
@@ -70,7 +70,8 @@ app.post("/checkout", (req, res) => {
           size: item.size,
         };
       });
-
+      // let arr =[newOrder]
+      // console.log(arr)
       transactionId = response.data.response.transactionId;
 
       res.json({
@@ -79,10 +80,25 @@ app.post("/checkout", (req, res) => {
         transactionId: response.data.transactionId,
       });
 
+      // const citiesRef = db.collection("users");
+      // const snap = await citiesRef.where("email", "==", email).get();
+
+      // snap.forEach((doc) => {
+      //   let userData = doc.data();
+      //   console.log([{...newOrder}]);
+      //   // let arr = [allOrders]
+      //   db.collection("users")
+      //     .doc(doc.id)
+      //     .update({
+      //       order: newOrder,
+      //       amount: 256
+      //     });
+      // });
+
       // console.log(response.data.response);
-      if (response.data.status === "Committed") {
-        console.log("succ from checkout");
-      }
+      // if (response.data.status === "Committed") {
+      //   console.log("succ from checkout");
+      // }
     })
     .catch((error) => {
       console.error(error);
@@ -96,31 +112,34 @@ app.post("/test", async (req, res) => {
 
 app.post("/cart", async (req, res) => {
   //when transaction successfull decrement quantity  of product
+  //and only in this ocassion make orders on account page
+  
 
   console.log("cart");
-  console.log(req.body);
+  // console.log(req.body);
+  console.log(req.body.finalAmount);
+  console.log(req.body.status);
   console.log("--------------------");
   console.log(email);
+  // finalAmount:
+  // status:
+  // if (req.body.status === "Committed") {
+  //     console.log("succ from checkout");
+  //   }
   const citiesRef = db.collection("users");
   const snap = await citiesRef.where("email", "==", email).get();
 
   snap.forEach((doc) => {
-    let userData = doc.data();
-    // console.log(userData.order);
-    // console.log('-----------------------')
-    let orders = userData.order;
-    let arraysToSpread
-    if(orders === null){
-      arraysToSpread = [...newOrder];
-    }else {
-      arraysToSpread = [...newOrder, ...orders];
-    }
-    console.log(arraysToSpread);
-    db.collection("users").doc(doc.id).update({
-      order: arraysToSpread,
-    });
+    // let userData = doc.data();
+   
+    db.collection("users")
+          .doc(doc.id)
+          .update({
+            order: newOrder,
+            amount:req.body.finalAmount
+          });
   });
-  console.log('done')
+  console.log("done");
 });
 
 // Start the server

@@ -32,6 +32,7 @@ const Checkout = () => {
       homeStatus,
       number: Number(number),
       storeName: user.displayName,
+      email: user.email,
       id: uniqid(),
       quantity: Number(1),
       createdAt: serverTimestamp(),

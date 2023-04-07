@@ -1,16 +1,118 @@
 .container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.user {
+  margin: 20px 0;
+}
+
+.btn {
+  padding: 10px 20px;
+  background-color: var(--orange);
+  border: none;
+  border-radius: 0px;
+  margin: 50px 0;
+  color: white;
+}
+
+.ordersContainer {
+  width: 50%;
+  min-height: 50vh;
+  /* background-color: rgb(1, 15, 92); */
+  /* border: 2px solid var(--black); */
+  border: 3px solid rgb(0, 138, 0);
+  border-radius: 10px;
+  padding: 10px;
+}
+/* 
+  .allOrder{
     width: 100%;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+    height: 70px;
+    background-color: brown;
+    
+  } */
+
+.orders {
+  margin: 10px 0px;
+  width: 100%;
+  height: 100px;
+  background-color: rgb(240, 240, 240);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 15px;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+}
+
+.image {
+  width: 80px;
+  height: 80px;
+}
+
+.image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.title {
+  max-width: 150px;
+  max-height: 35px;
+  overflow: hidden;
+  margin-right: 10px;
+  margin-left: 15px;
+}
+
+.title > p {
+  font-size: 14px;
+}
+
+.price {
+  float: right;
+}
+
+.price p {
+  font-weight: 700;
+  font-size: 17px;
+}
+
+.totalAmount {
+  float: right;
+}
+
+@media only screen and (max-width: 600px) {
+  .ordersContainer {
+    width: 90%;
   }
 
-  .btn  {
-    padding: 10px 20px;
-    background-color: var(--orange);
-    border: none;
-    border-radius: 0px;
-    margin: 10px 0;
-    color: white;
+  .image {
+    width: 40px;
+    height: 40px;
   }
+
+  .image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .title {
+    max-width: 100px;
+    max-height: 35px;
+    overflow: hidden;
+    margin-left: 15px;
+    margin-right: 10px;
+  }
+
+  .title > p {
+    font-size: 14px;
+  }
+}
