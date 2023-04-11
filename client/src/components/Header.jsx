@@ -302,7 +302,7 @@ const Header = () => {
           {/* <img src={logo} alt="Vertex" /> */}
           <div>
             <Link className="link" to={`/${path}`}>
-              <h1 className={styles.mainName}>Vertex</h1>
+              <h1 className={styles.mainName}>Vexter</h1>
             </Link>
           </div>
         </div>
