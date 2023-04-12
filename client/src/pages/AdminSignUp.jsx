@@ -44,6 +44,7 @@ const AdminSignUp = () => {
         storeLocation: addStoreLocation,
         email,
         createdAt: serverTimestamp(),
+        telegramId: ""
       });
       productId = newItem.id;
 

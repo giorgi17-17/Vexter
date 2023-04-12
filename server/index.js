@@ -5,6 +5,7 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv").config();
+const { Telegraf } = require("telegraf");
 // const http = require("http");
 // const { Server } = require("socket.io");
 const { db } = require("./firebase.js");
@@ -14,6 +15,9 @@ const port = 4000;
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
+const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
+console.log("")
+
 // const server = http.createServer(app);
 // const io = new Server(server, {
 //   cors: {
@@ -33,9 +37,36 @@ let newOrder;
 //   socket.emit("recieveData", {info: "sdsdsd"})
 // })
 
+// bot.start((ctx) => {
+//   ctx.reply("check!");
+//   const userId = ctx.from.id;
+//   console.log(userId)
+//   ctx.telegram.sendMessage(userId, 'Your payment was successful!');
+// });
+
+// bot.hears('success', async (ctx) => {
+//   // Get the user ID
+//   const userId = ctx.from.id;
+
+//   // Send notification to user
+//   ctx.telegram.sendMessage(userId, 'Your payment was successful!');
+// });
+// bot.launch();
+
 app.post("/checkout", (req, res) => {
-  // Call the justPay function from the API module
   console.log("checkout");
+  // Call the justPay function from the API module
+  // bot.start((ctx) => {
+  //   ctx.reply("check!");
+  //   const userId = ctx.from.id;
+  //   console.log(userId)
+  //   ctx.telegram.sendMessage(userId, 'Your payment was successful!');
+  // });
+  // bot.command('oldschool', (ctx) => ctx.reply('Hello'));
+  // ctx.reply("check!");
+
+  // bot.launch();
+
   email = req.body.email;
   const url = "https://payze.io/api/v1";
   const data = {
@@ -85,15 +116,10 @@ app.post("/checkout", (req, res) => {
 
       // snap.forEach((doc) => {
       //   let userData = doc.data();
-      //   console.log([{...newOrder}]);
-      //   // let arr = [allOrders]
-      //   db.collection("users")
-      //     .doc(doc.id)
-      //     .update({
-      //       order: newOrder,
-      //       amount: 256
-      //     });
+      //   console.log(userData.email);
       // });
+
+     
 
       // console.log(response.data.response);
       // if (response.data.status === "Committed") {
@@ -113,7 +139,6 @@ app.post("/test", async (req, res) => {
 app.post("/cart", async (req, res) => {
   //when transaction successfull decrement quantity  of product
   //and only in this ocassion make orders on account page
-  
 
   console.log("cart");
   // console.log(req.body);
@@ -123,22 +148,36 @@ app.post("/cart", async (req, res) => {
   console.log(email);
   // finalAmount:
   // status:
-  // if (req.body.status === "Committed") {
-  //     console.log("succ from checkout");
-  //   }
-  const citiesRef = db.collection("users");
-  const snap = await citiesRef.where("email", "==", email).get();
+  if (req.body.status === "Committed") {
+
+
+
+
+
+
+   
+  const usersRef = db.collection("users");
+  const snap = await usersRef.where("email", "==", email).get();
 
   snap.forEach((doc) => {
-    // let userData = doc.data();
-   
-    db.collection("users")
-          .doc(doc.id)
-          .update({
-            order: newOrder,
-            amount:req.body.finalAmount
-          });
+    db.collection("users").doc(doc.id).update({
+      order: newOrder,
+      amount: req.body.finalAmount,
+    });
   });
+
+  const storeRef = db.collection("store");
+  const ss = await storeRef.where("email", "==", email).get();
+
+  let telegramId 
+  ss.forEach((doc) => {
+   let userData = doc.data();
+   telegramId = userData.telegramId
+    console.log(userData.telegramId);
+  });
+  bot.telegram.sendMessage(telegramId, 'თქვენი პროდუქტი წარმატევით გაიყყიდა ❤️');
+  console.log("succ from checkout");
+}
   console.log("done");
 });
 

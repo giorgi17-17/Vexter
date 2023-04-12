@@ -52,7 +52,7 @@ const StoreInformation = () => {
       adress,
       city,
       number,
-      postalCode,
+      postalCode
     });
   }
 
