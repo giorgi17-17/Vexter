@@ -15,7 +15,7 @@ const port = 4000;
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
-const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
+const bot = new Telegraf(process.env.BOT_TOKEN);
 console.log("")
 
 // const server = http.createServer(app);
