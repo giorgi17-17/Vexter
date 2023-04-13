@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
 const bot = new Telegraf(process.env.BOT_TOKEN);
-console.log("")
+// console.log("")
 
 // const server = http.createServer(app);
 // const io = new Server(server, {
@@ -28,6 +28,8 @@ console.log("")
 // Define a route
 let email;
 let newOrder;
+let storeName;
+let prods
 
 // io.on("connection", (socket) => {
 //   console.log(`user ${socket.id}`)
@@ -44,14 +46,7 @@ let newOrder;
 //   ctx.telegram.sendMessage(userId, 'Your payment was successful!');
 // });
 
-// bot.hears('success', async (ctx) => {
-//   // Get the user ID
-//   const userId = ctx.from.id;
 
-//   // Send notification to user
-//   ctx.telegram.sendMessage(userId, 'Your payment was successful!');
-// });
-// bot.launch();
 
 app.post("/checkout", (req, res) => {
   console.log("checkout");
@@ -66,6 +61,8 @@ app.post("/checkout", (req, res) => {
   // ctx.reply("check!");
 
   // bot.launch();
+
+  // let store
 
   email = req.body.email;
   const url = "https://payze.io/api/v1";
@@ -89,20 +86,25 @@ app.post("/checkout", (req, res) => {
     .post(url, data)
     .then(async (response) => {
       console.log("paymant");
-      let prods = req.body.cartItems;
+     prods = req.body.cartItems;
+
+      storeName = prods.map((item) => {
+        return item.name;
+      });
+
       newOrder = prods.map((item) => {
+        // storeName = item.name
         return {
           id: item.id,
-          quantity: item.quantity,
           title: item.title,
-          img: item.img,
           price: item.price,
           name: item.name,
           size: item.size,
+          quantity: item.quantity,
+          img: item.img,
         };
       });
-      // let arr =[newOrder]
-      // console.log(arr)
+
       transactionId = response.data.response.transactionId;
 
       res.json({
@@ -111,20 +113,23 @@ app.post("/checkout", (req, res) => {
         transactionId: response.data.transactionId,
       });
 
-      // const citiesRef = db.collection("users");
-      // const snap = await citiesRef.where("email", "==", email).get();
-
-      // snap.forEach((doc) => {
-      //   let userData = doc.data();
-      //   console.log(userData.email);
-      // });
-
      
 
-      // console.log(response.data.response);
-      // if (response.data.status === "Committed") {
-      //   console.log("succ from checkout");
-      // }
+
+
+      /////////////////////////
+
+      // prods.forEach(async (item) => {
+      //   const storeRef = db.collection("store");
+      //   const snap = await storeRef.where("name", "==", item.namoe).get();
+      //   snap.forEach((doc) => {
+      //     db.collection("store").doc(doc.id).update({
+      //       order: newOrder,
+      //     });
+      //   });
+      // });
+
+      /////////////////////
     })
     .catch((error) => {
       console.error(error);
@@ -149,35 +154,58 @@ app.post("/cart", async (req, res) => {
   // finalAmount:
   // status:
   if (req.body.status === "Committed") {
+    const usersRef = db.collection("users");
+    const snap = await usersRef.where("email", "==", email).get();
 
-
-
-
-
-
-   
-  const usersRef = db.collection("users");
-  const snap = await usersRef.where("email", "==", email).get();
-
-  snap.forEach((doc) => {
-    db.collection("users").doc(doc.id).update({
-      order: newOrder,
-      amount: req.body.finalAmount,
+    snap.forEach((doc) => {
+      db.collection("users").doc(doc.id).update({
+        order: newOrder,
+        amount: req.body.finalAmount,
+      });
     });
-  });
 
-  const storeRef = db.collection("store");
-  const ss = await storeRef.where("email", "==", email).get();
 
-  let telegramId 
-  ss.forEach((doc) => {
-   let userData = doc.data();
-   telegramId = userData.telegramId
-    console.log(userData.telegramId);
-  });
-  bot.telegram.sendMessage(telegramId, 'თქვენი პროდუქტი წარმატევით გაიყყიდა ❤️');
-  console.log("succ from checkout");
-}
+
+     //this code is witten by chatgpt from here 
+    
+     const productsByStore = {};
+     prods.forEach((product) => {
+       const storeName = product.name;
+       if (!productsByStore[storeName]) {
+         productsByStore[storeName] = [];
+       }
+       productsByStore[storeName].push(product);
+     });
+
+     for (const [storeName, products] of Object.entries(productsByStore)) {
+       const storeRef = db.collection("store");
+       const snap = await storeRef.where("name", "==", storeName).get();
+
+       snap.forEach((doc) => {
+         db.collection("store").doc(doc.id).update({
+           order: products,
+         });
+       });
+     }
+
+     //to here
+
+    // const storeRef = db.collection("store");
+    // const ss = await storeRef.where("email", "==", email).get();
+
+    // let telegramId;
+    // ss.forEach((doc) => {
+    //   let userData = doc.data();
+    //   telegramId = userData.telegramId;
+    //   console.log(userData.telegramId);
+    // });
+    // console.log(telegramId);
+    // bot.telegram.sendMessage(
+    //   telegramId,
+    //   "თქვენი პროდუქტი წარმატევით გაიყყიდა ❤️"
+    // );
+    console.log("succ from checkout");
+  }
   console.log("done");
 });
 

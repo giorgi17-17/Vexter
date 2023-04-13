@@ -37,7 +37,6 @@ const Cart = () => {
     borderColor: "red",
   };
 
-
   localStorage.setItem("purchasedItems", JSON.stringify(cartItemsToChange));
   localStorage.setItem("transactionId", JSON.stringify(transactionID));
 
@@ -56,7 +55,8 @@ const Cart = () => {
       window.location.href = link;
     }
   }, [link, transactionID, open]);
-
+  // https://vexter.onrender.com/checkout
+  // http://localhost:4000/cart
   const handleSendInfo = async () => {
     setOpen(true);
     setLoading(true);
@@ -84,12 +84,9 @@ const Cart = () => {
       .catch((error) => {
         console.log(error);
       });
-
-   
   };
 
   const test = async () => {
-    
     await fetch("http://localhost:4000/test", {
       method: "POST",
       headers: {
@@ -100,13 +97,11 @@ const Cart = () => {
         return res.json();
       })
       .then((data) => {
-        console.log('data')
+        console.log("data");
       })
       .catch((error) => {
         console.log(error);
       });
-
-   
   };
 
   //
@@ -170,7 +165,7 @@ const Cart = () => {
             </div>
             {/* <Link to="/checkout"> */}
             <button onClick={handleSendInfo} className={styles.btn}>
-              Go To Checkout
+              ყიდვა
             </button>
             <button onClick={test} className={styles.btn}>
               test
