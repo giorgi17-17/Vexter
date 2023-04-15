@@ -11,9 +11,22 @@ import { db } from "../firebase/firebase";
 // import { Link } from "react-router-dom";
 const UserDashboard = ({ user }) => {
   const [products, setProducts] = useState([]);
+  // const [time, setTime] = useState("");
 
   const navigate = useNavigate();
   const { logOut } = UserAuth();
+
+  function time(mil) {
+    //  return new Date(mil)
+    let date = new Date(mil);
+    //  console.log(date.toLocaleDateString('en-US'))
+    //  date.toLocaleString('en-GB')
+    //  console.log(date.toLocaleString('en-GB'))
+    return date.toLocaleString("en-GB");
+    //  1680871156
+  }
+
+  // time(1681576300033)
 
   useEffect(() => {
     const collRef = collection(db, "users");
@@ -23,6 +36,7 @@ const UserDashboard = ({ user }) => {
     const getProducts = onSnapshot(q, (snap) => {
       const items = [];
       snap.forEach((doc) => {
+        // console.log(doc.data());
         items.push(doc.data());
       });
       setProducts(items);
@@ -62,7 +76,7 @@ const UserDashboard = ({ user }) => {
             {/* <p>Orders</p>
             <p>Return an item</p> */}
           </div>
-          
+
           <div className={styles.ordersContainer}>
             {products.map((item) => {
               // console.log(item.amount)
@@ -70,26 +84,34 @@ const UserDashboard = ({ user }) => {
                 <div key={item.email} className={styles.allOrder}>
                   {item.order
                     ? item.order.map((e, i) => {
-                        // console.log(e.img[0])
+                        // console.log(e.createdAt)
+                        // setTime(e.createdAt)
                         return (
                           <div key={i} className={styles.orders}>
-                            <div className={styles.left}>
-                              <div className={styles.image}>
-                                <img src={e.img[0]} alt={e.title} />
+                            <div className={styles.product}>
+                              <div className={styles.left}>
+                                <div className={styles.image}>
+                                  <img src={e.img[0]} alt={e.title} />
+                                </div>
+                                <div className={styles.title}>
+                                  <p>{e.title}</p>
+                                </div>
                               </div>
-                              <div className={styles.title}>
-                                <p>{e.title}</p>
+                              <div className={styles.price}>
+                                <p>₾ {e.price}</p>
                               </div>
                             </div>
                             <div className={styles.price}>
-                              <p>₾ {e.price}</p>
+                              <p>შეკვეთის დრო: </p>
+                              <p>{time(e.createdAt)}</p>
                             </div>
-                            
                           </div>
                         );
                       })
                     : null}
-                    <div className={styles.totalAmount}>გადახდილი თანხა:{item.amount}</div>
+                  <div className={styles.totalAmount}>
+                    გადახდილი თანხა:{item.amount}
+                  </div>
                 </div>
               );
             })}
@@ -101,7 +123,6 @@ const UserDashboard = ({ user }) => {
           </div>
         </div>
       )}
-      
     </div>
   );
 };

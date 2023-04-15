@@ -43,6 +43,8 @@ const MainSections = ({ type }) => {
     };
   }, [localgender, path, type]);
 
+  console.log(products)
+
   var gender;
   if (firstPath === "man") {
     gender = "კაცის";

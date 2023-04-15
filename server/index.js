@@ -5,10 +5,12 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv").config();
+const { Firestore } = require("firebase-admin/firestore");
 const { Telegraf } = require("telegraf");
 // const http = require("http");
 // const { Server } = require("socket.io");
 const { db } = require("./firebase.js");
+const admin = require("firebase-admin");
 // const { updateDoc, doc } = require("firebase-admin/firestore");
 const port = 4000;
 
@@ -29,7 +31,7 @@ const bot = new Telegraf(process.env.BOT_TOKEN);
 let email;
 let newOrder;
 let storeName;
-let prods
+let prods;
 
 // io.on("connection", (socket) => {
 //   console.log(`user ${socket.id}`)
@@ -45,8 +47,6 @@ let prods
 //   console.log(userId)
 //   ctx.telegram.sendMessage(userId, 'Your payment was successful!');
 // });
-
-
 
 app.post("/checkout", (req, res) => {
   console.log("checkout");
@@ -86,7 +86,7 @@ app.post("/checkout", (req, res) => {
     .post(url, data)
     .then(async (response) => {
       console.log("paymant");
-     prods = req.body.cartItems;
+      prods = req.body.cartItems;
 
       storeName = prods.map((item) => {
         return item.name;
@@ -102,9 +102,21 @@ app.post("/checkout", (req, res) => {
           size: item.size,
           quantity: item.quantity,
           img: item.img,
+          createdAt: Date.now(),
         };
       });
+      // console.log(req.body.amount)
+      // console.log(Date.now() )
 
+      // const usersRef = db.collection("users");
+      // const snap = await usersRef.where("email", "==", email).get();
+
+      // snap.forEach((doc) => {
+      //   db.collection("users").doc(doc.id).update({
+      //     order: newOrder,
+      //     amount: req.body.amount,
+      //   });
+      // });
       transactionId = response.data.response.transactionId;
 
       res.json({
@@ -113,8 +125,69 @@ app.post("/checkout", (req, res) => {
         transactionId: response.data.transactionId,
       });
 
-     
+      // const usersRef = db.collection("users");
+      // const snap = await usersRef.where("email", "==", email).get();
 
+      // snap.forEach((doc) => {
+      //   // console.log(doc.data().order)
+      //   let oldOrders = doc.data().order;
+      //   // console.log([...newOrder,...oldOrders])
+      //   if(oldOrders) {
+      //     db.collection("users")
+      //     .doc(doc.id)
+      //     .update({
+      //       order: [...newOrder, ...oldOrders],
+      //       amount: req.body.amount,
+      //     });
+      //   }else {
+      //     db.collection("users")
+      //     .doc(doc.id)
+      //     .update({
+      //       order: newOrder,
+      //       amount: req.body.amount,
+      //     });
+
+      //   }
+       
+      // });
+
+      // const productsByStore = {};
+      // newOrder.forEach((product) => {
+      //   const storeName = product.name;
+      //   if (!productsByStore[storeName]) {
+      //     productsByStore[storeName] = [];
+      //   }
+      //   productsByStore[storeName].push(product);
+      // });
+
+      // for (const [storeName, products] of Object.entries(productsByStore)) {
+      //   const storeRef = db.collection("store");
+      //   const snap = await storeRef.where("name", "==", storeName).get();
+
+      //   snap.forEach((doc) => {
+      //   let oldOrders = doc.data().order;
+      //   // console.log([...products,...oldOrders])
+
+      //   if(oldOrders) {
+      //     db.collection("store").doc(doc.id).update({
+      //       order: [...products,...oldOrders],
+      //     });
+      //   }else {
+      //     db.collection("store").doc(doc.id).update({
+      //       order: products,
+      //     });
+
+      //   }
+
+        
+      //   });
+      // }
+
+      // console.log(productsByStore)
+      // const date = new Date(timestamp);
+      // console.log(date); // 👉️ Fri Jan 13 2023 10:26:10
+
+      // console.log(date.toString());
 
 
       /////////////////////////
@@ -149,7 +222,6 @@ app.post("/cart", async (req, res) => {
   // console.log(req.body);
   console.log(req.body.finalAmount);
   console.log(req.body.status);
-  console.log("--------------------");
   console.log(email);
   // finalAmount:
   // status:
@@ -164,31 +236,66 @@ app.post("/cart", async (req, res) => {
       });
     });
 
+    //this code is witten by chatgpt from here
+    //ქვედა კოდი პროდუქტებს ამატებს შესაბამისი მაღაზიის დოკუმენტში
+
+    const productsByStore = {};
+    newOrder.forEach((product) => {
+      const storeName = product.name;
+      if (!productsByStore[storeName]) {
+        productsByStore[storeName] = [];
+      }
+      productsByStore[storeName].push(product);
+    });
+
+    for (const [storeName, products] of Object.entries(productsByStore)) {
+      const storeRef = db.collection("store");
+      const snap = await storeRef.where("name", "==", storeName).get();
+
+      snap.forEach((doc) => {
+      let oldOrders = doc.data().order;
+      // console.log([...products,...oldOrders])
+
+      if(oldOrders) {
+        db.collection("store").doc(doc.id).update({
+          order: [...products,...oldOrders],
+        });
+      }else {
+        db.collection("store").doc(doc.id).update({
+          order: products,
+        });
+
+      }
+
+      
+      });
+    }
 
 
-     //this code is witten by chatgpt from here 
-    
-     const productsByStore = {};
-     prods.forEach((product) => {
-       const storeName = product.name;
-       if (!productsByStore[storeName]) {
-         productsByStore[storeName] = [];
-       }
-       productsByStore[storeName].push(product);
-     });
 
-     for (const [storeName, products] of Object.entries(productsByStore)) {
-       const storeRef = db.collection("store");
-       const snap = await storeRef.where("name", "==", storeName).get();
 
-       snap.forEach((doc) => {
-         db.collection("store").doc(doc.id).update({
-           order: products,
-         });
-       });
-     }
 
-     //to here
+    // const productsByStore = {};
+    // prods.forEach((product) => {
+    //   const storeName = product.name;
+    //   if (!productsByStore[storeName]) {
+    //     productsByStore[storeName] = [];
+    //   }
+    //   productsByStore[storeName].push(product);
+    // });
+
+    // for (const [storeName, products] of Object.entries(productsByStore)) {
+    //   const storeRef = db.collection("store");
+    //   const snap = await storeRef.where("name", "==", storeName).get();
+
+    //   snap.forEach((doc) => {
+    //     db.collection("store").doc(doc.id).update({
+    //       order: products,
+    //     });
+    //   });
+    // }
+
+    //to here
 
     // const storeRef = db.collection("store");
     // const ss = await storeRef.where("email", "==", email).get();
@@ -207,6 +314,7 @@ app.post("/cart", async (req, res) => {
     console.log("succ from checkout");
   }
   console.log("done");
+  console.log("--------------------");
 });
 
 // Start the server

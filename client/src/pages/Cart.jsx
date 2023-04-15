@@ -56,7 +56,7 @@ const Cart = () => {
     }
   }, [link, transactionID, open]);
   // https://vexter.onrender.com/checkout
-  // http://localhost:4000/cart
+  // http://localhost:4000/checkout
   const handleSendInfo = async () => {
     setOpen(true);
     setLoading(true);
