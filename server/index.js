@@ -18,51 +18,12 @@ app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
 const bot = new Telegraf(process.env.BOT_TOKEN);
-// console.log("")
-
-// const server = http.createServer(app);
-// const io = new Server(server, {
-//   cors: {
-//     origin: "http://localhost:3000",
-//     methods: ["GET", "POST"],
-//   },
-// });
-// Define a route
-let email;
-let newOrder;
 let storeName;
-let prods;
-
-// io.on("connection", (socket) => {
-//   console.log(`user ${socket.id}`)
-//   socket.on("send_message", (data) => {
-//     console.log(data)
-//   });
-//   socket.emit("recieveData", {info: "sdsdsd"})
-// })
-
-// bot.start((ctx) => {
-//   ctx.reply("check!");
-//   const userId = ctx.from.id;
-//   console.log(userId)
-//   ctx.telegram.sendMessage(userId, 'Your payment was successful!');
-// });
+let email;
+// let newOrder
 
 app.post("/checkout", (req, res) => {
   console.log("checkout");
-  // Call the justPay function from the API module
-  // bot.start((ctx) => {
-  //   ctx.reply("check!");
-  //   const userId = ctx.from.id;
-  //   console.log(userId)
-  //   ctx.telegram.sendMessage(userId, 'Your payment was successful!');
-  // });
-  // bot.command('oldschool', (ctx) => ctx.reply('Hello'));
-  // ctx.reply("check!");
-
-  // bot.launch();
-
-  // let store
 
   email = req.body.email;
   const url = "https://payze.io/api/v1";
@@ -105,18 +66,7 @@ app.post("/checkout", (req, res) => {
           createdAt: Date.now(),
         };
       });
-      // console.log(req.body.amount)
-      // console.log(Date.now() )
 
-      // const usersRef = db.collection("users");
-      // const snap = await usersRef.where("email", "==", email).get();
-
-      // snap.forEach((doc) => {
-      //   db.collection("users").doc(doc.id).update({
-      //     order: newOrder,
-      //     amount: req.body.amount,
-      //   });
-      // });
       transactionId = response.data.response.transactionId;
 
       res.json({
@@ -124,32 +74,40 @@ app.post("/checkout", (req, res) => {
         cartItems: newOrder,
         transactionId: response.data.transactionId,
       });
+      let ord = {
+        orderId: "sdfdsf",
+        orders: newOrder,
+        sellers: storeName,
+        buyer: email,
+        purchaseTime: Date.now(),
+      };
+
+      // console.log(ord);
 
       // const usersRef = db.collection("users");
       // const snap = await usersRef.where("email", "==", email).get();
 
       // snap.forEach((doc) => {
-      //   // console.log(doc.data().order)
       //   let oldOrders = doc.data().order;
-      //   // console.log([...newOrder,...oldOrders])
-      //   if(oldOrders) {
-      //     db.collection("users")
-      //     .doc(doc.id)
-      //     .update({
-      //       order: [...newOrder, ...oldOrders],
-      //       amount: req.body.amount,
-      //     });
-      //   }else {
-      //     db.collection("users")
-      //     .doc(doc.id)
-      //     .update({
-      //       order: newOrder,
-      //       amount: req.body.amount,
-      //     });
 
-      //   }
-       
+      //   let ord = {
+      //     orderId: doc.id,
+      //     orders: newOrder,
+      //     sellers: storeName,
+      //     buyer: email,
+      //     purchaseTime: Date.now(),
+      //     amount: req.body.amount,
+      //   };
+      //   db.collection("users")
+      //     .doc(doc.id)
+      //     .update({
+      //       order: [ord, ...oldOrders],
+      //       // amount: req.body.amount,
+      //     });
       // });
+
+      //this code is witten by chatgpt from here
+      //ქვედა კოდი პროდუქტებს ამატებს შესაბამისი მაღაზიის დოკუმენტში
 
       // const productsByStore = {};
       // newOrder.forEach((product) => {
@@ -165,45 +123,35 @@ app.post("/checkout", (req, res) => {
       //   const snap = await storeRef.where("name", "==", storeName).get();
 
       //   snap.forEach((doc) => {
-      //   let oldOrders = doc.data().order;
-      //   // console.log([...products,...oldOrders])
+      //     let oldOrders = doc.data().order;
+      //     let ord = {
+      //       orderId: doc.id,
+      //       orders: newOrder,
+      //       buyer: email,
+      //       purchaseTime: Date.now(),
+      //       amount: req.body.amount,
+      //     };
+      //     // console.log([ord, ...oldOrders]);
 
-      //   if(oldOrders) {
-      //     db.collection("store").doc(doc.id).update({
-      //       order: [...products,...oldOrders],
-      //     });
-      //   }else {
-      //     db.collection("store").doc(doc.id).update({
-      //       order: products,
-      //     });
-
-      //   }
-
-        
+      //     if (oldOrders) {
+      //       db.collection("store")
+      //         .doc(doc.id)
+      //         .update({
+      //           order: [ord, ...oldOrders],
+      //         });
+      //     } else {
+      //       db.collection("store")
+      //         .doc(doc.id)
+      //         .update({
+      //           order: [ord],
+      //         });
+      //     }
       //   });
       // }
 
-      // console.log(productsByStore)
-      // const date = new Date(timestamp);
-      // console.log(date); // 👉️ Fri Jan 13 2023 10:26:10
-
-      // console.log(date.toString());
-
-
-      /////////////////////////
-
-      // prods.forEach(async (item) => {
-      //   const storeRef = db.collection("store");
-      //   const snap = await storeRef.where("name", "==", item.namoe).get();
-      //   snap.forEach((doc) => {
-      //     db.collection("store").doc(doc.id).update({
-      //       order: newOrder,
-      //     });
-      //   });
-      // });
-
-      /////////////////////
+      console.log("succ from checkout");
     })
+
     .catch((error) => {
       console.error(error);
       res.status(500).send("Error processing payment.");
@@ -230,11 +178,24 @@ app.post("/cart", async (req, res) => {
     const snap = await usersRef.where("email", "==", email).get();
 
     snap.forEach((doc) => {
-      db.collection("users").doc(doc.id).update({
-        order: newOrder,
+      let oldOrders = doc.data().order;
+
+      let ord = {
+        orderId: doc.id,
+        orders: newOrder,
+        sellers: storeName,
+        buyer: email,
+        purchaseTime: Date.now(),
         amount: req.body.finalAmount,
-      });
+      };
+      db.collection("users")
+        .doc(doc.id)
+        .update({
+          order: [ord, ...oldOrders],
+          // amount: req.body.amount,
+        });
     });
+
 
     //this code is witten by chatgpt from here
     //ქვედა კოდი პროდუქტებს ამატებს შესაბამისი მაღაზიის დოკუმენტში
@@ -253,49 +214,31 @@ app.post("/cart", async (req, res) => {
       const snap = await storeRef.where("name", "==", storeName).get();
 
       snap.forEach((doc) => {
-      let oldOrders = doc.data().order;
-      // console.log([...products,...oldOrders])
+        let oldOrders = doc.data().order;
+        let ord = {
+          orderId: doc.id,
+          orders: newOrder,
+          buyer: email,
+          purchaseTime: Date.now(),
+          amount: req.body.amount,
+        };
+        // console.log([ord, ...oldOrders]);
 
-      if(oldOrders) {
-        db.collection("store").doc(doc.id).update({
-          order: [...products,...oldOrders],
-        });
-      }else {
-        db.collection("store").doc(doc.id).update({
-          order: products,
-        });
-
-      }
-
-      
+        if (oldOrders) {
+          db.collection("store")
+            .doc(doc.id)
+            .update({
+              order: [ord, ...oldOrders],
+            });
+        } else {
+          db.collection("store")
+            .doc(doc.id)
+            .update({
+              order: [ord],
+            });
+        }
       });
     }
-
-
-
-
-
-    // const productsByStore = {};
-    // prods.forEach((product) => {
-    //   const storeName = product.name;
-    //   if (!productsByStore[storeName]) {
-    //     productsByStore[storeName] = [];
-    //   }
-    //   productsByStore[storeName].push(product);
-    // });
-
-    // for (const [storeName, products] of Object.entries(productsByStore)) {
-    //   const storeRef = db.collection("store");
-    //   const snap = await storeRef.where("name", "==", storeName).get();
-
-    //   snap.forEach((doc) => {
-    //     db.collection("store").doc(doc.id).update({
-    //       order: products,
-    //     });
-    //   });
-    // }
-
-    //to here
 
     // const storeRef = db.collection("store");
     // const ss = await storeRef.where("email", "==", email).get();

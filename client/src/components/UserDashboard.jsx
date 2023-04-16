@@ -79,39 +79,48 @@ const UserDashboard = ({ user }) => {
 
           <div className={styles.ordersContainer}>
             {products.map((item) => {
-              // console.log(item.amount)
               return (
                 <div key={item.email} className={styles.allOrder}>
                   {item.order
                     ? item.order.map((e, i) => {
-                        // console.log(e.createdAt)
-                        // setTime(e.createdAt)
                         return (
                           <div key={i} className={styles.orders}>
-                            <div className={styles.product}>
-                              <div className={styles.left}>
-                                <div className={styles.image}>
-                                  <img src={e.img[0]} alt={e.title} />
-                                </div>
-                                <div className={styles.title}>
-                                  <p>{e.title}</p>
-                                </div>
-                              </div>
-                              <div className={styles.price}>
-                                <p>₾ {e.price}</p>
-                              </div>
-                            </div>
+                            {e.orders
+                              ? e.orders.map((e) => {
+                                  // console.log(e);
+                                  return (
+                                    <div
+                                      className={styles.productCont}
+                                      key={e.id}
+                                    >
+                                      <div className={styles.product}>
+                                        <div className={styles.left}>
+                                          <div className={styles.image}>
+                                            <img src={e.img[0]} alt={e.title} />
+                                          </div>
+                                          <div className={styles.title}>
+                                            <p>{e.title}</p>
+                                          </div>
+                                        </div>
+                                        <div className={styles.price}>
+                                          <p>₾ {e.price}</p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  );
+                                })
+                              : null}
                             <div className={styles.price}>
                               <p>შეკვეთის დრო: </p>
-                              <p>{time(e.createdAt)}</p>
+                              <p>{time(e.purchaseTime)}</p>
+                            </div>
+                            <div className={styles.totalAmount}>
+                              გადახდილი თანხა:{e.amount}
                             </div>
                           </div>
                         );
                       })
                     : null}
-                  <div className={styles.totalAmount}>
-                    გადახდილი თანხა:{item.amount}
-                  </div>
                 </div>
               );
             })}
