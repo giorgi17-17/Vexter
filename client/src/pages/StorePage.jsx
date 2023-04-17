@@ -5,26 +5,27 @@ import { collection, onSnapshot, query, where } from "firebase/firestore";
 import styles from "../components/css/storePage.module.css";
 import Categories from "../components/Categories";
 import Product from "../components/Product";
-// import { ShoppingCart } from "../Context/CartContext";
+import { ShoppingCart } from "../Context/CartContext";
 
 const StorePage = () => {
   const { user } = UserAuth();
 //   const [store, setStore] = useState([]);
   const [products, setProducts] = useState([]);
+  const { secondPath } = ShoppingCart();
 
-  const [storeName, setStoreName] = useState("");
+  // const [storeName, setStoreName] = useState("");
 //   const { firstPath } = ShoppingCart();
-
+  // console.log(secondPath)
   useEffect(() => {
     // let storeName;
-    if (user) {
-    //   storeName = user.displayName;
-      setStoreName(user.displayName)
-    } else {
-        setStoreName('')
-    }
+    // if (user) {
+    // //   storeName = user.displayName;
+    //   setStoreName(user.displayName)
+    // } else {
+    //     setStoreName('')
+    // }
     const collRef = collection(db, "products");
-    const q = query(collRef, where("name", "==", `${storeName}`));
+    const q = query(collRef, where("name", "==", `${secondPath}`));
 
     const unsub = onSnapshot(q, (snap) => {
       const items = [];
@@ -33,17 +34,18 @@ const StorePage = () => {
       });
       setProducts(items);
     });
+    // console.log('...')
     return () => {
       unsub();
     };
-  }, [storeName, user]);
+  }, [secondPath,user]);
 
   return (
     <div className={styles.container}>
       <div className={styles.categories}>
         <Categories setProducts={setProducts} />
       </div>
-        <h1>{storeName}</h1>
+        <h1>{secondPath}</h1>
       <div className={styles.products}>
         <div className={styles.productsTrue}>
           <p className={styles.productsCount}>{products.length} პროდუქტი</p>
