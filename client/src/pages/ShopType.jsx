@@ -6,11 +6,13 @@ import styles from "../components/css/shopType.module.css";
 import { ShoppingCart } from "../Context/CartContext";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import Categories from "../components/Categories";
+import { ProductsSkeleton } from "../components/ProductsSkeleton";
 
 const Shop = () => {
   const { firstPath, secondPath, thirdPath } = ShoppingCart();
 
   const [productsType, setProductsType] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -28,6 +30,7 @@ const Shop = () => {
         items.push(doc.data());
       });
       setProductsType(items);
+      setLoading(false);
       // console.log(items);
     });
 
@@ -43,6 +46,8 @@ const Shop = () => {
         <Categories setProducts={setProductsType} />
       </div>
       <div className={styles.products}>
+      {loading && <ProductsSkeleton cards={8} />}
+
         {productsType.length > 0 ? (
           <div className={styles.productsTrue}>
             <p className={styles.productsCount}>{productsType.length} პროდუქტი</p>

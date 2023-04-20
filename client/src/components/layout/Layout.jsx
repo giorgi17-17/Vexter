@@ -6,21 +6,24 @@ import Footer from "../Footer";
 import Header from "../Header";
 import "../../App.css";
 import FavoritesProvider from "../../Context/FavoritesContext.js";
+import { SkeletonTheme } from "react-loading-skeleton";
 
 const Layout = () => {
   return (
     <div className="layout">
-      <AuthContextProvider>
-        <CartProvider>
-          <FavoritesProvider>
-            <Header />
-            <div className="body">
-              <Router />
-            </div>
-            <Footer />
-          </FavoritesProvider>
-        </CartProvider>
-      </AuthContextProvider>
+      <SkeletonTheme >
+        <AuthContextProvider>
+          <CartProvider>
+            <FavoritesProvider>
+              <Header />
+              <div className="body">
+                <Router />
+              </div>
+              <Footer />
+            </FavoritesProvider>
+          </CartProvider>
+        </AuthContextProvider>
+      </SkeletonTheme>
     </div>
   );
 };

@@ -6,10 +6,13 @@ import { useEffect, useState } from "react";
 import { db } from "../firebase/firebase";
 import Product from "./Product";
 import { Link } from "react-router-dom";
+import { ProductsSkeleton } from "./ProductsSkeleton";
 
 const MainSections = ({ type }) => {
   const [products, setProducts] = useState([]);
   const { firstPath } = ShoppingCart();
+  const [loading, setLoading] = useState(true);
+  const [windowSize, setWindowSize] = useState({ width: undefined });
 
   const localgender = localStorage.getItem("gender");
 
@@ -19,6 +22,20 @@ const MainSections = ({ type }) => {
     //'path' joins array items into string
     var path = splited.join("");
   }
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowSize({
+        width: window.innerWidth,
+      });
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const collRef = collection(db, "products");
@@ -35,6 +52,7 @@ const MainSections = ({ type }) => {
         items.push(doc.data());
       });
       setProducts(items);
+      setLoading(false);
       //   console.log(items);
     });
 
@@ -42,7 +60,7 @@ const MainSections = ({ type }) => {
       getProducts();
     };
   }, [localgender, path, type]);
-
+  // console.log(windowSize.width)
 
   var gender;
   if (firstPath === "man") {
@@ -60,7 +78,7 @@ const MainSections = ({ type }) => {
     apparelType = "ტანსაცმელი";
   } else if (type === "sport") {
     apparelType = "სპორტული ჩასაცმელი";
-  }else if(type === "bags") {
+  } else if (type === "bags") {
     apparelType = "ჩანთები";
   }
 
@@ -75,6 +93,9 @@ const MainSections = ({ type }) => {
         </Link>
       </div>
       <div className={styles.products}>
+      {loading && windowSize.width < 600 ? <ProductsSkeleton cards={2} /> : null}
+      {loading && windowSize.width > 600 ? <ProductsSkeleton cards={8} /> : null}
+
         {products.map((item) => {
           return (
             <div key={item.id} className={styles.prod}>

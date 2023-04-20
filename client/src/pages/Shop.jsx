@@ -6,11 +6,13 @@ import styles from "../components/css/shop.module.css";
 import { ShoppingCart } from "../Context/CartContext";
 import Categories from "../components/Categories";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { ProductsSkeleton } from "../components/ProductsSkeleton";
 
 const Shop = () => {
   const { firstPath, secondPath } = ShoppingCart();
 
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -28,6 +30,7 @@ const Shop = () => {
         items.push(doc.data());
       });
       setProducts(items);
+      setLoading(false);
     });
 
     return () => {
@@ -42,14 +45,12 @@ const Shop = () => {
         <Categories setProducts={setProducts} />
       </div>
       <div className={styles.products}>
-        {products.length > 0 ? (
+        {loading && <ProductsSkeleton cards={8} />}
+
+        {products.length > 0 && (
           <div className={styles.productsTrue}>
             <p className={styles.productsCount}>{products.length} პროდუქტი</p>
             {products.map((item) => {
-              // console.log(typeof item.price)
-              // let arr = []
-              // arr.push(item.price)
-              // console.log(arr)
               return (
                 <div key={item.id} className={styles.prod}>
                   <Product
@@ -65,7 +66,8 @@ const Shop = () => {
               );
             })}
           </div>
-        ) : (
+        )}
+        {products.length < 0 && loading === false (
           <div className={styles.productsFalse}>
             <h1>პროდუქტები ვერ მოიძებნა</h1>
           </div>

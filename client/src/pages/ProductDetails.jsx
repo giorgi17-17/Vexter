@@ -9,10 +9,14 @@ import { AiOutlineCheck, AiOutlineHeart } from "react-icons/ai";
 import ImageCarousel from "../components/ImageCarousel";
 import { Favorites } from "../Context/FavoritesContext";
 import MainSections from "../components/MainSections";
+import { ProductsDetailsSkeleton } from "../components/ProductsSkeleton";
+// import Skeleton from "react-loading-skeleton";
 
 const Productdetails = () => {
   const { id } = useParams();
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const [images, setImages] = useState([]);
   // const [size, setSize] = useState("");
   // const [error, setError] = useState("");
@@ -38,6 +42,7 @@ const Productdetails = () => {
       });
       setProducts(items);
       setImages(imgs[0]);
+      setLoading(false)
     });
 
     return () => {
@@ -50,6 +55,7 @@ const Productdetails = () => {
 
   return (
     <div className={styles.container}>
+      {loading && <ProductsDetailsSkeleton cards={1}/>}
       {products.map((item) => {
         type = item.category.type
         // console.log(item.category.size)
@@ -70,6 +76,7 @@ const Productdetails = () => {
                 </Link>
                 
               </div>
+              {/* ზომის არევა */}
               {/* <div className={styles.input}>
                 {!size && <p className={styles.sizeError}>{error}</p>}
 

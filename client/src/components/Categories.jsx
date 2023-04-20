@@ -139,7 +139,7 @@ const Categories = ({ setProducts }) => {
     thirdPath,
     // priceArray
   ]);
-  console.log(save);
+  // console.log(save);
   // if(test === false){
   //   setDropDown(false)
   // }
