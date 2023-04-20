@@ -28,7 +28,7 @@ const Product = ({ title, name, img, price, id, storeLocation, size }) => {
     <div className={styles.container}>
       <Link className={styles.imageContainer} to={`/detail/${id}`}>
         <div className={styles.image}>
-          <img src={img} alt={title} />
+          <img src={img} alt={title} loading="lazy" />
         </div>
       </Link>
 

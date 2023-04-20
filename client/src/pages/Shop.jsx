@@ -46,6 +46,10 @@ const Shop = () => {
           <div className={styles.productsTrue}>
             <p className={styles.productsCount}>{products.length} პროდუქტი</p>
             {products.map((item) => {
+              // console.log(typeof item.price)
+              // let arr = []
+              // arr.push(item.price)
+              // console.log(arr)
               return (
                 <div key={item.id} className={styles.prod}>
                   <Product

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styles from "./css/categories.module.css";
-
+import Slider from "@mui/material/Slider";
 import { db } from "../firebase/firebase";
 import {
   collection,
@@ -10,9 +10,19 @@ import {
   where,
 } from "firebase/firestore";
 import { ShoppingCart } from "../Context/CartContext";
+// import { BsEmojiNeutralFill } from "react-icons/bs";
+
+function valuetext(value) {
+  return `${value}`;
+}
 
 const Categories = ({ setProducts }) => {
   const { firstPath, secondPath, thirdPath } = ShoppingCart();
+  const [priceArray, setPriceArray] = useState([]);
+  const [dropDown, setDropDown] = useState(false);
+  const [save, setSave] = useState(false);
+  // const [test, setTest] = useState(false);
+
   const [type, setType] = useState("");
   const [brand, setBrand] = useState("");
   const [color, setColor] = useState("");
@@ -21,7 +31,12 @@ const Categories = ({ setProducts }) => {
   const [subType, setSubType] = useState("");
   // const [gender, setGender] = useState("");
   const [sortBy, setSortBy] = useState("");
-  // const [name, setName] = useState("");
+  const [value, setValue] = useState([0, 1000]);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   const gender = localStorage.getItem("gender");
   if (gender) {
     //'splited' make gender to array and removes first and last charaqter
@@ -30,12 +45,31 @@ const Categories = ({ setProducts }) => {
     var path = splited.join("");
   }
 
+  let minElement = priceArray[0];
 
-  //   const [products, setProducts] = useState([]);
-  //   console.log(products)
+  for (let i = 1; i < priceArray.length; ++i) {
+    if (priceArray[i] < minElement) {
+      minElement = priceArray[i];
+    }
+  }
+
+  let maxElement = priceArray[0];
+
+  for (let i = 1; i < priceArray.length; ++i) {
+    if (priceArray[i] > maxElement) {
+      maxElement = priceArray[i];
+    }
+  }
+
+  // useEffect(() => {
+  //   setDropDown(false);
+  // }, [test]);
+
   useEffect(() => {
     const collRef = collection(db, "products");
+
     // setGender(firstPath);
+
     setType(secondPath);
     let q = query(collRef);
     if (subType !== "")
@@ -45,12 +79,16 @@ const Categories = ({ setProducts }) => {
     if (size !== "") q = query(q, where("category.size", "==", `${size}`));
     // if (type !== "") q = query(q, where("category.type", "==", `${type}`));
     if (color !== "") q = query(q, where("category.color", "==", `${color}`));
-    if (path !== "")
-      q = query(q, where("category.gender", "==", `${path}`));
+    if (path !== "") q = query(q, where("category.gender", "==", `${path}`));
 
-      if (firstPath === "man" || firstPath === "woman" || firstPath === "kids") {
-        if (type !== "") q = query(q, where("category.type", "==", `${type}`));
-      }
+    if (firstPath === "man" || firstPath === "woman" || firstPath === "kids") {
+      if (type !== "") q = query(q, where("category.type", "==", `${type}`));
+    }
+
+    if (save) {
+      if (value[0] >= 1) q = query(q, where("price", ">=", value[0]));
+      if (value[1] >= 1) q = query(q, where("price", "<=", value[1]));
+    }
 
     // if (thirdPath)
     //   q = query(q, where("category.subType", "==", `${thirdPath}`));
@@ -63,13 +101,19 @@ const Categories = ({ setProducts }) => {
       q = query(q, orderBy("createdAt", `asc`));
     }
 
+    //   if(test === false){
+    //   setDropDown(false)
+    // }
+    // setDropDown(false)
+
     const unsub = onSnapshot(q, (snap) => {
-      // setProducts([])
       const items = [];
+      const prices = [];
       snap.forEach((doc) => {
-        // setProducts(doc.data())
+        prices.push(doc.data().price);
         items.push(doc.data());
       });
+      setPriceArray(prices);
       setProducts(items);
     });
 
@@ -77,6 +121,9 @@ const Categories = ({ setProducts }) => {
       unsub();
     };
   }, [
+    value,
+    save,
+    minElement,
     sortBy,
     subType,
     setProducts,
@@ -90,7 +137,12 @@ const Categories = ({ setProducts }) => {
     path,
     type,
     thirdPath,
+    // priceArray
   ]);
+  console.log(save);
+  // if(test === false){
+  //   setDropDown(false)
+  // }
   return (
     <div className={styles.categoriesContainer}>
       <select
@@ -136,6 +188,44 @@ const Categories = ({ setProducts }) => {
         <option value="hand-made">Hand made</option>
         <option value="New Balance">New Balance</option>
       </select>
+
+      <div className={styles.price}>
+        {!dropDown ? (
+          <button onClick={() => setDropDown(!dropDown)}>
+            {dropDown ? null : "ფასი"}
+          </button>
+        ) : null}
+
+        {dropDown && (
+          <div className={styles.rangeSlider}>
+            <Slider
+              getAriaLabel={() => "Temperature range"}
+              value={value}
+              onChange={handleChange}
+              valueLabelDisplay="auto"
+              getAriaValueText={valuetext}
+              min={0}
+              max={500}
+              size="small"
+            />
+            <div className={styles.priceValues}>
+              <div>{value[0]}</div>
+              <div>{value[1]}</div>
+            </div>
+            <div
+              className={styles.save}
+              onClick={() => {
+                // Do something when "Save" button is clicked
+                setDropDown(false); // Close the dropdown
+                setSave(true);
+              }}
+            >
+              save
+            </div>
+          </div>
+        )}
+      </div>
+
       <select
         onChange={(e) => {
           setColor(e.target.value);
@@ -146,7 +236,6 @@ const Categories = ({ setProducts }) => {
         <option value="red">Red</option>
         <option value="blue">Blue</option>
       </select>
-      
 
       {secondPath !== "shoe" ? (
         <select
