@@ -1,6 +1,6 @@
 // import baner from "../assets/baner.png";
 import { useState } from "react";
-import vexter from "../assets/Vertex(5).png";
+import vexter from "../assets/vexterBanner.webp";
 import Skeleton from "react-loading-skeleton";
 
 const Baner = () => {

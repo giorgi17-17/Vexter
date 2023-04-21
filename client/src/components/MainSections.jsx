@@ -94,7 +94,7 @@ const MainSections = ({ type }) => {
       </div>
       <div className={styles.products}>
       {loading && windowSize.width < 600 ? <ProductsSkeleton cards={2} /> : null}
-      {loading && windowSize.width > 600 ? <ProductsSkeleton cards={8} /> : null}
+      {loading && windowSize.width > 600 ? <ProductsSkeleton cards={7} /> : null}
 
         {products.map((item) => {
           return (
