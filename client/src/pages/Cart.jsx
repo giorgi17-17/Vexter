@@ -7,73 +7,22 @@ import ClipLoader from "react-spinners/ClipLoader";
 // import io from "socket.io-client"
 import { UserAuth } from "../Context/AuthContext";
 import { Link } from "react-router-dom";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
-import { db } from "../firebase/firebase";
-
-//change this with render url
-// const socket = io.connect("https://vertex-ecommerce.web.app")
-// socket.on("connect_error", (err) => {
-//   console.log(err.message); // prints the message associated with the error
-// });
-
-// if (!localStorage.getItem("transactionId")) {
-//   localStorage.setItem("transactionId", JSON.stringify([]));
-// }
-// const tra = JSON.parse(localStorage.getItem("transactionId") || "");
 
 const Cart = () => {
   const { items, deleteOneFromCart, totalAmount, cost, delivery } =
     ShoppingCart();
+
   const [link, setLink] = useState("");
-  // const [acountNumber, setAccountNumber] = useState("");
-  // const [data, setData] = useState("");
-  // const [test, setTest] = useState("");
-  // const [transactionID, setTransactionId] = useState(tra);
-  // const [cartItemsToChange, setCartItemsToChange] = useState([]);
   const [checkUser, setCheckUser] = useState(true);
   let [loading, setLoading] = useState(false);
   let [open, setOpen] = useState(false);
-  // console.log(transactionID)
-  // console.log(cartItemsToChange)
+
   const { user } = UserAuth();
   const override = {
     display: "block",
     margin: "0 auto",
     borderColor: "red",
   };
-
-  // localStorage.setItem("purchasedItems", JSON.stringify(cartItemsToChange));
-  // localStorage.setItem("transactionId", JSON.stringify(transactionID));
-
-  // socket.on("recieveData", (data) => {
-  //   // console.log(data.info)
-  //   setData(data.info)
-  //   setTest(data.test)
-  //   // alert(data.info)
-  // })
-
-  useEffect(() => {
-    const collRef = collection(db, "store");
-
-    const q = query(
-      collRef,
-      where("email", "==", `${user.email}`)
-      // where("category.type", "==", `${type}`)
-    );
-
-    const getProducts = onSnapshot(q, (snap) => {
-      const items = [];
-      snap.forEach((doc) => {
-        items.push(doc.data());
-      });
-    });
-
-    return () => {
-      getProducts();
-    };
-  }, [user.email]);
-
-  // console.log(acountNumber)
 
   useEffect(() => {
     if (link) {
@@ -106,22 +55,12 @@ const Cart = () => {
         })
         .then((data) => {
           setLink(data.transactionUrl.transactionUrl);
-          // setTransactionId(data.transactionUrl.transactionId);
-          // setCartItemsToChange(data.cartItems);
-          // setCartItemsToChange()
-          // console.log(data);
         })
         .catch((error) => {
           console.log(error);
         });
     } else {
       setCheckUser(false);
-      return (
-        <div>
-          <p>Please register before making a purchase</p>
-          {/* Other content to display when user is not registered */}
-        </div>
-      );
     }
   };
 

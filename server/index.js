@@ -60,7 +60,8 @@ app.post("/checkout", async (req, res) => {
       let bankNumbers = doc.data().bankNumber;
 
       // Calculate the amount for each store
-       storeAmount = storeData.totalAmount;
+      // 
+       storeAmount = storeData.totalAmount;  // მთლიანი თანხა
       let storeSellersMoney = storeAmount - storeAmount * 0.05;
 
       // Add a new split for each bank number
@@ -72,7 +73,7 @@ app.post("/checkout", async (req, res) => {
       });
     });
   }
-  
+  // console.log(splitData)
 
   const url = "https://payze.io/api/v1";
   const data = {
@@ -90,7 +91,7 @@ app.post("/checkout", async (req, res) => {
       split: [
         {
           iban: "GE33TB0000000000350000",
-          amount: storeAmount * 0.05,
+          amount: storeAmount * 0.02,
           payIn: 0,
           description: "Description for bank.",
         },
