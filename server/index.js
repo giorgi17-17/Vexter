@@ -7,18 +7,30 @@ const dotenv = require("dotenv").config();
 const { Telegraf } = require("telegraf");
 const { db } = require("./firebase.js");
 const port = 4000;
+const session = require('express-session');
 
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
+app.use(
+  session({
+    secret: process.env.SESSION, // Replace this with a strong secret key
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 60 * 60 * 1000 }, // 1 hour session
+  })
+);
 const bot = new Telegraf(process.env.BOT_TOKEN);
+
 let storeName;
-// let email = null;
+// let email;
 let amount;
 let newOrder;
 
+
 app.post("/checkout", async (req, res) => {
   console.log("checkout");
+  req.session.email = req.body.email;
   // email = req.body.email;
   prods = req.body.cartItems;
   amount = req.body.amount;
@@ -127,7 +139,8 @@ app.post("/checkout", async (req, res) => {
 app.post("/cart", async (req, res) => {
   //when transaction successfull decrement quantity  of product
   //and only in this ocassion make orders on account page
- let email = req.query.email;
+  // email = req.query.email;
+  const email = req.session.email;
   console.log("cart");
   // console.log(req.body);
   console.log(req.body.finalAmount);
