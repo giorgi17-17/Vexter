@@ -62,7 +62,7 @@ app.post("/checkout", async (req, res) => {
       // Calculate the amount for each store
       // 
        storeAmount = storeData.totalAmount;  // მთლიანი თანხა
-      let storeSellersMoney = storeAmount - storeAmount * 0.05;
+      let storeSellersMoney = storeAmount - storeAmount * 0.08;
 
       // Add a new split for each bank number
       splitData.push({
