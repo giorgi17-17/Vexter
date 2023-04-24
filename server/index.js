@@ -13,7 +13,7 @@ app.use(cors());
 app.use(bodyParser.json());
 const bot = new Telegraf(process.env.BOT_TOKEN);
 let storeName;
-let email;
+let email = null;
 let amount;
 let newOrder;
 
@@ -22,7 +22,6 @@ app.post("/checkout", async (req, res) => {
   email = req.body.email;
   prods = req.body.cartItems;
   amount = req.body.amount;
-
 
   newOrder = prods.map((item) => {
     return {
@@ -51,7 +50,7 @@ app.post("/checkout", async (req, res) => {
   });
   console.log(productsByStore);
   const splitData = [];
-  let storeAmount
+  let storeAmount;
   for (const [storeName, storeData] of Object.entries(productsByStore)) {
     const storeRef = db.collection("store");
     const snap = await storeRef.where("name", "==", storeName).get();
@@ -60,8 +59,8 @@ app.post("/checkout", async (req, res) => {
       let bankNumbers = doc.data().bankNumber;
 
       // Calculate the amount for each store
-      // 
-       storeAmount = storeData.totalAmount;  // მთლიანი თანხა
+      //
+      storeAmount = storeData.totalAmount; // მთლიანი თანხა
       let storeSellersMoney = storeAmount - storeAmount * 0.08;
 
       // Add a new split for each bank number
@@ -135,6 +134,7 @@ app.post("/cart", async (req, res) => {
   // finalAmount:
   // status:
   if (req.body.status === "Committed") {
+    console.log(email);
     const usersRef = db.collection("users");
     const snap = await usersRef.where("email", "==", email).get();
 
