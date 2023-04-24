@@ -12,12 +12,13 @@ const session = require('express-session');
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true })); // To parse the request body
 app.use(
   session({
-    secret: process.env.SESSION, // Replace this with a strong secret key
+    secret: "dfsfndsfbsuibd234", // Replace this with a strong secret key
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 60 * 60 * 1000 }, // 1 hour session
+    // cookie: { maxAge: 60 * 60 * 1000 }, // 1 hour session
   })
 );
 const bot = new Telegraf(process.env.BOT_TOKEN);
@@ -31,6 +32,8 @@ let newOrder;
 app.post("/checkout", async (req, res) => {
   console.log("checkout");
   req.session.email = req.body.email;
+  const email = req.query.email;
+  console.log(email)
   // email = req.body.email;
   prods = req.body.cartItems;
   amount = req.body.amount;
