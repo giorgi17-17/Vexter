@@ -25,11 +25,11 @@ const Cart = () => {
   const { items, deleteOneFromCart, totalAmount, cost, delivery } =
     ShoppingCart();
   const [link, setLink] = useState("");
-  const [acountNumber, setAccountNumber] = useState("");
+  // const [acountNumber, setAccountNumber] = useState("");
   // const [data, setData] = useState("");
   // const [test, setTest] = useState("");
   // const [transactionID, setTransactionId] = useState(tra);
-  const [cartItemsToChange, setCartItemsToChange] = useState([]);
+  // const [cartItemsToChange, setCartItemsToChange] = useState([]);
   const [checkUser, setCheckUser] = useState(true);
   let [loading, setLoading] = useState(false);
   let [open, setOpen] = useState(false);
@@ -42,7 +42,7 @@ const Cart = () => {
     borderColor: "red",
   };
 
-  localStorage.setItem("purchasedItems", JSON.stringify(cartItemsToChange));
+  // localStorage.setItem("purchasedItems", JSON.stringify(cartItemsToChange));
   // localStorage.setItem("transactionId", JSON.stringify(transactionID));
 
   // socket.on("recieveData", (data) => {
@@ -52,40 +52,28 @@ const Cart = () => {
   //   // alert(data.info)
   // })
 
-
-
   useEffect(() => {
     const collRef = collection(db, "store");
 
     const q = query(
       collRef,
-      where("email", "==", `${user.email}`),
+      where("email", "==", `${user.email}`)
       // where("category.type", "==", `${type}`)
     );
 
     const getProducts = onSnapshot(q, (snap) => {
       const items = [];
-      // console.log('adad')
-      let accountNum = ""
       snap.forEach((doc) => {
         items.push(doc.data());
-        accountNum = doc.data().bankNumber
-        console.log(doc.data())
       });
-      // console.log(items)
-      setAccountNumber(accountNum);
-
-      // setLoading(false);
-      //   console.log(items);
     });
-    // console.log('first')
+
     return () => {
       getProducts();
     };
   }, [user.email]);
-  
-// console.log(acountNumber)
 
+  // console.log(acountNumber)
 
   useEffect(() => {
     if (link) {
@@ -119,7 +107,7 @@ const Cart = () => {
         .then((data) => {
           setLink(data.transactionUrl.transactionUrl);
           // setTransactionId(data.transactionUrl.transactionId);
-          setCartItemsToChange(data.cartItems);
+          // setCartItemsToChange(data.cartItems);
           // setCartItemsToChange()
           // console.log(data);
         })
