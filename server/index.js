@@ -13,13 +13,13 @@ app.use(cors());
 app.use(bodyParser.json());
 const bot = new Telegraf(process.env.BOT_TOKEN);
 let storeName;
-let email = null;
+// let email = null;
 let amount;
 let newOrder;
 
 app.post("/checkout", async (req, res) => {
   console.log("checkout");
-  email = req.body.email;
+  // email = req.body.email;
   prods = req.body.cartItems;
   amount = req.body.amount;
 
@@ -86,7 +86,9 @@ app.post("/checkout", async (req, res) => {
       callbackError: "https://vertex-ecommerce.web.app/cart",
       preauthorize: false,
       lang: "EN",
-      hookUrl: "https://vexter.onrender.com/cart",
+      hookUrl: `https://vexter.onrender.com/cart?email=${encodeURIComponent(
+        email
+      )}`,
       split: [
         {
           iban: "GE33TB0000000000350000",
@@ -125,7 +127,7 @@ app.post("/checkout", async (req, res) => {
 app.post("/cart", async (req, res) => {
   //when transaction successfull decrement quantity  of product
   //and only in this ocassion make orders on account page
-
+ let email = req.query.email;
   console.log("cart");
   // console.log(req.body);
   console.log(req.body.finalAmount);
