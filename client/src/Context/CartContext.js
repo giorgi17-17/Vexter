@@ -29,7 +29,7 @@ export function CartProvider({ children }) {
   let getStoreLocation = storeLocation
 
   let cost = getTotalCost();
-  let delivery = 5;
+  let delivery = 0;
   let totalAmount = cost + delivery
 
 

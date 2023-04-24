@@ -69,7 +69,7 @@ const Router = () => {
         path="orders"
         element={
           <Suspense fallback={<Error />}>
-            <ProductDetails />
+            <Orders />
           </Suspense>
         }
       />

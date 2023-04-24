@@ -21,7 +21,8 @@ const Shop = () => {
     const q = query(
       collRef,
       where("category.gender", "==", `${firstPath}`),
-      where("category.type", "==", `${secondPath}`)
+      where("category.type", "==", `${secondPath}`),
+      where("quantity", "!=", 0)
     );
 
     const unsub = onSnapshot(q, (snap) => {
@@ -37,7 +38,7 @@ const Shop = () => {
       unsub();
     };
   }, [firstPath, secondPath]);
-  // console.log(products)
+  console.log(products);
 
   return (
     <div className={styles.container}>
@@ -50,24 +51,26 @@ const Shop = () => {
         {products.length > 0 && (
           <div className={styles.productsTrue}>
             <p className={styles.productsCount}>{products.length} პროდუქტი</p>
-            {products.map((item) => {
-              return (
-                <div key={item.id} className={styles.prod}>
-                  <Product
-                    title={item.title}
-                    name={item.name}
-                    img={item.image}
-                    price={item.price}
-                    id={item.id}
-                    size={item.category.size}
-                    storeLocation={item.location}
-                  />
-                </div>
-              );
-            })}
+            {products
+              .filter((item) => item.quantity !== 0)
+              .map((item) => {
+                return (
+                  <div key={item.id} className={styles.prod}>
+                    <Product
+                      title={item.title}
+                      name={item.name}
+                      img={item.image}
+                      price={item.price}
+                      id={item.id}
+                      size={item.category.size}
+                      storeLocation={item.location}
+                    />
+                  </div>
+                );
+              })}
           </div>
         )}
-        {products.length < 0 && loading === false (
+        {products.length < 0 && loading === false && (
           <div className={styles.productsFalse}>
             <h1>პროდუქტები ვერ მოიძებნა</h1>
           </div>
