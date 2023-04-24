@@ -7,20 +7,27 @@ const dotenv = require("dotenv").config();
 const { Telegraf } = require("telegraf");
 const { db } = require("./firebase.js");
 const port = 4000;
-const session = require('express-session');
-
+// const session = require('express-session');
+const sessions = require('client-sessions');
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.urlencoded({ extended: true })); // To parse the request body
-app.use(
-  session({
-    secret: "dfsfndsfbsuibd234", // Replace this with a strong secret key
-    resave: false,
-    saveUninitialized: false,
-    // cookie: { maxAge: 60 * 60 * 1000 }, // 1 hour session
-  })
-);
+app.use(sessions({
+  cookieName: 'mySession',
+  secret: 'rftgybhunm65hty',
+  duration: 24 * 60 * 60 * 1000,
+  activeDuration: 1000 * 60 * 5
+}));
+
+// app.use(express.urlencoded({ extended: true })); // To parse the request body
+// app.use(
+//   session({
+//     secret: "dfsfndsfbsuibd234", // Replace this with a strong secret key
+//     resave: false,
+//     saveUninitialized: false,
+//     // cookie: { maxAge: 60 * 60 * 1000 }, // 1 hour session
+//   })
+// );
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
 let storeName;
@@ -31,8 +38,11 @@ let newOrder;
 
 app.post("/checkout", async (req, res) => {
   console.log("checkout");
-  req.session.email = req.body.email;
-  const email = req.query.email;
+  // req.session.email = req.body.email;
+  // const email = req.query.email;
+  const email = req.body.email; // Assign email value
+  req.mySession.email = email
+
   console.log(email)
   // email = req.body.email;
   prods = req.body.cartItems;
@@ -143,7 +153,8 @@ app.post("/cart", async (req, res) => {
   //when transaction successfull decrement quantity  of product
   //and only in this ocassion make orders on account page
   // email = req.query.email;
-  const email = req.session.email;
+  // const email = req.session.email;
+  const email = req.mySession.email;
   console.log("cart");
   // console.log(req.body);
   console.log(req.body.finalAmount);
