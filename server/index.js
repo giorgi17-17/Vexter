@@ -8,7 +8,11 @@ const { Telegraf } = require("telegraf");
 const { db } = require("./firebase.js");
 const port = 4000;
 const session = require('express-session');
+const RedisStore = require('connect-redis')(session);
 // const sessions = require('client-sessions');
+const redisClient = redis.createClient();
+redisClient.on('error', console.error);
+
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
@@ -19,9 +23,11 @@ app.use(bodyParser.json());
 //   activeDuration: 1000 * 60 * 5
 // }));
 app.use(session({
-  secret: 'your-secret-key', // replace with your own secret key
+  secret: 'your_secret_key',
+  store: new RedisStore({ client: redisClient }),
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie: { secure: true } 
 }));
 
 // app.use(express.urlencoded({ extended: true })); // To parse the request body
