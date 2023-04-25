@@ -7,12 +7,12 @@ const dotenv = require("dotenv").config();
 const { Telegraf } = require("telegraf");
 const { db } = require("./firebase.js");
 const port = 4000;
-const session = require('express-session');
-const RedisStore = require('connect-redis')(session);
+// const session = require('express-session');
+// const redisStore = require('connect-redis')(session);
 // const sessions = require('client-sessions');
-const redisClient = redis.createClient();
-redisClient.on('error', console.error);
-
+// const redisClient = redis.createClient();
+// redisClient.on('error', console.error);
+// console.log(require('connect-redis'))
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
@@ -22,13 +22,13 @@ app.use(bodyParser.json());
 //   duration: 24 * 60 * 60 * 1000,
 //   activeDuration: 1000 * 60 * 5
 // }));
-app.use(session({
-  secret: 'your_secret_key',
-  store: new RedisStore({ client: redisClient }),
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: true } 
-}));
+// app.use(session({
+//   secret: 'your_secret_key',
+//   store: new redisStore({ client: redisClient }),
+//   resave: false,  
+//   saveUninitialized: true,
+//   cookie: { secure: true } 
+// }));
 
 // app.use(express.urlencoded({ extended: true })); // To parse the request body
 // app.use(
@@ -60,8 +60,8 @@ app.post("/checkout", async (req, res) => {
   // req.mySession.email = email
   // const { email } = req.body; // Get the email value from the request body
   // req.email = email; // S
-  const email = req.body.email; // get email from query parameter
-  req.session.email = email;
+   email = req.body.email; // get email from query parameter
+  // req.session.email = email;
   // email = req.query.email;
   console.log(email)
   // console.log(email)
@@ -175,7 +175,7 @@ app.post("/cart", async (req, res) => {
   // const email = req.session.email;
   // const email = req.mySession.email;
   // const { email } = req
-  const email = req.session.email; 
+  // const email = req.session.email; 
   console.log(email);
   // console.log(req.body);
   console.log(req.body.finalAmount);
