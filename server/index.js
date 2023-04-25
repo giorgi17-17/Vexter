@@ -43,7 +43,7 @@ app.post("/checkout", async (req, res) => {
   const email = req.body.email; // Assign email value
   req.mySession.email = email
 
-  console.log(email)
+  // console.log(email)
   // email = req.body.email;
   prods = req.body.cartItems;
   amount = req.body.amount;
@@ -111,9 +111,7 @@ app.post("/checkout", async (req, res) => {
       callbackError: "https://vertex-ecommerce.web.app/cart",
       preauthorize: false,
       lang: "EN",
-      hookUrl: `https://vexter.onrender.com/cart?email=${encodeURIComponent(
-        email
-      )}`,
+      hookUrl: `https://vexter.onrender.com/cart`,
       split: [
         {
           iban: "GE33TB0000000000350000",
@@ -155,7 +153,7 @@ app.post("/cart", async (req, res) => {
   // email = req.query.email;
   // const email = req.session.email;
   const email = req.mySession.email;
-  console.log("cart");
+  console.log(email);
   // console.log(req.body);
   console.log(req.body.finalAmount);
   console.log(req.body.status);
