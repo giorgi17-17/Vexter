@@ -31,18 +31,27 @@ app.use(sessions({
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
 let storeName;
-// let email;
+let email;
 let amount;
 let newOrder;
+// Define middleware to set email variable
+app.use((req, res, next) => {
+  req.email = ''; // Set a default value for email
+  next();
+});
 
 
 app.post("/checkout", async (req, res) => {
   console.log("checkout");
   // req.session.email = req.body.email;
   // const email = req.query.email;
-  const email = req.body.email; // Assign email value
-  req.mySession.email = email
-
+  // const email = req.body.email; // Assign email value
+  // req.mySession.email = email
+  const { email } = req.body; // Get the email value from the request body
+  req.email = email; // S
+  
+  // email = req.query.email;
+  console.log(email)
   // console.log(email)
   // email = req.body.email;
   prods = req.body.cartItems;
@@ -152,7 +161,8 @@ app.post("/cart", async (req, res) => {
   //and only in this ocassion make orders on account page
   // email = req.query.email;
   // const email = req.session.email;
-  const email = req.mySession.email;
+  // const email = req.mySession.email;
+  const { email } = req
   console.log(email);
   // console.log(req.body);
   console.log(req.body.finalAmount);
