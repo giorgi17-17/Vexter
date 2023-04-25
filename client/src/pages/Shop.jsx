@@ -31,13 +31,16 @@ const Shop = () => {
         items.push(doc.data());
       });
       setProducts(items);
-      setLoading(false);
     });
+    if (products.length > 0 || products.length === 0) {
+      setLoading(false);
+      console.log(products.length);
+    }
 
     return () => {
       unsub();
     };
-  }, [firstPath, secondPath]);
+  }, [firstPath, secondPath, products.length]);
   console.log(products);
 
   return (
@@ -70,7 +73,7 @@ const Shop = () => {
               })}
           </div>
         )}
-        {products.length < 0 && loading === false && (
+        {products.length === 0 && loading === false && (
           <div className={styles.productsFalse}>
             <h1>პროდუქტები ვერ მოიძებნა</h1>
           </div>

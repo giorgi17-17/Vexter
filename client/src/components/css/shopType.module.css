@@ -13,6 +13,13 @@
     align-items: center;
     justify-content: center;
 }
+.products{
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
 
  .productsFalse > h1 {
     font-size: 18px;

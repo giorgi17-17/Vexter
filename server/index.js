@@ -7,65 +7,21 @@ const dotenv = require("dotenv").config();
 const { Telegraf } = require("telegraf");
 const { db } = require("./firebase.js");
 const port = 4000;
-// const session = require('express-session');
-// const redisStore = require('connect-redis')(session);
-// const sessions = require('client-sessions');
-// const redisClient = redis.createClient();
-// redisClient.on('error', console.error);
-// console.log(require('connect-redis'))
+
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
-// app.use(sessions({
-//   cookieName: 'mySession',
-//   secret: 'rftgybhunm65hty',
-//   duration: 24 * 60 * 60 * 1000,
-//   activeDuration: 1000 * 60 * 5
-// }));
-// app.use(session({
-//   secret: 'your_secret_key',
-//   store: new redisStore({ client: redisClient }),
-//   resave: false,  
-//   saveUninitialized: true,
-//   cookie: { secure: true } 
-// }));
-
-// app.use(express.urlencoded({ extended: true })); // To parse the request body
-// app.use(
-//   session({
-//     secret: "dfsfndsfbsuibd234", // Replace this with a strong secret key
-//     resave: false,
-//     saveUninitialized: false,
-//     // cookie: { maxAge: 60 * 60 * 1000 }, // 1 hour session
-//   })
-// );
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
 let storeName;
 let email;
 let amount;
 let newOrder;
-// Define middleware to set email variable
-app.use((req, res, next) => {
-  req.email = ''; // Set a default value for email
-  next();
-});
-
 
 app.post("/checkout", async (req, res) => {
   console.log("checkout");
-  // req.session.email = req.body.email;
-  // const email = req.query.email;
-  // const email = req.body.email; // Assign email value
-  // req.mySession.email = email
-  // const { email } = req.body; // Get the email value from the request body
-  // req.email = email; // S
-   email = req.body.email; // get email from query parameter
-  // req.session.email = email;
-  // email = req.query.email;
-  console.log(email)
-  // console.log(email)
-  // email = req.body.email;
+  email = req.body.email;
+  console.log(email);
   prods = req.body.cartItems;
   amount = req.body.amount;
 
@@ -118,7 +74,6 @@ app.post("/checkout", async (req, res) => {
       });
     });
   }
-  // console.log(splitData)
 
   const url = "https://payze.io/api/v1";
   const data = {
@@ -169,23 +124,14 @@ app.post("/checkout", async (req, res) => {
 });
 
 app.post("/cart", async (req, res) => {
-  //when transaction successfull decrement quantity  of product
-  //and only in this ocassion make orders on account page
-  // email = req.query.email;
-  // const email = req.session.email;
-  // const email = req.mySession.email;
-  // const { email } = req
-  // const email = req.session.email; 
   console.log(email);
-  // console.log(req.body);
   console.log(req.body.finalAmount);
   console.log(req.body.status);
-  console.log(`in cart${email}`);
+  console.log(`in cart ${email}`);
   // finalAmount:
   // status:
   if (req.body.status === "Committed") {
-    // console.log(email);
-  console.log(`in commited${email}`);
+    console.log(`in commited ${email}`);
 
     const usersRef = db.collection("users");
     const snap = await usersRef.where("email", "==", email).get();

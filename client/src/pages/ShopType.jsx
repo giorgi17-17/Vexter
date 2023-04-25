@@ -33,41 +33,50 @@ const Shop = () => {
       setLoading(false);
       // console.log(items);
     });
+    if (productsType.length > 0) {
+      setLoading(false);
+      console.log(productsType.length);
+    }
 
     return () => {
       unsub();
     };
-  }, [firstPath, secondPath, thirdPath]);
+  }, [firstPath, secondPath, thirdPath, productsType.length]);
   // console.log(productsType);
 
   return (
-<div className={styles.container}>
+    <div className={styles.container}>
       <div className={styles.categories}>
         <Categories setProducts={setProductsType} />
       </div>
       <div className={styles.products}>
-      {loading && <ProductsSkeleton cards={8} />}
+        {loading && <ProductsSkeleton cards={8} />}
 
-        {productsType.length > 0 ? (
+        {productsType.length > 0 && (
           <div className={styles.productsTrue}>
-            <p className={styles.productsCount}>{productsType.length} პროდუქტი</p>
-            {productsType.map((item) => {
-              return (
-                <div key={item.id} className={styles.prod}>
-                  <Product
-                    title={item.title}
-                    name={item.name}
-                    img={item.image}
-                    price={item.price}
-                    id={item.id}
-                    size={item.category.size}
-                    storeLocation={item.location}
-                  />
-                </div>
-              );
-            })}
+            <p className={styles.productsCount}>
+              {productsType.length} პროდუქტი
+            </p>
+            {productsType
+              .filter((item) => item.quantity !== 0)
+              .map((item) => {
+                return (
+                  <div key={item.id} className={styles.prod}>
+                    <Product
+                      title={item.title}
+                      name={item.name}
+                      img={item.image}
+                      price={item.price}
+                      id={item.id}
+                      size={item.category.size}
+                      storeLocation={item.location}
+                    />
+                  </div>
+                );
+              })}
           </div>
-        ) : (
+        )}
+        {productsType.length < 0 && loading === false && (
           <div className={styles.productsFalse}>
             <h1>პროდუქტები ვერ მოიძებნა</h1>
           </div>
