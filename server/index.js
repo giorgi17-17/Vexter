@@ -7,16 +7,21 @@ const dotenv = require("dotenv").config();
 const { Telegraf } = require("telegraf");
 const { db } = require("./firebase.js");
 const port = 4000;
-// const session = require('express-session');
-const sessions = require('client-sessions');
+const session = require('express-session');
+// const sessions = require('client-sessions');
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
-app.use(sessions({
-  cookieName: 'mySession',
-  secret: 'rftgybhunm65hty',
-  duration: 24 * 60 * 60 * 1000,
-  activeDuration: 1000 * 60 * 5
+// app.use(sessions({
+//   cookieName: 'mySession',
+//   secret: 'rftgybhunm65hty',
+//   duration: 24 * 60 * 60 * 1000,
+//   activeDuration: 1000 * 60 * 5
+// }));
+app.use(session({
+  secret: 'your-secret-key', // replace with your own secret key
+  resave: false,
+  saveUninitialized: true
 }));
 
 // app.use(express.urlencoded({ extended: true })); // To parse the request body
@@ -47,9 +52,10 @@ app.post("/checkout", async (req, res) => {
   // const email = req.query.email;
   // const email = req.body.email; // Assign email value
   // req.mySession.email = email
-  const { email } = req.body; // Get the email value from the request body
-  req.email = email; // S
-  
+  // const { email } = req.body; // Get the email value from the request body
+  // req.email = email; // S
+  const email = req.body.email; // get email from query parameter
+  req.session.email = email;
   // email = req.query.email;
   console.log(email)
   // console.log(email)
@@ -162,16 +168,19 @@ app.post("/cart", async (req, res) => {
   // email = req.query.email;
   // const email = req.session.email;
   // const email = req.mySession.email;
-  const { email } = req
+  // const { email } = req
+  const email = req.session.email; 
   console.log(email);
   // console.log(req.body);
   console.log(req.body.finalAmount);
   console.log(req.body.status);
-  console.log(email);
+  console.log(`in cart${email}`);
   // finalAmount:
   // status:
   if (req.body.status === "Committed") {
-    console.log(email);
+    // console.log(email);
+  console.log(`in commited${email}`);
+
     const usersRef = db.collection("users");
     const snap = await usersRef.where("email", "==", email).get();
 
