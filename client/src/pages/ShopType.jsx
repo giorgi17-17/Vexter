@@ -41,7 +41,9 @@ const Shop = () => {
     return () => {
       unsub();
     };
-  }, [firstPath, secondPath, thirdPath, productsType.length]);
+    // productsType.length იწვევს პრობლემას
+
+  }, [firstPath, secondPath, thirdPath, ]);
   // console.log(productsType);
 
   return (

@@ -93,24 +93,30 @@ const MainSections = ({ type }) => {
         </Link>
       </div>
       <div className={styles.products}>
-      {loading && windowSize.width < 600 ? <ProductsSkeleton cards={2} /> : null}
-      {loading && windowSize.width > 600 ? <ProductsSkeleton cards={7} /> : null}
+        {loading && windowSize.width < 600 ? (
+          <ProductsSkeleton cards={2} />
+        ) : null}
+        {loading && windowSize.width > 600 ? (
+          <ProductsSkeleton cards={7} />
+        ) : null}
 
-        {products.map((item) => {
-          return (
-            <div key={item.id} className={styles.prod}>
-              <Product
-                title={item.title}
-                name={item.name}
-                img={item.image}
-                price={item.price}
-                id={item.id}
-                storeLocation={item.location}
-                size={item.category.size}
-              />
-            </div>
-          );
-        })}
+        {products
+          .filter((item) => item.quantity !== 0)
+          .map((item) => {
+            return (
+              <div key={item.id} className={styles.prod}>
+                <Product
+                  title={item.title}
+                  name={item.name}
+                  img={item.image}
+                  price={item.price}
+                  id={item.id}
+                  storeLocation={item.location}
+                  size={item.category.size}
+                />
+              </div>
+            );
+          })}
       </div>
     </div>
   );

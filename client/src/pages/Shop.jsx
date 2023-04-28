@@ -31,7 +31,6 @@ const Shop = () => {
         items.push(doc.data());
       });
       setProducts(items);
-      console.log('sdsd')
     });
     if (products.length > 0 || products.length === 0) {
       setLoading(false);
@@ -41,7 +40,8 @@ const Shop = () => {
     return () => {
       unsub();
     };
-  }, [firstPath, secondPath,products.length ]);
+    // products.length იწვევს პრობლემას
+  }, [firstPath, secondPath, ]);
   console.log(products);
 
   return (
