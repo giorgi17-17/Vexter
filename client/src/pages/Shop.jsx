@@ -22,7 +22,7 @@ const Shop = () => {
       collRef,
       where("category.gender", "==", `${firstPath}`),
       where("category.type", "==", `${secondPath}`),
-      where("quantity", "!=", 0)
+      // where("quantity", "!=", 0)
     );
 
     const unsub = onSnapshot(q, (snap) => {
@@ -31,6 +31,7 @@ const Shop = () => {
         items.push(doc.data());
       });
       setProducts(items);
+      console.log('sdsd')
     });
     if (products.length > 0 || products.length === 0) {
       setLoading(false);
@@ -40,7 +41,7 @@ const Shop = () => {
     return () => {
       unsub();
     };
-  }, [firstPath, secondPath, products.length]);
+  }, [firstPath, secondPath,products.length ]);
   console.log(products);
 
   return (

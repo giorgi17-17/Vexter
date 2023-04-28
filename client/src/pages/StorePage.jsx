@@ -1,31 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../firebase/firebase";
-import { UserAuth } from "../Context/AuthContext";
+// import { UserAuth } from "../Context/AuthContext";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import styles from "../components/css/storePage.module.css";
 import Categories from "../components/Categories";
 import Product from "../components/Product";
 import { ShoppingCart } from "../Context/CartContext";
+import { ProductsSkeleton } from "../components/ProductsSkeleton";
 
 const StorePage = () => {
-  const { user } = UserAuth();
-//   const [store, setStore] = useState([]);
   const [products, setProducts] = useState([]);
   const { secondPath } = ShoppingCart();
+  const [loading, setLoading] = useState(true);
 
-  // const [storeName, setStoreName] = useState("");
-//   const { firstPath } = ShoppingCart();
-  // console.log(secondPath)
   useEffect(() => {
-    // let storeName;
-    // if (user) {
-    // //   storeName = user.displayName;
-    //   setStoreName(user.displayName)
-    // } else {
-    //     setStoreName('')
-    // }
     const collRef = collection(db, "products");
-    const q = query(collRef, where("name", "==", `${secondPath}`));
+    const q = query(collRef, where("name", "==", `vertex`));
 
     const unsub = onSnapshot(q, (snap) => {
       const items = [];
@@ -34,37 +24,46 @@ const StorePage = () => {
       });
       setProducts(items);
     });
-    // console.log('...')
+    console.log("first")
+    if (products.length > 0 || products.length === 0) {
+      setLoading(false);
+      console.log(products.length);
+    }
     return () => {
       unsub();
     };
-  }, [secondPath,user]);
+  }, [secondPath,products.length]);
+  
 
   return (
     <div className={styles.container}>
       <div className={styles.categories}>
         <Categories setProducts={setProducts} />
       </div>
-        <h1>{secondPath}</h1>
+      <h1>{secondPath}</h1>
       <div className={styles.products}>
-        <div className={styles.productsTrue}>
-          <p className={styles.productsCount}>{products.length} პროდუქტი</p>
-          {products.map((item) => {
-            return (
-              <div key={item.id} className={styles.prod}>
-                <Product
-                  title={item.title}
-                  name={item.name}
-                  img={item.image}
-                  price={item.price}
-                  id={item.id}
-                  size={item.category.size}
-                  storeLocation={item.location}
-                />
-              </div>
-            );
-          })}
-        </div>
+        {loading && <ProductsSkeleton cards={8} />}
+
+        {products.length > 0 && (
+          <div className={styles.productsTrue}>
+            <p className={styles.productsCount}>{products.length} პროდუქტი</p>
+            {products.map((item) => {
+              return (
+                <div key={item.id} className={styles.prod}>
+                  <Product
+                    title={item.title}
+                    name={item.name}
+                    img={item.image}
+                    price={item.price}
+                    id={item.id}
+                    size={item.category.size}
+                    storeLocation={item.location}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );
