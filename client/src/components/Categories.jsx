@@ -152,12 +152,6 @@ const Categories = ({ setProducts }) => {
           }}
         >
           <option value="">ქვე კატეგორია</option>
-          {/* {apparelTypes.map((type) => {
-            console.log(type.display)
-            return (
-              <div key={type.display}>dsf</div>
-            )
-          })} */}
           {apparelTypes.map((type) =>
             type.path === `${firstPath}/${secondPath}` &&
             type.subMenu &&

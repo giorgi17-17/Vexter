@@ -16,6 +16,7 @@ import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { useRef } from "react";
 import { Slide, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { apparelTypes } from "./Header.jsx";
 
 const AddProduct = () => {
   const [type, setType] = useState("");
@@ -34,6 +35,13 @@ const AddProduct = () => {
 
   const { user } = UserAuth();
   const { getStoreLocation } = ShoppingCart();
+  const genderFromLocalStorage = localStorage.getItem("gender");
+  if (genderFromLocalStorage) {
+    //'splited' make gender to array and removes first and last charaqter
+    const splited = genderFromLocalStorage.split("").slice(1, -1);
+    //'path' joins array items into string
+    var path = splited.join("");
+  }
 
   var productId;
   const addProduct = async () => {
@@ -120,6 +128,8 @@ const AddProduct = () => {
     }
   };
 
+
+
   return (
     <div>
       <ToastContainer
@@ -188,48 +198,38 @@ const AddProduct = () => {
             <option value="bags">ჩანთა</option>
             <option value="accessories">აქსესუარები</option>
           </select>
-          {type === "shoe" ? (
+          {/* ----------- */}
+
+          {type ? (
             <select
               onChange={(e) => {
                 setSubType(e.target.value);
               }}
             >
-              <option value="subType">ქვე კატეგორია</option>
-              <option value="sneakers">Sneakers</option>
-              <option value="boots">Boots</option>
-              <option value="loafers">Loafers</option>
-            </select>
-          ) : type === "clothe" ? (
-            <select
-              onChange={(e) => {
-                setSubType(e.target.value);
-              }}
-            >
-              <option value="subType">ქვე კატეგორია</option>
-              <option value="shirt">Shirt</option>
-              <option value="sweater">Sweater</option>
-              <option value="jeans">Jeans</option>
-            </select>
-          ) : type === "bags" ? (
-            <select
-              onChange={(e) => {
-                setSubType(e.target.value);
-              }}
-            >
-              <option value="subType">ქვე კატეგორია</option>
-              <option value="handMade">ხელნაკეთი</option>
-              <option value="Zara">Zara</option>
-              <option value="Nike">Nike</option>
+              <option value="">ქვე კატეგორია</option>
+              {apparelTypes.map((subtype) =>
+                subtype.path === `${path}/${type}` &&
+                subtype.subMenu &&
+                subtype.subMenu.length > 0
+                  ? subtype.subMenu.map((subMenuOption) => {
+                      return (
+                        <option
+                          key={subMenuOption.path}
+                          value={subMenuOption.path}
+                        >
+                          {subMenuOption.title}
+                        </option>
+                      );
+                    })
+                  : null
+              )}
             </select>
           ) : (
-            <select
-              onChange={(e) => {
-                setSubType(e.target.value);
-              }}
-            >
-              <option value="subType">ქვე კატეგორია</option>
+            <select>
+              <option value="">ქვე კატეგორია</option>
             </select>
           )}
+
           <select
             onChange={(e) => {
               setBrand(e.target.value);
@@ -267,8 +267,6 @@ const AddProduct = () => {
             <option value="kids">ბავშვი</option>
           </select>
 
-          
-
           {type !== "shoe" ? (
             <select
               onChange={(e) => {
@@ -276,9 +274,14 @@ const AddProduct = () => {
               }}
             >
               <option value="size">Size</option>
+              <option value="xxs">XXS</option>
+              <option value="xs">XS</option>
               <option value="s">S</option>
               <option value="m">M</option>
               <option value="l">L</option>
+              <option value="xl">XL</option>
+              <option value="xxl">XXL</option>
+              <option value="3xl">3XL</option>
             </select>
           ) : (
             <select
@@ -287,9 +290,15 @@ const AddProduct = () => {
               }}
             >
               <option value="size">Size</option>
+              <option value="37">37</option>
+              <option value="38">38</option>
+              <option value="39">39</option>
               <option value="40">40</option>
               <option value="41">41</option>
               <option value="42">42</option>
+              <option value="43">43</option>
+              <option value="44">44</option>
+              <option value="45">45</option>
             </select>
           )}
         </div>
