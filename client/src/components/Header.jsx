@@ -15,6 +15,15 @@ import { useEffect, useState } from "react";
 import { Favorites } from "../Context/FavoritesContext";
 // import ReactGA from "react-ga"
 import { useLocation } from "react-router-dom";
+
+const gender = localStorage.getItem("gender");
+// console.log(gender)
+if (gender) {
+  //'splited' make gender to array and removes first and last charaqter
+  const splited = gender.split("").slice(1, -1);
+  //'path' joins array items into string
+  var path = splited.join("");
+}
 const nav_link = [
   {
     path: "man",
@@ -27,6 +36,138 @@ const nav_link = [
   {
     path: "kids",
     display: "ბავშვი",
+  },
+];
+
+
+export const apparelTypes = [
+  {
+    path: `${path}/clothe`,
+    display: "ტანსაცმელი",
+    subMenu: [
+      {
+        title: "მაისური",
+        path: "t-shirt",
+      },
+      {
+        title: "პერანგი",
+        path: "shirt",
+      },
+      {
+        title: "ჯინსი",
+        path: "jeans",
+      },
+      {
+        title: "შორტები",
+        path: "shorts",
+      },
+      {
+        title: "სვიტრი",
+        path: "sweater",
+      },
+      {
+        title: "ჰუდი",
+        path: "hoodies",
+      },
+      {
+        title: "ჟაკეტი",
+        path: "jackets",
+      },
+      {
+        title: "შარვალი",
+        path: "trousers",
+      },
+      {
+        title: "ქურტუკი",
+        path: "coat",
+      },
+      {
+        title: "ჯემპრი",
+        path: "sweatshirts",
+      },
+    ],
+  },
+  {
+    path: `${path}/shoe`,
+    display: "ფეხსაცმელი",
+    subMenu: [
+      {
+        title: "სპორტული/კედი",
+        path: "sneakers",
+      },
+      {
+        title: "ბათინკი",
+        path: "boots",
+      },
+      {
+        title: "კლასიკური",
+        path: "clasicShoes",
+      },
+      {
+        title: "ყოველდღიური",
+        path: "dailyShoes",
+      },
+      {
+        title: "სანდალი/ჩუსტი",
+        path: "loafers",
+      },
+    ],
+  },
+  {
+    path: `${path}/sport`,
+    display: "სპორტული",
+    subMenu: [
+      {
+        title: "სპორტული მაისური",
+        path: "sportsShirts",
+      },
+      {
+        title: "სპორტული შარვალი",
+        path: "sportsTrousers",
+      },
+      {
+        title: "სპორტული ჟაკეტი",
+        path: "sportsJacket",
+      },
+      {
+        title: "სპორტული ფეხსაცმელი",
+        path: "sportsShoes",
+      },
+    ],
+  },
+  {
+    path: `${path}/accessories`,
+    display: "აქსესუარები",
+    subMenu: [
+      {
+        title: "ჩანთა",
+        path: "bag",
+      },
+      {
+        title: "შარფი",
+        path: "scarf",
+      },
+      {
+        title: "წინდები",
+        path: "socks",
+      },
+      {
+        title: "ხელთათმანი",
+        path: "xeltatmani",
+      },
+      {
+        title: "სამაჯური",
+        path: "bracelete",
+      },
+      {
+        title: "ქუდი",
+        path: "hat",
+      },
+      {
+        title: "ქამარი",
+        path: "belt",
+      },
+    ],
   },
 ];
 
@@ -62,150 +203,7 @@ const Header = () => {
   }
 
   // 'gender' gets gender value from localstorage
-  const gender = localStorage.getItem("gender");
-  // console.log(gender)
-  if (gender) {
-    //'splited' make gender to array and removes first and last charaqter
-    const splited = gender.split("").slice(1, -1);
-    //'path' joins array items into string
-    var path = splited.join("");
-  }
 
-  // useEffect(() => {
-  //   ReactGA.pageview(window.location.pathname + window.location.search)
-  //   console.log('first')
-  // },[firstPath])
-
-  let apparelTypes = [
-    {
-      path: `${path}/clothe`,
-      display: "ტანსაცმელი",
-      subMenu: [
-        {
-          title: "მაისური",
-          path: "t-shirt",
-        },
-        {
-          title: "პერანგი",
-          path: "shirt",
-        },
-        {
-          title: "ჯინსი",
-          path: "jeans",
-        },
-        {
-          title: "შორტები",
-          path: "shorts",
-        },
-        {
-          title: "სვიტრი",
-          path: "sweater",
-        },
-        {
-          title: "ჰუდი",
-          path: "hoodies",
-        },
-        {
-          title: "ჟაკეტი",
-          path: "jackets",
-        },
-        {
-          title: "შარვალი",
-          path: "trousers",
-        },
-        {
-          title: "ქურტუკი",
-          path: "coat",
-        },
-        {
-          title: "ჯემპრი",
-          path: "sweatshirts",
-        },
-      ],
-    },
-    {
-      path: `${path}/shoe`,
-      display: "ფეხსაცმელი",
-      subMenu: [
-        {
-          title: "სპორტული/კედი",
-          path: "sneakers",
-        },
-        {
-          title: "ბათინკი",
-          path: "boots",
-        },
-        {
-          title: "კლასიკური",
-          path: "clasicShoes",
-        },
-        {
-          title: "ყოველდღიური",
-          path: "dailyShoes",
-        },
-        {
-          title: "სანდალი/ჩუსტი",
-          path: "loafers",
-        },
-      ],
-    },
-    {
-      path: `${path}/sport`,
-      display: "სპორტული",
-      subMenu: [
-        {
-          title: "სპორტული მაისური",
-          path: "sportsShirts",
-        },
-        {
-          title: "სპორტული შარვალი",
-          path: "sportsTrousers",
-        },
-        {
-          title: "სპორტული ჟაკეტი",
-          path: "sportsJacket",
-        },
-        {
-          title: "სპორტული ფეხსაცმელი",
-          path: "sportsShoes",
-        },
-      ],
-    },
-    {
-      path: `${path}/accessories`,
-      display: "აქსესუარები",
-      subMenu: [
-        {
-          title: "ჩანთა",
-          path: "sportsShoes",
-        },
-        {
-          title: "შარფი",
-          path: "sportsShoes",
-        },
-        {
-          title: "წინდები",
-          path: "sportsShoes",
-        },
-        {
-          title: "ხელთათმანი",
-          path: "sportsShoes",
-        },
-        {
-          title: "სამაჯური",
-          path: "sportsShoes",
-        },
-        {
-          title: "ქუდი",
-          path: "sportsShoes",
-        },
-        {
-          title: "ქამარი",
-          path: "sportsShoes",
-        },
-      ],
-    },
-  ];
 
   // this reduce function shows number of items in cart
   const productsCount = items.reduce(

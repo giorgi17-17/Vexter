@@ -10,28 +10,26 @@ import {
   where,
 } from "firebase/firestore";
 import { ShoppingCart } from "../Context/CartContext";
-// import { BsEmojiNeutralFill } from "react-icons/bs";
+import { apparelTypes } from "./Header.jsx";
 
 function valuetext(value) {
   return `${value}`;
 }
-
+console.log(apparelTypes[0]);
 const Categories = ({ setProducts }) => {
   const { firstPath, secondPath, thirdPath } = ShoppingCart();
   const [priceArray, setPriceArray] = useState([]);
   const [dropDown, setDropDown] = useState(false);
   const [save, setSave] = useState(false);
-  // const [test, setTest] = useState(false);
-
   const [type, setType] = useState("");
   const [brand, setBrand] = useState("");
   const [color, setColor] = useState("");
   const [size, setSize] = useState("");
-  // const [price, setPrice] = useState("");
   const [subType, setSubType] = useState("");
-  // const [gender, setGender] = useState("");
   const [sortBy, setSortBy] = useState("");
   const [value, setValue] = useState([0, 1000]);
+  // const [apparelPath, setApparelPath] = useState("");
+  // console.log(`${firstPath}/${secondPath}`);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -61,16 +59,11 @@ const Categories = ({ setProducts }) => {
     }
   }
 
-  // useEffect(() => {
-  //   setDropDown(false);
-  // }, [test]);
-
   useEffect(() => {
     const collRef = collection(db, "products");
-
-    // setGender(firstPath);
-
+    // setApparelPath(secondPath);
     setType(secondPath);
+
     let q = query(collRef);
     if (subType !== "")
       q = query(q, where("category.subType", "==", `${subType}`));
@@ -90,8 +83,6 @@ const Categories = ({ setProducts }) => {
       if (value[1] >= 1) q = query(q, where("price", "<=", value[1]));
     }
 
-    // if (thirdPath)
-    //   q = query(q, where("category.subType", "==", `${thirdPath}`));
 
     if (sortBy === "asc" || sortBy === "desc") {
       if (sortBy) q = query(q, orderBy("price", `${sortBy}`));
@@ -100,11 +91,6 @@ const Categories = ({ setProducts }) => {
     } else if (sortBy === "dzveli") {
       q = query(q, orderBy("createdAt", `asc`));
     }
-
-    //   if(test === false){
-    //   setDropDown(false)
-    // }
-    // setDropDown(false)
 
     const unsub = onSnapshot(q, (snap) => {
       const items = [];
@@ -130,19 +116,13 @@ const Categories = ({ setProducts }) => {
     brand,
     size,
     color,
-    // price,
     firstPath,
     secondPath,
-    // gender,
     path,
     type,
     thirdPath,
-    // priceArray
   ]);
-  // console.log(save);
-  // if(test === false){
-  //   setDropDown(false)
-  // }
+
   return (
     <div className={styles.categoriesContainer}>
       <select
@@ -164,6 +144,7 @@ const Categories = ({ setProducts }) => {
           ძველი
         </option>
       </select>
+
       {thirdPath === undefined ? (
         <select
           onChange={(e) => {
@@ -171,9 +152,28 @@ const Categories = ({ setProducts }) => {
           }}
         >
           <option value="">ქვე კატეგორია</option>
-          <option value="shirt">Shirt</option>
-          <option value="sweater">Sweater</option>
-          <option value="jeans">Jeans</option>
+          {/* {apparelTypes.map((type) => {
+            console.log(type.display)
+            return (
+              <div key={type.display}>dsf</div>
+            )
+          })} */}
+          {apparelTypes.map((type) =>
+            type.path === `${firstPath}/${secondPath}` &&
+            type.subMenu &&
+            type.subMenu.length > 0
+              ? type.subMenu.map((subMenuOption) => (
+                  <option
+                    key={subMenuOption.path}
+                    value={subMenuOption.path}
+                  >
+                    {subMenuOption.title}
+                  </option>
+                ))
+              : null
+          )}
+
+        
         </select>
       ) : null}
       <select
