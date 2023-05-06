@@ -31,11 +31,13 @@ const Shop = () => {
         items.push(doc.data());
       });
       setProducts(items);
-    });
-    if (products.length > 0 || products.length === 0) {
       setLoading(false);
-      console.log(products.length);
-    }
+
+    });
+    // if (products.length > 0 || products.length === 0) {
+    //   setLoading(false);
+    //   console.log(products.length);
+    // }
 
     return () => {
       unsub();

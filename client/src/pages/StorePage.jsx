@@ -15,7 +15,7 @@ const StorePage = () => {
 
   useEffect(() => {
     const collRef = collection(db, "products");
-    const q = query(collRef, where("name", "==", `vertex`));
+    const q = query(collRef, where("name", "==", `${secondPath}`));
 
     const unsub = onSnapshot(q, (snap) => {
       const items = [];
@@ -23,17 +23,13 @@ const StorePage = () => {
         items.push(doc.data());
       });
       setProducts(items);
-    });
-    console.log("first")
-    if (products.length > 0 || products.length === 0) {
       setLoading(false);
-      console.log(products.length);
-    }
+    });
+    
     return () => {
       unsub();
     };
   }, [secondPath,products.length]);
-  
 
   return (
     <div className={styles.container}>
@@ -44,26 +40,24 @@ const StorePage = () => {
       <div className={styles.products}>
         {loading && <ProductsSkeleton cards={8} />}
 
-        {products.length > 0 && (
-          <div className={styles.productsTrue}>
-            <p className={styles.productsCount}>{products.length} პროდუქტი</p>
-            {products.map((item) => {
-              return (
-                <div key={item.id} className={styles.prod}>
-                  <Product
-                    title={item.title}
-                    name={item.name}
-                    img={item.image}
-                    price={item.price}
-                    id={item.id}
-                    size={item.category.size}
-                    storeLocation={item.location}
-                  />
-                </div>
-              );
-            })}
-          </div>
-        )}
+        <div className={styles.productsTrue}>
+          <p className={styles.productsCount}>{products.length} პროდუქტი</p>
+          {products.map((item) => {
+            return (
+              <div key={item.id} className={styles.prod}>
+                <Product
+                  title={item.title}
+                  name={item.name}
+                  img={item.image}
+                  price={item.price}
+                  id={item.id}
+                  size={item.category.size}
+                  storeLocation={item.location}
+                />
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

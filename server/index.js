@@ -91,7 +91,7 @@ app.post("/checkout", async (req, res) => {
       split: [
         {
           iban: "GE33TB0000000000350000",
-          amount: storeAmount * 0.02,
+          amount: storeAmount * 0.05,
           payIn: 0,
           description: "Description for bank.",
         },
