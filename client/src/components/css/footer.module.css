@@ -1,0 +1,131 @@
+/* Footer container */
+.container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 20px;
+  /* background-color: var(--black); */
+  background-color: #181818;
+  margin-top: 5rem;
+}
+
+/* Footer columns */
+.column {
+  width: 100%;
+  margin-bottom: 20px;
+}
+.columnEmail {
+  /* width: 100%; */
+  display: flex;
+  /* align-items: center; */
+  justify-content: center;
+  flex-direction: column;
+}
+
+.columnEmailElements {
+  display: flex;
+  /* justify-content: center; */
+  flex-direction: column;
+}
+/* Footer heading */
+h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Footer links */
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 5px;
+}
+
+a {
+  color: #666;
+  transition: color 0.3s ease-in-out;
+}
+
+a:hover {
+  color: #333;
+}
+
+/* Footer social links */
+.social {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+/* Footer newsletter form */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input[type="email"] {
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-family: inherit;
+  /* width: 100%; */
+  max-width: 300px;
+  margin-bottom: 10px;
+}
+
+button[type="submit"] {
+  background-color: var(--brightOrange);
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  max-width: 150px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+button[type="submit"]:hover {
+  background-color: var(--brightOrangeHover);
+}
+
+/* Footer text center */
+.text-center {
+  margin-top: 20px;
+}
+
+.mainText {
+  color: white;
+}
+.bottomText {
+  color: white;
+  margin-top: 10px;
+}
+
+.column ul {
+  display: flex;
+  gap: 10px;
+}
+
+.fb {
+  color: rgb(67, 67, 255);
+}
+
+.tw {
+  color: rgb(0, 132, 255);
+}
+
+.ig {
+  color: rgb(255, 94, 0);
+}

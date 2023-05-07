@@ -15,7 +15,6 @@ import { apparelTypes } from "./Header.jsx";
 function valuetext(value) {
   return `${value}`;
 }
-console.log(apparelTypes[0]);
 const Categories = ({ setProducts }) => {
   const { firstPath, secondPath, thirdPath } = ShoppingCart();
   const [priceArray, setPriceArray] = useState([]);
@@ -58,11 +57,11 @@ const Categories = ({ setProducts }) => {
       maxElement = priceArray[i];
     }
   }
-
   useEffect(() => {
     const collRef = collection(db, "products");
     // setApparelPath(secondPath);
     setType(secondPath);
+    // 
 
     let q = query(collRef);
     if (subType !== "")
@@ -185,7 +184,10 @@ const Categories = ({ setProducts }) => {
 
       <div className={styles.price}>
         {!dropDown ? (
-          <button onClick={() => setDropDown(!dropDown)}>
+          <button onClick={() => {
+            setDropDown(!dropDown) 
+            setSave(false)
+          }}>
             {dropDown ? null : "ფასი"}
           </button>
         ) : null}
@@ -214,7 +216,7 @@ const Categories = ({ setProducts }) => {
                 setSave(true);
               }}
             >
-              save
+              შენახვა
             </div>
           </div>
         )}

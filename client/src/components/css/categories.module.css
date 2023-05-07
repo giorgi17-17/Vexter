@@ -40,6 +40,7 @@
   background-color: var(--black);
   color: white;
   margin-top: 5px;
+  text-align: center;
 }
 
 .categoriesContainer {
