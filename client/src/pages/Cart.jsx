@@ -39,7 +39,7 @@ const Cart = () => {
       setCheckUser(true);
       setOpen(true);
       setLoading(true);
-      await fetch("https://vexter.onrender.com/checkout", {
+      await fetch("http://localhost:4000/checkout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

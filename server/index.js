@@ -83,8 +83,8 @@ app.post("/checkout", async (req, res) => {
     data: {
       amount: req.body.amount,
       currency: "GEL",
-      callback: "https://vertex-ecommerce.web.app",
-      callbackError: "https://vertex-ecommerce.web.app/cart",
+      callback: "https://vexter.ge",
+      callbackError: "https://vexter.ge/cart",
       preauthorize: false,
       lang: "EN",
       hookUrl: `https://vexter.onrender.com/cart`,
@@ -147,12 +147,20 @@ app.post("/cart", async (req, res) => {
         purchaseTime: Date.now(),
         amount: req.body.finalAmount,
       };
-      db.collection("users")
-        .doc(doc.id)
-        .update({
-          order: [ord, ...oldOrders],
-          // amount: req.body.amount,
-        });
+
+      if (oldOrders) {
+        db.collection("users")
+          .doc(doc.id)
+          .update({
+            order: [ord, ...oldOrders],
+          });
+      } else {
+        db.collection("users")
+          .doc(doc.id)
+          .update({
+            order: [ord],
+          });
+      }
     });
 
     //this code is witten by chatgpt from here
@@ -173,6 +181,7 @@ app.post("/cart", async (req, res) => {
 
       snap.forEach((doc) => {
         let oldOrders = doc.data().order;
+        console.log(oldOrders);
         let ord = {
           orderId: doc.id,
           orders: newOrder,
@@ -188,7 +197,7 @@ app.post("/cart", async (req, res) => {
             .update({
               order: [ord, ...oldOrders],
             });
-        } else {
+        } else if (oldOrders === null) {
           db.collection("store")
             .doc(doc.id)
             .update({
