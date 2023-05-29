@@ -14,9 +14,9 @@ import { db } from "../firebase/firebase";
 const StoreInformation = () => {
   const [number, setNumber] = useState(0);
   const [city, setCity] = useState("");
-  const [adress, setAdress] = useState("");
+  const [address, setAddress] = useState("");
   const [postalCode, setPostalCode] = useState("");
-  const [storeStatus, setStoretatus] = useState("");
+  const [storeStatus, setStoreStatus] = useState("");
   const [storeName, setStoreName] = useState("");
 
   const { user } = UserAuth();
@@ -32,7 +32,7 @@ const StoreInformation = () => {
     const storeRef = collection(db, "store");
     const q = query(storeRef, where("name", "==", `${storeName}`));
 
-    const unsubb = onSnapshot(q, (snap) => {
+    const unsub = onSnapshot(q, (snap) => {
       let items = "";
       snap.forEach((doc) => {
         items = doc.data().id;
@@ -41,7 +41,7 @@ const StoreInformation = () => {
     });
 
     return () => {
-      unsubb();
+      unsub();
     };
   }, [setStoreName, user]);
 
@@ -49,10 +49,10 @@ const StoreInformation = () => {
     const updateDocId = doc(db, "store", storeName);
 
     await updateDoc(updateDocId, {
-      adress,
+      address,
       city,
       number,
-      postalCode
+      postalCode,
     });
   }
 
@@ -60,7 +60,7 @@ const StoreInformation = () => {
     <div className={styles.container}>
       <div className={styles.information}>
         <div className={styles.info}>
-          <label htmlFor="">number</label>
+          <label htmlFor="">ტელეფონის ნომერი</label>
           <input
             type="number"
             onChange={(e) => setNumber(e.target.value)}
@@ -68,7 +68,7 @@ const StoreInformation = () => {
           />
         </div>
         <div className={styles.info}>
-          <label htmlFor="">city</label>
+          <label htmlFor="">ქალაქი</label>
           <input
             type="text"
             onChange={(e) => setCity(e.target.value)}
@@ -76,7 +76,7 @@ const StoreInformation = () => {
           />
         </div>
         <div className={styles.info}>
-          <label htmlFor="">postal code</label>
+          <label htmlFor="">საფოსტო კოდი</label>
           <input
             type="text"
             onChange={(e) => setPostalCode(e.target.value)}
@@ -84,28 +84,28 @@ const StoreInformation = () => {
           />
         </div>
         <div className={styles.info}>
-          <label htmlFor="">adress</label>
+          <label htmlFor="">მისამართი</label>
           <input
             type="text"
-            onChange={(e) => setAdress(e.target.value)}
-            value={adress}
+            onChange={(e) => setAddress(e.target.value)}
+            value={address}
           />
         </div>
         <div className={styles.info}>
-          <label htmlFor="">საცხოვრებლის ტიპი</label>
+          <label htmlFor="">მაღაზიის სტატუსი</label>
           <select
             name=""
             id=""
-            onChange={(e) => setStoretatus(e.target.value)}
+            onChange={(e) => setStoreStatus(e.target.value)}
             value={storeStatus}
           >
             <option value=""></option>
-            <option value="bina">bina</option>
-            <option value="saxli">saxli</option>
+            <option value="bina">ბინა</option>
+            <option value="saxli">სახლი</option>
           </select>
         </div>
       </div>
-      <button onClick={update}>add</button>
+      <button onClick={update}>დამატება</button>
     </div>
   );
 };
