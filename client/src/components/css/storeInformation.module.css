@@ -22,9 +22,9 @@
     margin-bottom: 5px;
   }
   
-  input[type="number"],
-  input[type="text"],
-  select {
+  .info > input[type="number"],
+  .info > input[type="text"],
+  .info > select {
     width: 100%;
     padding: 8px;
     border-radius: 4px;

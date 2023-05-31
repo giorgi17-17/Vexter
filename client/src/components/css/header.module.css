@@ -87,7 +87,7 @@
 .searchBar {
   width: 400px;
   height: 40px;
-  background-color: var(--orange);
+  background-color: var(--brightOrange);
   border: none;
   border-radius: 5px 5px 0px 0px;
   padding: 0px 10px;
@@ -106,7 +106,7 @@
   font-weight: 500;
   /* font-style: italic; */
   font-size: 45px;
-  color: var(--orange);
+  color: var(--brightOrange);
   margin-left: 10px;
 }
 
@@ -114,7 +114,7 @@
   /* font-weight: 600; */
   color: rgb(0, 0, 0);
   text-decoration: none;
-  color: var(--orange);
+  color: var(--brightOrange);
 }
 
 .nav_item {
@@ -181,8 +181,8 @@
   top: 40%;
   right: 50%;
   content: "";
-  background-color: var(--orange);
-  color: white;
+  background-color: var(--brightOrange);
+  color: var(--textColor);
   border-radius: 50px;
   font-size: 0.8rem;
   font-weight: 600;

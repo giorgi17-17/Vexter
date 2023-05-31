@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { Favorites } from "../Context/FavoritesContext";
 // import ReactGA from "react-ga"
 import { useLocation } from "react-router-dom";
+import { UserAuth } from "../Context/AuthContext";
 
 const gender = localStorage.getItem("gender");
 // console.log(gender)
@@ -38,7 +39,6 @@ const nav_link = [
     display: "ბავშვი",
   },
 ];
-
 
 export const apparelTypes = [
   {
@@ -174,6 +174,7 @@ export const apparelTypes = [
 const Header = () => {
   const { firstPath, items } = ShoppingCart();
   const { favoriteItems } = Favorites();
+  const { user } = UserAuth();
 
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
@@ -204,7 +205,6 @@ const Header = () => {
 
   // 'gender' gets gender value from localstorage
 
-
   // this reduce function shows number of items in cart
   const productsCount = items.reduce(
     (sum, product) => sum + product.quantity,
@@ -221,7 +221,6 @@ const Header = () => {
       {open && (
         <div className={styles.sideBar}>
           <div className={styles.topBar}>
-            {/* <h5>დაყავი კატეგორიებად</h5> */}
             <div className={styles.closeIcon}>
               {open ? closeIcon : hamburgerIcon}
             </div>
@@ -306,9 +305,19 @@ const Header = () => {
         </div>
         <div className={styles.additional}>
           <span>
-            <Link className="link" to="/account">
-              <CgProfile size={"1.5rem"} className={styles.icon} />
-            </Link>
+            {user ? (
+              <div>
+                <Link className="link" to="/account">
+                  <CgProfile size={"1.5rem"} className={styles.icon} />
+                </Link>
+              </div>
+            ) : (
+              <div>
+                <Link className="login" to="/login">
+                  <button>შესვლა</button>
+                </Link>
+              </div>
+            )}
           </span>
           <span className={styles.fav_icon}>
             {/* favorites */}

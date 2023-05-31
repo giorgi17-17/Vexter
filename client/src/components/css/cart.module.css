@@ -166,6 +166,23 @@
   font-weight: bold;
 }
 
+
+.signinPopUpcontainer,.signUpPopUpcontainer {
+  width: 400px;
+  height: 300px;
+}
+
+.signinPopUpcontainer > form input, 
+.signUpPopUpcontainer > form input
+{
+  width: 100%;
+  padding: 8px;
+}
+
+
+
+
+
 @media only screen and (max-width: 600px) {
   /* .container{
     display: flex;

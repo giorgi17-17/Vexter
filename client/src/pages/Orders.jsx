@@ -3,7 +3,7 @@ import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../firebase/firebase";
 import { UserAuth } from "../Context/AuthContext";
-import styles from "../components/css/userDashboard.module.css";
+import styles from "../components/css/orders.module.css";
 
 const Orders = () => {
   const [products, setProducts] = useState([]);
@@ -44,7 +44,7 @@ const Orders = () => {
   // })
 
   return (
-    <div>
+    <div className={styles.container}>
       {products.map((item, i) => {
         return (
           <div key={i} className={styles.allOrder}>

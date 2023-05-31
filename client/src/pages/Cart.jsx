@@ -6,7 +6,10 @@ import { useEffect, useState } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 // import io from "socket.io-client"
 import { UserAuth } from "../Context/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast, ToastContainer,Slide } from "react-toastify";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { db } from "../firebase/firebase";
 
 const Cart = () => {
   const { items, deleteOneFromCart, totalAmount, cost, delivery } =
@@ -14,10 +17,18 @@ const Cart = () => {
 
   const [link, setLink] = useState("");
   const [checkUser, setCheckUser] = useState(true);
-  let [loading, setLoading] = useState(false);
-  let [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [signinPopUp, setSigninPopUp] = useState(false);
+  const [signupPopUp, setSignupPopUp] = useState(false);
+  const [box, setBox] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const { user } = UserAuth();
+  const navigate = useNavigate();
+  const collRef = collection(db, "users");
+
+  const { user, signIn, createUser } = UserAuth();
   const override = {
     display: "block",
     margin: "0 auto",
@@ -61,13 +72,108 @@ const Cart = () => {
         });
     } else {
       setCheckUser(false);
+      setBox(true);
+    }
+  };
+
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    // setError("");
+    try {
+      await signIn(email, password);
+      navigate("/");
+      toast.success("წარმატებით დარეგისტრირდით", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: "slide",
+      });
+    } catch (error) {
+      if (error.message === "Firebase: Error (auth/wrong-password).") {
+        toast.error("იმეილი ან პაროლი არასწორია", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      } else if (error.message === "Firebase: Error (auth/user-not-found).") {
+        toast.error("მომხმარებელი ვერ მოიძებნა", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      }
+      // setError(error.message);
+      console.log(error.message);
+    }
+  };
+
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    // setError("");
+    try {
+      await createUser(email, password);
+      navigate("/");
+
+      await addDoc(collRef, {
+        email,
+        createdAt: serverTimestamp(),
+        order: null,
+        amount: 0,
+      });
+
+      toast.success("წარმატებით დარეგისტრირდით");
+    } catch (error) {
+      if (error.message === "Firebase: Error (auth/email-already-in-use).") {
+        toast.error("იმეილი უკვე გამოყენებულია", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      } else if (
+        error.message ===
+        "Firebase: Password should be at least 6 characters (auth/weak-password)."
+      ) {
+        toast.error("პაროლი უნდა შედგებოდეს მინიმუმ 6 ასოსგან", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      }
+      // setError(error.message);
+
+      // console.log(error.message);
     }
   };
 
   //
   return (
     <div className={styles.container}>
-      {checkUser ? (
+      {checkUser && (
         <div>
           {open && (
             <div className={styles.spinner}>
@@ -138,22 +244,110 @@ const Cart = () => {
             </div>
           )}
         </div>
-      ) : (
+      )}
+
+      {/* -------------- */}
+      {!checkUser && (
         <div className={styles.falseUserContainer}>
-          <div className={styles.box}>
-            <div className={styles.text}>
-              <h2>ყიდვამდე გაიარეთ რეგისტრაცია</h2>
-            </div>
-            <div className={styles.buttons}>
-              <Link to={"/login"}>
+          {box && (
+            <div className={styles.box}>
+              <div className={styles.text}>
+                <h2>ყიდვამდე გაიარეთ რეგისტრაცია</h2>
+              </div>
+              <div className={styles.buttons}>
+                {/* <Link to={"/login"}>
                 <button className={styles.signInButton}>შესვლა</button>
-              </Link>
-              <Link to={"/signup"}>
-                <button className={styles.registerButton}>რეგისტრაცია</button>
-              </Link>
-              {/* <button className={styles.registerButton}>რეგისტრაცია</button> */}
+              </Link> */}
+                <button
+                  className={styles.signInButton}
+                  onClick={() => {
+                    setSigninPopUp(true);
+                    setBox(false);
+                  }}
+                >
+                  შესვლა
+                </button>
+
+                <button
+                  className={styles.registerButton}
+                  onClick={() => {
+                    setSignupPopUp(true);
+                    setBox(false);
+                  }}
+                >
+                  რეგისტრაცია
+                </button>
+                {/* <button className={styles.registerButton}>რეგისტრაცია</button> */}
+              </div>
             </div>
-          </div>
+          )}
+
+          {signinPopUp && (
+            <div className={styles.signinPopUpcontainer}>
+              <ToastContainer />
+              <h1>ავტორიზაცია</h1>
+              <form>
+                <div className={styles.email}>
+                  <label>Email</label>
+                  <input
+                    type="text"
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+                <div className={styles.password}>
+                  <label>Password</label>
+                  <input
+                    type="password"
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </div>
+                <button onClick={handleSignIn} className={styles.btn}>
+                  შესვლა
+                </button>
+              </form>
+              <p>არ გაქვთ ანგარიში?</p>
+              <Link to="/signup" className={styles.logIn}>
+                რეგისტრაცია
+              </Link>
+            </div>
+          )}
+          {signupPopUp && (
+              <div className={styles.signUpPopUpcontainer}>
+              <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                limit={10}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                // pauseOnFocusLoss
+                draggable
+                // pauseOnHover
+                theme="dark"
+                transition={Slide}
+              />
+              <h1>ახალი მომხმარებლის რეგისტრაცია</h1>
+              <form onSubmit={handleSignUp}>
+                <div className={styles.email}>
+                  <label>Email</label>
+                  <input onChange={(e) => setEmail(e.target.value)} type="text" />
+                </div>
+                <div className={styles.password}>
+                  <label>Password</label>
+                  <input
+                    onChange={(e) => setPassword(e.target.value)}
+                    type="password"
+                  />
+                </div>
+                <button className={styles.btn}>რეგისტრაცია</button>
+              </form>
+              <p>უკვე გაქვთ ანგარიში?</p>
+              <Link to="/login" className={styles.signUp}>
+                ანგარიშზე შესვლა
+              </Link>
+            </div>
+          )}
         </div>
       )}
     </div>
