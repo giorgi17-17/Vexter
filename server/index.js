@@ -18,6 +18,10 @@ let email;
 let amount;
 let newOrder;
 
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = require("twilio")(accountSid, authToken);
+
 app.post("/checkout", async (req, res) => {
   console.log("checkout");
   email = req.body.email;
@@ -181,6 +185,7 @@ app.post("/cart", async (req, res) => {
 
       snap.forEach((doc) => {
         let oldOrders = doc.data().order;
+        let phoneNUmber = doc.data().number
         console.log(oldOrders);
         let ord = {
           orderId: doc.id,
@@ -189,7 +194,16 @@ app.post("/cart", async (req, res) => {
           purchaseTime: Date.now(),
           amount: req.body.amount,
         };
-        // console.log([ord, ...oldOrders]);
+
+        // twilio sms
+        client.messages
+          .create({
+            body: "თქვენი პროდუქტი გაიყიდა",
+            from: "+13203346949",
+            to: phoneNUmber,
+          })
+          .then((message) => console.log(message.sid));
+        // twilio sms
 
         if (oldOrders) {
           db.collection("store")
