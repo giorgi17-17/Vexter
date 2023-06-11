@@ -23,6 +23,64 @@ const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = require("twilio")(accountSid, authToken);
 
 app.post("/checkout", async (req, res) => {
+  const storeRef = db.collection("store");
+    const ss = await storeRef.where("email", "==", email).get();
+
+    let telegramId;
+    ss.forEach((doc) => {
+      let userData = doc.data();
+      telegramId = userData.telegramId;
+      console.log(userData.telegramId);
+    });
+    console.log(telegramId);
+    bot.telegram.sendMessage(
+      telegramId,
+      "თქვენი პროდუქტი წარმატევით გაიყყიდა Checkout ❤️"
+    );
+    console.log("succ from checkout");
+  // const axios = require('axios');
+  // console.log("checkouttesttttt"); 
+
+
+  //   try {
+  //     const workspaceId = "b32262aa-22e9-4e94-aaeb-dedef1e8f4e5";
+  //     const channelId = "2b6eea4f-a7b6-4f86-9537-3565a375cb7a";
+  //     // const accessToken = process.env.ACCESS_TOKEN;
+
+  //     const url = `https://nest.messagebird.com/workspaces/${workspaceId}/${channelId}/messages
+  //     `;
+
+  //     const requestBody = {
+  //       receiver: {
+  //         contacts: [
+  //           {
+  //             identifierValue: "+995595802526",
+  //           },
+  //         ],
+  //       },
+
+  //       body: {
+  //         type: "text",
+  //         text: {
+  //           text: "Single text message",
+  //         },
+  //       },
+  //     };
+
+  //     const response = await axios.post(url, requestBody, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `AccessKey ${process.env.ACCESS_TOKEN}`,
+  //       },
+  //     });
+
+  //     console.log("Message sent successfully:", response.data);
+  //   } catch (error) {
+  //     console.error("Error sending message:", error.response.data);
+  //   }
+
+  // // sendMessage();
+
   console.log("checkout");
   email = req.body.email;
   console.log(email);
@@ -185,7 +243,7 @@ app.post("/cart", async (req, res) => {
 
       snap.forEach((doc) => {
         let oldOrders = doc.data().order;
-        let phoneNUmber = doc.data().number
+        let phoneNUmber = doc.data().number;
         console.log(oldOrders);
         let ord = {
           orderId: doc.id,
@@ -237,20 +295,20 @@ app.post("/cart", async (req, res) => {
       }
     });
 
-    // const storeRef = db.collection("store");
-    // const ss = await storeRef.where("email", "==", email).get();
+    const storeRef = db.collection("store");
+    const ss = await storeRef.where("email", "==", email).get();
 
-    // let telegramId;
-    // ss.forEach((doc) => {
-    //   let userData = doc.data();
-    //   telegramId = userData.telegramId;
-    //   console.log(userData.telegramId);
-    // });
-    // console.log(telegramId);
-    // bot.telegram.sendMessage(
-    //   telegramId,
-    //   "თქვენი პროდუქტი წარმატევით გაიყყიდა ❤️"
-    // );
+    let telegramId;
+    ss.forEach((doc) => {
+      let userData = doc.data();
+      telegramId = userData.telegramId;
+      console.log(userData.telegramId);
+    });
+    console.log(telegramId);
+    bot.telegram.sendMessage(
+      telegramId,
+      "თქვენი პროდუქტი წარმატევით გაიყყიდა cart ❤️"
+    );
     console.log("succ from checkout");
   }
   console.log("done");
