@@ -209,13 +209,13 @@ app.post("/cart", async (req, res) => {
 
         // twilio sms
 
-        client.messages
-          .create({
-            body: "თქვენი პროდუქტი წარმატებით გაიყიდა ❤️",
-            from: "+13203346949",
-            to: phoneNUmber,
-          })
-          .then((message) => console.log(message.sid));
+        // client.messages
+        //   .create({
+        //     body: "თქვენი პროდუქტი წარმატებით გაიყიდა ❤️",
+        //     from: "+13203346949",
+        //     to: phoneNUmber,
+        //   })
+        //   .then((message) => console.log(message.sid));
 
         // twilio sms
 
