@@ -257,8 +257,10 @@ app.post("/cart", async (req, res) => {
         console.log(telegramId);
         bot.telegram.sendMessage(
           telegramId,
-          "თქვენი პროდუქტი წარმატევით გაიყყიდა ❤️"
-        );
+          "თქვენი პროდუქტი წარმატევით გაიყიდა ❤️"
+        ).catch(error => {
+          console.error('Error sending message:', error);
+        });
 
         // twilio sms
         // client.messages
