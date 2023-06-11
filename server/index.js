@@ -117,13 +117,14 @@ app.post("/checkout", async (req, res) => {
     productsByStore[storeName].products.push(product);
     productsByStore[storeName].totalAmount += product.price * product.quantity;
   });
+
+  
   // console.log(productsByStore);
   const splitData = [];
   let storeAmount;
   for (const [storeName, storeData] of Object.entries(productsByStore)) {
     const storeRef = db.collection("store");
     const snap = await storeRef.where("name", "==", storeName).get();
-
     snap.forEach((doc) => {
       let bankNumbers = doc.data().bankNumber;
 
@@ -188,6 +189,10 @@ app.post("/checkout", async (req, res) => {
       console.error(error);
       res.status(500).send("Error processing payment.");
     });
+
+
+
+
 });
 
 app.post("/cart", async (req, res) => {
@@ -239,7 +244,7 @@ app.post("/cart", async (req, res) => {
       if (!productsByStore[storeName]) {
         productsByStore[storeName] = [];
       }
-      productsByStore[storeName].push(product);
+      // productsByStore[storeName].push(product);
     });
 
     for (const [storeName, products] of Object.entries(productsByStore)) {
