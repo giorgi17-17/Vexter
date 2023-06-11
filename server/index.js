@@ -22,11 +22,23 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = require("twilio")(accountSid, authToken);
 
-
-
-
 app.post("/checkout", async (req, res) => {
   console.log("succ from checkout");
+  // const storeRef = db.collection("store");
+  // const ss = await storeRef.where("email", "==", "vexter@gmail.com").get();
+
+  // let telegramId;
+  // ss.forEach((doc) => {
+  //   let userData = doc.data();
+  //   telegramId = userData.telegramId;
+  //   console.log(userData.telegramId);
+  // });
+  // console.log(telegramId);
+  // bot.telegram.sendMessage(
+  //   telegramId,
+  //   "თქვენი პროდუქტი წარმატებით გაიყიდა ❤️"
+  // );
+
   // const axios = require('axios');
   // console.log("checkouttesttttt");
 
@@ -69,9 +81,9 @@ app.post("/checkout", async (req, res) => {
 
   // // sendMessage();
 
-  console.log("checkout");
+  // console.log("checkout");
   email = req.body.email;
-  console.log(email);
+  // console.log(email);
   prods = req.body.cartItems;
   amount = req.body.amount;
 
@@ -100,7 +112,7 @@ app.post("/checkout", async (req, res) => {
     productsByStore[storeName].products.push(product);
     productsByStore[storeName].totalAmount += product.price * product.quantity;
   });
-  console.log(productsByStore);
+  // console.log(productsByStore);
   const splitData = [];
   let storeAmount;
   for (const [storeName, storeData] of Object.entries(productsByStore)) {
@@ -154,7 +166,7 @@ app.post("/checkout", async (req, res) => {
   axios
     .post(url, data)
     .then(async (response) => {
-      console.log("paymant");
+      // console.log("paymant");
 
       storeName = prods.map((item) => {
         return item.name;
@@ -174,10 +186,10 @@ app.post("/checkout", async (req, res) => {
 });
 
 app.post("/cart", async (req, res) => {
-  console.log(email);
-  console.log(req.body.finalAmount);
-  console.log(req.body.status);
-  console.log(`in cart ${email}`);
+  // console.log(email);
+  // console.log(req.body.finalAmount);
+  // console.log(req.body.status);
+  // console.log(`in cart ${email}`);
   // finalAmount:
   // status:
   if (req.body.status === "Committed") {
@@ -232,8 +244,8 @@ app.post("/cart", async (req, res) => {
       snap.forEach((doc) => {
         let oldOrders = doc.data().order;
         let phoneNUmber = doc.data().number;
-        let telegramId = userData.telegramId;
-        console.log(oldOrders);
+        let telegramId = doc.data().telegramId;
+        // console.log(oldOrders);
         let ord = {
           orderId: doc.id,
           orders: newOrder,
@@ -242,14 +254,6 @@ app.post("/cart", async (req, res) => {
           amount: req.body.amount,
         };
 
-        // const storeRef = db.collection("store");
-        // const ss = await storeRef.where("email", "==", email).get();
-    
-        // ss.forEach((doc) => {
-        //   let userData = doc.data();
-        //   telegramId = userData.telegramId;
-        //   console.log(userData.telegramId);
-        // });
         console.log(telegramId);
         bot.telegram.sendMessage(
           telegramId,
@@ -298,24 +302,10 @@ app.post("/cart", async (req, res) => {
       }
     });
 
-    // const storeRef = db.collection("store");
-    // const ss = await storeRef.where("email", "==", email).get();
-
-    // let telegramId;
-    // ss.forEach((doc) => {
-    //   let userData = doc.data();
-    //   telegramId = userData.telegramId;
-    //   console.log(userData.telegramId);
-    // });
-    // console.log(telegramId);
-    // bot.telegram.sendMessage(
-    //   telegramId,
-    //   "თქვენი პროდუქტი წარმატევით გაიყყიდა ❤️"
-    // );
     console.log("succ from checkout");
   }
   console.log("done");
-  console.log("--------------------");
+  // console.log("--------------------");
 });
 
 // Start the server
