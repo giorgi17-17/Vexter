@@ -22,25 +22,13 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = require("twilio")(accountSid, authToken);
 
+
+
+
 app.post("/checkout", async (req, res) => {
-  const storeRef = db.collection("store");
-    const ss = await storeRef.where("email", "==", email).get();
-
-    let telegramId;
-    ss.forEach((doc) => {
-      let userData = doc.data();
-      telegramId = userData.telegramId;
-      console.log(userData.telegramId);
-    });
-    console.log(telegramId);
-    bot.telegram.sendMessage(
-      telegramId,
-      "თქვენი პროდუქტი წარმატევით გაიყყიდა Checkout ❤️"
-    );
-    console.log("succ from checkout");
+  console.log("succ from checkout");
   // const axios = require('axios');
-  // console.log("checkouttesttttt"); 
-
+  // console.log("checkouttesttttt");
 
   //   try {
   //     const workspaceId = "b32262aa-22e9-4e94-aaeb-dedef1e8f4e5";
@@ -244,6 +232,7 @@ app.post("/cart", async (req, res) => {
       snap.forEach((doc) => {
         let oldOrders = doc.data().order;
         let phoneNUmber = doc.data().number;
+        let telegramId = userData.telegramId;
         console.log(oldOrders);
         let ord = {
           orderId: doc.id,
@@ -253,14 +242,28 @@ app.post("/cart", async (req, res) => {
           amount: req.body.amount,
         };
 
+        // const storeRef = db.collection("store");
+        // const ss = await storeRef.where("email", "==", email).get();
+    
+        // ss.forEach((doc) => {
+        //   let userData = doc.data();
+        //   telegramId = userData.telegramId;
+        //   console.log(userData.telegramId);
+        // });
+        console.log(telegramId);
+        bot.telegram.sendMessage(
+          telegramId,
+          "თქვენი პროდუქტი წარმატევით გაიყყიდა ❤️"
+        );
+
         // twilio sms
-        client.messages
-          .create({
-            body: "თქვენი პროდუქტი გაიყიდა",
-            from: "+13203346949",
-            to: phoneNUmber,
-          })
-          .then((message) => console.log(message.sid));
+        // client.messages
+        //   .create({
+        //     body: "თქვენი პროდუქტი გაიყიდა",
+        //     from: "+13203346949",
+        //     to: phoneNUmber,
+        //   })
+        //   .then((message) => console.log(message.sid));
         // twilio sms
 
         if (oldOrders) {
@@ -295,20 +298,20 @@ app.post("/cart", async (req, res) => {
       }
     });
 
-    const storeRef = db.collection("store");
-    const ss = await storeRef.where("email", "==", email).get();
+    // const storeRef = db.collection("store");
+    // const ss = await storeRef.where("email", "==", email).get();
 
-    let telegramId;
-    ss.forEach((doc) => {
-      let userData = doc.data();
-      telegramId = userData.telegramId;
-      console.log(userData.telegramId);
-    });
-    console.log(telegramId);
-    bot.telegram.sendMessage(
-      telegramId,
-      "თქვენი პროდუქტი წარმატევით გაიყყიდა cart ❤️"
-    );
+    // let telegramId;
+    // ss.forEach((doc) => {
+    //   let userData = doc.data();
+    //   telegramId = userData.telegramId;
+    //   console.log(userData.telegramId);
+    // });
+    // console.log(telegramId);
+    // bot.telegram.sendMessage(
+    //   telegramId,
+    //   "თქვენი პროდუქტი წარმატევით გაიყყიდა ❤️"
+    // );
     console.log("succ from checkout");
   }
   console.log("done");
