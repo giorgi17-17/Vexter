@@ -28,16 +28,21 @@ app.post("/checkout", async (req, res) => {
   // const ss = await storeRef.where("email", "==", "vexter@gmail.com").get();
 
   // let telegramId;
+  // let ph
   // ss.forEach((doc) => {
   //   let userData = doc.data();
   //   telegramId = userData.telegramId;
-  //   console.log(userData.telegramId);
+  //   ph= userData.number
+  //   console.log(ph);
   // });
-  // console.log(telegramId);
-  // bot.telegram.sendMessage(
-  //   telegramId,
-  //   "თქვენი პროდუქტი წარმატებით გაიყიდა ❤️"
-  // );
+
+  // client.messages
+  // .create({
+  //   body: "თქვენი პროდუქტი წარმატებით გაიყიდა ❤️",
+  //   from: 'whatsapp:+14155238886',
+  //   to: ph,
+  // })
+  // .then((message) => console.log(message.sid));
 
   // const axios = require('axios');
   // console.log("checkouttesttttt");
@@ -254,22 +259,24 @@ app.post("/cart", async (req, res) => {
           amount: req.body.amount,
         };
 
-      //  onsole.log(telegramId);
-      //   bot.telegram.sendMessage(
-      //     telegramId,
-      //     "თქვენი პროდუქტი წარმატევით გაიყიდა ❤️"
-      //   ).catch(error => {
-      //     console.error('Error sending message:', error);
-      //   }); c
+        //  onsole.log(telegramId);
+        //   bot.telegram.sendMessage(
+        //     telegramId,
+        //     "თქვენი პროდუქტი წარმატევით გაიყიდა ❤️"
+        //   ).catch(error => {
+        //     console.error('Error sending message:', error);
+        //   }); c
 
         // twilio sms
+
         client.messages
           .create({
             body: "თქვენი პროდუქტი წარმატებით გაიყიდა ❤️",
-            from: 'whatsapp:+14155238886',
-            to: phoneNUmber,
+            from: "whatsapp:+14155238886",
+            to: ph,
           })
           .then((message) => console.log(message.sid));
+
         // twilio sms
 
         if (oldOrders) {
