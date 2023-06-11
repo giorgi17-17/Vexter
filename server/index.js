@@ -272,7 +272,7 @@ app.post("/cart", async (req, res) => {
         client.messages
           .create({
             body: "თქვენი პროდუქტი წარმატებით გაიყიდა ❤️",
-            from: "whatsapp:+14155238886",
+            from: "+13203346949",
             to: ph,
           })
           .then((message) => console.log(message.sid));
