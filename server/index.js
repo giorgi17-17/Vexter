@@ -24,67 +24,7 @@ const client = require("twilio")(accountSid, authToken);
 
 app.post("/checkout", async (req, res) => {
   console.log("succ from checkout");
-  // const storeRef = db.collection("store");
-  // const ss = await storeRef.where("email", "==", "vexter@gmail.com").get();
-
-  // let telegramId;
-  // let ph
-  // ss.forEach((doc) => {
-  //   let userData = doc.data();
-  //   telegramId = userData.telegramId;
-  //   ph= userData.number
-  //   console.log(ph);
-  // });
-
-  // client.messages
-  // .create({
-  //   body: "თქვენი პროდუქტი წარმატებით გაიყიდა ❤️",
-  //   from: 'whatsapp:+14155238886',
-  //   to: ph,
-  // })
-  // .then((message) => console.log(message.sid));
-
-  // const axios = require('axios');
-  // console.log("checkouttesttttt");
-
-  //   try {
-  //     const workspaceId = "b32262aa-22e9-4e94-aaeb-dedef1e8f4e5";
-  //     const channelId = "2b6eea4f-a7b6-4f86-9537-3565a375cb7a";
-  //     // const accessToken = process.env.ACCESS_TOKEN;
-
-  //     const url = `https://nest.messagebird.com/workspaces/${workspaceId}/${channelId}/messages
-  //     `;
-
-  //     const requestBody = {
-  //       receiver: {
-  //         contacts: [
-  //           {
-  //             identifierValue: "+995595802526",
-  //           },
-  //         ],
-  //       },
-
-  //       body: {
-  //         type: "text",
-  //         text: {
-  //           text: "Single text message",
-  //         },
-  //       },
-  //     };
-
-  //     const response = await axios.post(url, requestBody, {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `AccessKey ${process.env.ACCESS_TOKEN}`,
-  //       },
-  //     });
-
-  //     console.log("Message sent successfully:", response.data);
-  //   } catch (error) {
-  //     console.error("Error sending message:", error.response.data);
-  //   }
-
-  // // sendMessage();
+  
 
   // console.log("checkout");
   email = req.body.email;
@@ -105,24 +45,24 @@ app.post("/checkout", async (req, res) => {
     };
   });
 
-  const productsByStore = {};
+  const productsBySellers = {};
   newOrder.forEach((product) => {
     const storeName = product.name;
-    if (!productsByStore[storeName]) {
-      productsByStore[storeName] = {
+    if (!productsBySellers[storeName]) {
+      productsBySellers[storeName] = {
         products: [],
         totalAmount: 0,
       };
     }
-    productsByStore[storeName].products.push(product);
-    productsByStore[storeName].totalAmount += product.price * product.quantity;
+    productsBySellers[storeName].products.push(product);
+    productsBySellers[storeName].totalAmount +=
+      product.price * product.quantity;
   });
 
-  
-  // console.log(productsByStore);
+  // console.log(productsBySellers);
   const splitData = [];
   let storeAmount;
-  for (const [storeName, storeData] of Object.entries(productsByStore)) {
+  for (const [storeName, storeData] of Object.entries(productsBySellers)) {
     const storeRef = db.collection("store");
     const snap = await storeRef.where("name", "==", storeName).get();
     snap.forEach((doc) => {
@@ -189,10 +129,6 @@ app.post("/checkout", async (req, res) => {
       console.error(error);
       res.status(500).send("Error processing payment.");
     });
-
-
-
-
 });
 
 app.post("/cart", async (req, res) => {
@@ -200,8 +136,7 @@ app.post("/cart", async (req, res) => {
   // console.log(req.body.finalAmount);
   // console.log(req.body.status);
   // console.log(`in cart ${email}`);
-  // finalAmount:
-  // status:
+ 
   if (req.body.status === "Committed") {
     console.log(`in commited ${email}`);
 
@@ -238,23 +173,23 @@ app.post("/cart", async (req, res) => {
     //this code is witten by chatgpt from here
     //ქვედა კოდი პროდუქტებს ამატებს შესაბამისი მაღაზიის დოკუმენტში
 
-    const productsByStore = {};
+    const productsByStores = {};
     newOrder.forEach((product) => {
       const storeName = product.name;
-      if (!productsByStore[storeName]) {
-        productsByStore[storeName] = [];
+      if (!productsByStores[storeName]) {
+        productsByStores[storeName] = [];
       }
-      // productsByStore[storeName].push(product);
+      productsByStores[storeName].push(product);
     });
 
-    for (const [storeName, products] of Object.entries(productsByStore)) {
+    for (const [storeName, products] of Object.entries(productsByStores)) {
       const storeRef = db.collection("store");
       const snap = await storeRef.where("name", "==", storeName).get();
 
       snap.forEach((doc) => {
         let oldOrders = doc.data().order;
         let phoneNUmber = doc.data().number;
-        // let telegramId = doc.data().telegramId;
+        let telegramId = doc.data().telegramId;
         // console.log(oldOrders);
         let ord = {
           orderId: doc.id,
@@ -265,12 +200,12 @@ app.post("/cart", async (req, res) => {
         };
 
         //  onsole.log(telegramId);
-        //   bot.telegram.sendMessage(
-        //     telegramId,
-        //     "თქვენი პროდუქტი წარმატევით გაიყიდა ❤️"
-        //   ).catch(error => {
-        //     console.error('Error sending message:', error);
-        //   }); c
+          bot.telegram.sendMessage(
+            telegramId,
+            "თქვენი პროდუქტი წარმატევით გაიყიდა ❤️"
+          ).catch(error => {
+            console.error('Error sending message:', error);
+          }); 
 
         // twilio sms
 
@@ -278,7 +213,7 @@ app.post("/cart", async (req, res) => {
           .create({
             body: "თქვენი პროდუქტი წარმატებით გაიყიდა ❤️",
             from: "+13203346949",
-            to: ph,
+            to: phoneNUmber,
           })
           .then((message) => console.log(message.sid));
 
