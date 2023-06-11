@@ -244,7 +244,7 @@ app.post("/cart", async (req, res) => {
       snap.forEach((doc) => {
         let oldOrders = doc.data().order;
         let phoneNUmber = doc.data().number;
-        let telegramId = doc.data().telegramId;
+        // let telegramId = doc.data().telegramId;
         // console.log(oldOrders);
         let ord = {
           orderId: doc.id,
@@ -254,22 +254,22 @@ app.post("/cart", async (req, res) => {
           amount: req.body.amount,
         };
 
-        console.log(telegramId);
-        bot.telegram.sendMessage(
-          telegramId,
-          "თქვენი პროდუქტი წარმატევით გაიყიდა ❤️"
-        ).catch(error => {
-          console.error('Error sending message:', error);
-        });
+      //  onsole.log(telegramId);
+      //   bot.telegram.sendMessage(
+      //     telegramId,
+      //     "თქვენი პროდუქტი წარმატევით გაიყიდა ❤️"
+      //   ).catch(error => {
+      //     console.error('Error sending message:', error);
+      //   }); c
 
         // twilio sms
-        // client.messages
-        //   .create({
-        //     body: "თქვენი პროდუქტი გაიყიდა",
-        //     from: "+13203346949",
-        //     to: phoneNUmber,
-        //   })
-        //   .then((message) => console.log(message.sid));
+        client.messages
+          .create({
+            body: "თქვენი პროდუქტი წარმატებით გაიყიდა ❤️",
+            from: 'whatsapp:+14155238886',
+            to: phoneNUmber,
+          })
+          .then((message) => console.log(message.sid));
         // twilio sms
 
         if (oldOrders) {
