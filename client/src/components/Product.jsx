@@ -12,16 +12,14 @@ const Product = ({ title, name, img, price, id, storeLocation, size }) => {
   const productQuantity = getFavoritesQuantity(id);
   // console.log(items)
 
-  const eventClick = (title, price, img) => {
-    ReactGA.event({
-      category: "favotites",
-      action: "added to favotites",
-      label: title, // optional
-      value: price, // optional, must be a number
-      nonInteraction: true, // optional, true/false
-      transport: img, // optional, beacon/xhr/image
+  const eventClick = (title, price) => {
+    ReactGA.gtag('event', 'added to favotites', {
+      event_category: 'favotites',
+      event_label: title,
+      value: price
     });
   };
+  
 
   let location = useLocation();
   return (

@@ -83,42 +83,43 @@ const MainSections = ({ type }) => {
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.sectionName}>
-        <p>
-          {gender} {apparelType}
-        </p>
-        <Link className={styles.seeMore} to={`/${path}/${type}`}>
-          მეტის ნახვა
-        </Link>
-      </div>
-      <div className={styles.products}>
-        {loading && windowSize.width < 600 ? (
-          <ProductsSkeleton cards={2} />
-        ) : null}
-        {loading && windowSize.width > 600 ? (
-          <ProductsSkeleton cards={7} />
-        ) : null}
+    <section className={styles.container}>
+    <header className={styles.sectionName}>
+      <h1>
+        {gender} {apparelType}
+      </h1>
+      <Link className={styles.seeMore} to={`/${path}/${type}`}>
+        მეტის ნახვა
+      </Link>
+    </header>
+    <main className={styles.products}>
+      {loading && windowSize.width < 600 ? (
+        <ProductsSkeleton cards={2} />
+      ) : null}
+      {loading && windowSize.width > 600 ? (
+        <ProductsSkeleton cards={7} />
+      ) : null}
 
-        {products
-          .filter((item) => item.quantity !== 0)
-          .map((item) => {
-            return (
-              <div key={item.id} className={styles.prod}>
-                <Product
-                  title={item.title}
-                  name={item.name}
-                  img={item.image}
-                  price={item.price}
-                  id={item.id}
-                  storeLocation={item.location}
-                  size={item.category.size}
-                />
-              </div>
-            );
-          })}
-      </div>
-    </div>
+      {products
+        .filter((item) => item.quantity !== 0)
+        .map((item) => {
+          return (
+            <article key={item.id} className={styles.prod}>
+              <Product
+                title={item.title}
+                name={item.name}
+                img={item.image}
+                price={item.price}
+                id={item.id}
+                storeLocation={item.location}
+                size={item.category.size}
+                alt={`${item.name} image`} // alt attribute for image
+              />
+            </article>
+          );
+        })}
+    </main>
+  </section>
   );
 };
 

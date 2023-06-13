@@ -4,23 +4,21 @@ import { BiMenuAltRight } from "react-icons/bi";
 import { IoIosArrowDown } from "react-icons/io";
 import { BsBag } from "react-icons/bs";
 import { VscClose } from "react-icons/vsc";
-
-// import logo from "../assets/vertex---logo.png";
 import styles from "./css/header.module.css";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import "./css/head.css";
 import "../App.css";
 import { ShoppingCart } from "../Context/CartContext";
 import { useEffect, useState } from "react";
 import { Favorites } from "../Context/FavoritesContext";
-// import ReactGA from "react-ga"
-import { useLocation } from "react-router-dom";
 import { UserAuth } from "../Context/AuthContext";
+import { HelmetProvider, Helmet } from "react-helmet-async";
+
 
 const gender = localStorage.getItem("gender");
 // console.log(gender)
 if (gender) {
-  //'splited' make gender to array and removes first and last charaqter
+  //'splited' make gender to array and removes first and last character
   const splited = gender.split("").slice(1, -1);
   //'path' joins array items into string
   var path = splited.join("");
@@ -172,6 +170,8 @@ export const apparelTypes = [
 ];
 
 const Header = () => {
+  // ... existing code ...
+
   const { firstPath, items } = ShoppingCart();
   const { favoriteItems } = Favorites();
   const { user } = UserAuth();
@@ -216,16 +216,75 @@ const Header = () => {
   );
 
   return (
-    <div className={styles.container}>
-      <div className={styles.demo}>საიტი არის ტესტირების რეჟიმში</div>
-      {open && (
-        <div className={styles.sideBar}>
-          <div className={styles.topBar}>
-            <div className={styles.closeIcon}>
-              {open ? closeIcon : hamburgerIcon}
+    <HelmetProvider>
+      <header className={styles.container}>
+        <Helmet>
+
+          <title>Vexter - იშოპინგე ონლაინ</title>
+          {/* <meta name="description" content="My Page Description" /> */}
+        </Helmet>
+        <div className={styles.demo}>საიტი არის ტესტირების რეჟიმში</div>
+        {open && (
+          <nav className={styles.sideBar}>
+            <div className={styles.topBar}>
+              <div className={styles.closeIcon}>
+                {open ? closeIcon : hamburgerIcon}
+              </div>
             </div>
-          </div>
-          <div className={styles.gendreButtons}>
+            <div className={styles.gendreButtons}>
+              {nav_link.map((item, i) => (
+                <button key={i} className={styles.nav_item}>
+                  <NavLink
+                    to={item.path}
+                    className={(navClass) =>
+                      navClass.isActive
+                        ? `${styles.nav_active}`
+                        : `${styles.nav_item}`
+                    }
+                  >
+                    {item.display}
+                  </NavLink>
+                </button>
+              ))}
+            </div>
+            {/* ---------------------- */}
+            <div className={styles.mobile_categories}>
+              {apparelTypes.map((item, i) => {
+                return (
+                  <div key={i} className={styles.nav_items}>
+                    <div className={styles.mobileCat}>
+                      <Link className={styles.link} to={item.path}>
+                        {item.display}
+                      </Link>
+                      <span className={styles.arrowDown}>
+                        <IoIosArrowDown size={"1.5rem"} />
+                      </span>
+                    </div>
+                    <div className={styles.mobileItemsCont}>
+                      {item.subMenu
+                        ? item.subMenu.map((e, i) => {
+                            // console.log(e.title)
+                            return (
+                              <div className={styles.items} key={i}>
+                                <Link
+                                  className={styles.linkItems}
+                                  to={`${item.path}/${e.path}`}
+                                >
+                                  <p>{e.title}</p>
+                                </Link>
+                              </div>
+                            );
+                          })
+                        : null}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </nav>
+        )}
+        <nav className={styles.upHeader}>
+          <div className={styles.buttons}>
             {nav_link.map((item, i) => (
               <button key={i} className={styles.nav_item}>
                 <NavLink
@@ -241,20 +300,57 @@ const Header = () => {
               </button>
             ))}
           </div>
-          {/* ---------------------- */}
-          <div className={styles.mobile_categories}>
+          <div className={styles.logo}>
+            <Link className="link" to={`/${path}`}>
+              <h1 className={styles.mainName}>Vexter</h1>
+            </Link>
+          </div>
+          <div className={styles.additional}>
+            <span>
+              {user ? (
+                <div>
+                  <Link className="link" to="/account">
+                    <CgProfile size={"1.5rem"} className={styles.icon} />
+                  </Link>
+                </div>
+              ) : (
+                <div>
+                  <Link className="login" to="/login">
+                    <button>შესვლა</button>
+                  </Link>
+                </div>
+              )}
+            </span>
+            <span className={styles.fav_icon}>
+              {/* favorites */}
+              <Link className="link" to="/favorites">
+                <AiOutlineHeart size={"1.5rem"} className={styles.icon} />
+                <span className={styles.badge}>{favoritesCount}</span>
+              </Link>
+            </span>
+            <span className={styles.fav_icon}>
+              {/* cart */}
+              <Link className="link" to="/cart">
+                <BsBag size={"1.5rem"} className={styles.icon} />
+                <span className={styles.badge}>{productsCount}</span>
+              </Link>
+            </span>
+            <div className={styles.hamburger}>
+              <span>{open ? closeIcon : hamburgerIcon}</span>
+            </div>
+          </div>
+        </nav>
+        <main className={styles.downHeader}>
+          <div className={styles.categories}>
             {apparelTypes.map((item, i) => {
               return (
-                <div key={i} className={styles.nav_items}>
-                  <div className={styles.mobileCat}>
+                <div key={i} className={styles.appaerlItems}>
+                  <div className={styles.apparelCategories}>
                     <Link className={styles.link} to={item.path}>
                       {item.display}
                     </Link>
-                    <span className={styles.arrowDown}>
-                      <IoIosArrowDown size={"1.5rem"} />
-                    </span>
                   </div>
-                  <div className={styles.mobileItemsCont}>
+                  <div className={styles.itemsCont}>
                     {item.subMenu
                       ? item.subMenu.map((e, i) => {
                           // console.log(e.title)
@@ -275,110 +371,9 @@ const Header = () => {
               );
             })}
           </div>
-        </div>
-      )}
-      {/* ------------------------------------------ */}
-      <div className={styles.upHeader}>
-        <div className={styles.buttons}>
-          {nav_link.map((item, i) => (
-            <button key={i} className={styles.nav_item}>
-              <NavLink
-                to={item.path}
-                className={(navClass) =>
-                  navClass.isActive
-                    ? `${styles.nav_active}`
-                    : `${styles.nav_item}`
-                }
-              >
-                {item.display}
-              </NavLink>
-            </button>
-          ))}
-        </div>
-        <div className={styles.logo}>
-          {/* <img src={logo} alt="Vertex" /> */}
-          <div>
-            <Link className="link" to={`/${path}`}>
-              <h1 className={styles.mainName}>Vexter</h1>
-            </Link>
-          </div>
-        </div>
-        <div className={styles.additional}>
-          <span>
-            {user ? (
-              <div>
-                <Link className="link" to="/account">
-                  <CgProfile size={"1.5rem"} className={styles.icon} />
-                </Link>
-              </div>
-            ) : (
-              <div>
-                <Link className="login" to="/login">
-                  <button>შესვლა</button>
-                </Link>
-              </div>
-            )}
-          </span>
-          <span className={styles.fav_icon}>
-            {/* favorites */}
-            <Link className="link" to="/favorites">
-              <AiOutlineHeart size={"1.5rem"} className={styles.icon} />
-              <span className={styles.badge}>{favoritesCount}</span>
-            </Link>
-          </span>
-          <span className={styles.fav_icon}>
-            {/* cart */}
-            <Link className="link" to="/cart">
-              <BsBag size={"1.5rem"} className={styles.icon} />
-              <span className={styles.badge}>{productsCount}</span>
-            </Link>
-          </span>
-          <div className={styles.hamburger}>
-            <span>{open ? closeIcon : hamburgerIcon}</span>
-          </div>
-        </div>
-      </div>
-      <div className={styles.downHeader}>
-        <div className={styles.categories}>
-          {apparelTypes.map((item, i) => {
-            return (
-              <div key={i} className={styles.appaerlItems}>
-                <div className={styles.apparelCategories}>
-                  <Link className={styles.link} to={item.path}>
-                    {item.display}
-                  </Link>
-                </div>
-                <div className={styles.itemsCont}>
-                  {item.subMenu
-                    ? item.subMenu.map((e, i) => {
-                        // console.log(e.title)
-                        return (
-                          <div className={styles.items} key={i}>
-                            <Link
-                              className={styles.linkItems}
-                              to={`${item.path}/${e.path}`}
-                            >
-                              <p>{e.title}</p>
-                            </Link>
-                          </div>
-                        );
-                      })
-                    : null}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* <div className={styles.search}>
-          <input
-            className={styles.searchBar}
-            type="text"
-            placeholder="Search"
-          />
-        </div> */}
-      </div>
-    </div>
+        </main>
+      </header>
+    </HelmetProvider>
   );
 };
 
