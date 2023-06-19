@@ -85,9 +85,9 @@ const MainSections = ({ type }) => {
   return (
     <section className={styles.container}>
     <header className={styles.sectionName}>
-      <h1>
+      <p>
         {gender} {apparelType}
-      </h1>
+      </p>
       <Link className={styles.seeMore} to={`/${path}/${type}`}>
         მეტის ნახვა
       </Link>
@@ -106,7 +106,7 @@ const MainSections = ({ type }) => {
           return (
             <article key={item.id} className={styles.prod}>
               <Product
-                title={item.title}
+                title={item.category.brand}
                 name={item.name}
                 img={item.image}
                 price={item.price}

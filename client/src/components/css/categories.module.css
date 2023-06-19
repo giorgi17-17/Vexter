@@ -18,6 +18,8 @@
   border: 1px solid var(--grey);
   padding:11px;
   background-color: rgb(255, 255, 255);
+  color: black;
+  font-weight: 300;
   /* max-width: 300px; */ 
 }
 /* .price button {

@@ -18,19 +18,22 @@ import { Slide, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { apparelTypes } from "./Header.jsx";
 
+const shoeSize = [39, 40, 41, 42, 43, 44];
+const clotheSize = ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL"];
+// setSelectedItems
 const AddProduct = () => {
   const [type, setType] = useState("");
   const [brand, setBrand] = useState("");
   const [color, setColor] = useState("");
   const [gender, setGender] = useState("");
   const [title, setTitle] = useState("");
-  const [size, setSize] = useState("");
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
   const [subType, setSubType] = useState("");
   const [imageUpload, setImageUpload] = useState("");
-  // const [progress, setProgress] = useState(0);
-
+  const [selectedSizes, setSelectedSizes] = useState([]);
+  const [isExpanded, setIsExpanded] = useState(false);
+  // const [clickedItem, setClickedItem] = useState(null);
   const imageInputRef = useRef();
 
   const { user } = UserAuth();
@@ -42,6 +45,22 @@ const AddProduct = () => {
     //'path' joins array items into string
     var path = splited.join("");
   }
+  const toggleExpansion = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  const handleItemClick = (event, itemValue) => {
+    if (selectedSizes.includes(itemValue)) {
+      setSelectedSizes(
+        selectedSizes.filter((selectedItem) => selectedItem !== itemValue)
+      );
+    } else {
+      setSelectedSizes((prevSelectedItems) => [
+        ...prevSelectedItems,
+        itemValue,
+      ]);
+    }
+  };
 
   var productId;
   const addProduct = async () => {
@@ -55,7 +74,7 @@ const AddProduct = () => {
       name: user.displayName,
       id: uniqid(),
       quantity: Number(quantity),
-      category: { type, color, brand, gender, size, subType },
+      category: { type, color, brand, gender, size: selectedSizes, subType },
       createdAt: serverTimestamp(),
       location: getStoreLocation,
     });
@@ -74,10 +93,10 @@ const AddProduct = () => {
       setColor("");
       setGender("");
       setTitle("");
-      setSize("");
       setPrice("");
       setQuantity("");
       setSubType("");
+      setSelectedSizes([]);
 
       if (imageUpload.length > 0) {
         for (let i = 0; i < imageUpload.length; i++) {
@@ -127,8 +146,6 @@ const AddProduct = () => {
       console.log("catch", error.message);
     }
   };
-
-
 
   return (
     <div>
@@ -268,38 +285,63 @@ const AddProduct = () => {
           </select>
 
           {type !== "shoe" ? (
-            <select
-              onChange={(e) => {
-                setSize(e.target.value);
-              }}
-            >
-              <option value="size">Size</option>
-              <option value="xxs">XXS</option>
-              <option value="xs">XS</option>
-              <option value="s">S</option>
-              <option value="m">M</option>
-              <option value="l">L</option>
-              <option value="xl">XL</option>
-              <option value="xxl">XXL</option>
-              <option value="3xl">3XL</option>
-            </select>
+            <div className={styles.multiplecont}>
+              <div className={styles.selectbtn} onClick={toggleExpansion}>
+                <span className={styles.btnText}>ზომა</span>
+              </div>
+              {isExpanded && (
+                <ul className={styles.listItems}>
+                  {clotheSize.map((sizeItem) => (
+                    <li
+                      className={styles.item}
+                      onClick={(event) => handleItemClick(event, sizeItem)}
+                      // data-value={sizeItem}
+                      value={sizeItem}
+                      key={sizeItem}
+                    >
+                      <span
+                        className={`${styles.itemText} ${
+                          selectedSizes.includes(sizeItem)
+                            ? styles.selected
+                            : ""
+                        }`}
+                      >
+                        {sizeItem}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           ) : (
-            <select
-              onChange={(e) => {
-                setSize(e.target.value);
-              }}
-            >
-              <option value="size">Size</option>
-              <option value="37">37</option>
-              <option value="38">38</option>
-              <option value="39">39</option>
-              <option value="40">40</option>
-              <option value="41">41</option>
-              <option value="42">42</option>
-              <option value="43">43</option>
-              <option value="44">44</option>
-              <option value="45">45</option>
-            </select>
+            <div className={styles.multiplecont}>
+              <div className={styles.selectbtn} onClick={toggleExpansion}>
+                <span className={styles.btnText}>ზომა</span>
+              </div>
+              {isExpanded && (
+                <ul className={styles.listItems}>
+                  {shoeSize.map((sizeItem) => (
+                    <li
+                      className={styles.item}
+                      onClick={(event) => handleItemClick(event, sizeItem)}
+                      // data-value={sizeItem}
+                      value={sizeItem}
+                      key={sizeItem}
+                    >
+                      <span
+                        className={`${styles.itemText} ${
+                          selectedSizes.includes(sizeItem)
+                            ? styles.selected
+                            : ""
+                        }`}
+                      >
+                        {sizeItem}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           )}
         </div>
         <div className={styles.btn}>

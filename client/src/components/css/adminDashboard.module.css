@@ -62,6 +62,7 @@
   align-items: flex-start;
   justify-content: flex-start;
   flex-direction: row;
+  
 }
 
 .top {
@@ -180,6 +181,10 @@
   }
 
 @media only screen and (max-width: 600px) {
+  .main {
+    display: flex;
+    flex-direction: column;
+  }
   .products {
     width: 100%;
   }
@@ -199,7 +204,7 @@
   }
   .settingsIcon {
     display: block;
-    margin: 50px 0 0 20px;
+    /* margin: 50px 0 0 20px; */
   }
   .settingsPopUp {
     width: 80%;

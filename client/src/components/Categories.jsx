@@ -174,7 +174,7 @@ const Categories = ({ setProducts }) => {
           setBrand(e.target.value);
         }}
       >
-        <option value="">Brand</option>
+        <option value="">ბრენდი</option>
         <option value="nike">Nike</option>
         <option value="addidas">Adiddas</option>
         <option value="puma">Puma</option>
@@ -227,7 +227,7 @@ const Categories = ({ setProducts }) => {
           setColor(e.target.value);
         }}
       >
-        <option value="">Color</option>
+        <option value="">ფერი</option>
         <option value="white">White</option>
         <option value="red">Red</option>
         <option value="blue">Blue</option>
@@ -239,7 +239,7 @@ const Categories = ({ setProducts }) => {
             setSize(e.target.value);
           }}
         >
-          <option value="">Size</option>
+          <option value="">ზომა</option>
           <option value="s">S</option>
           <option value="m">M</option>
           <option value="l">L</option>
@@ -250,10 +250,17 @@ const Categories = ({ setProducts }) => {
             setSize(e.target.value);
           }}
         >
-          <option value="">Size</option>
+          <option value="">ზომა</option>
+          <option value="36">36</option>
+          <option value="37">37</option>
+          <option value="38">38</option>
+          <option value="39">39</option>
           <option value="40">40</option>
           <option value="41">41</option>
           <option value="42">42</option>
+          <option value="43">43</option>
+          <option value="44">44</option>
+          <option value="45">45</option>
         </select>
       )}
       {/* <input type="range" min="0" max="10" /> */}

@@ -5,12 +5,10 @@ import { collection, onSnapshot, query, where } from "firebase/firestore";
 import styles from "../components/css/productDetails.module.css";
 import { ShoppingCart } from "../Context/CartContext";
 import { AiOutlineCheck, AiOutlineHeart } from "react-icons/ai";
-// import { BsFillBagPlusFill } from "react-icons/bs";
 import ImageCarousel from "../components/ImageCarousel";
 import { Favorites } from "../Context/FavoritesContext";
 import MainSections from "../components/MainSections";
 import { ProductsDetailsSkeleton } from "../components/ProductsSkeleton";
-// import Skeleton from "react-loading-skeleton";
 
 const Productdetails = () => {
   const { id } = useParams();
@@ -18,13 +16,13 @@ const Productdetails = () => {
   const [loading, setLoading] = useState(true);
 
   const [images, setImages] = useState([]);
-  // const [size, setSize] = useState("");
-  // const [error, setError] = useState("");
+  const [size, setSize] = useState("");
+  const [error, setError] = useState("");
   const { getFavoritesQuantity, addOneToFavorites, deleteOneFromFavorites } =
     Favorites();
   const favoritesQuantity = getFavoritesQuantity(id);
 
-  const { addOneToCart, getPoductQuantity, removeOneFromCart} = ShoppingCart();
+  const { addOneToCart, getPoductQuantity, removeOneFromCart } = ShoppingCart();
   const productQuantity = getPoductQuantity(id);
 
   useEffect(() => {
@@ -42,23 +40,20 @@ const Productdetails = () => {
       });
       setProducts(items);
       setImages(imgs[0]);
-      setLoading(false)
+      setLoading(false);
     });
 
     return () => {
       unsub();
     };
   }, [id]);
-  // window.scrollTo(0, 0);
-  // add place where u show quantity of product
-  let type 
 
+  let type;
   return (
     <div className={styles.container}>
-      {loading && <ProductsDetailsSkeleton cards={1}/>}
+      {loading && <ProductsDetailsSkeleton cards={1} />}
       {products.map((item) => {
-        type = item.category.type
-        // console.log(item.category.size)
+        type = item.category.type;
         return (
           <div key={item.id} className={styles.cont}>
             <div className={styles.productImages} key={item.id}>
@@ -70,59 +65,48 @@ const Productdetails = () => {
                 <p className={styles.title}>{item.title}</p>
                 <p className={styles.price}>₾ {item.price}</p>
                 <p className={styles.color}>ფერი: {item.category.color}</p>
-                <p className={styles.color}>ზომა: {item.category.size}</p>
+                <p className={styles.color}>რაოდენობა: {item.quantity}</p>
+
+                {/* <p className={styles.color}>ზომა: {item.category.size}</p> */}
                 <Link className={styles.link} to={`/storepage/${item.name}`}>
-                <p className={styles.color}>მაღაზია: {item.name}</p>
+                  <p className={styles.color}>მაღაზია: {item.name}</p>
                 </Link>
-                
               </div>
-              {/* ზომის არევა */}
-              {/* <div className={styles.input}>
+              <div className={styles.input}>
                 {!size && <p className={styles.sizeError}>{error}</p>}
 
                 {item.category.type === "shoe" ? (
                   <select
+                    value={size}
                     onChange={(e) => {
                       setSize(e.target.value);
+                      setError("");
                     }}
                   >
                     <option value="">Size</option>
-                    <option value="39">39</option>
-                    <option value="40">40</option>
-                    <option value="41">41</option>
-                  </select>
-                ) : item.category.type === "clothe" ? (
-                  <select
-                    onChange={(e) => {
-                      setSize(e.target.value);
-                    }}
-                  >
-                    <option value="Size">Size</option>
-                    <option value="s">S</option>
-                    <option value="m">M</option>
-                    <option value="l">L</option>
-                  </select>
-                ) : item.category.type === "bags" ? (
-                  <select
-                    onChange={(e) => {
-                      setSize(e.target.value);
-                    }}
-                  >
-                    <option value="Size">Size</option>
-                    <option value="s">S</option>
-                    <option value="m">M</option>
-                    <option value="l">L</option>
+                    {item.category.size.map((sizeItem) => (
+                      <option key={sizeItem} value={sizeItem}>
+                        {sizeItem}
+                      </option>
+                    ))}
                   </select>
                 ) : (
                   <select
+                    value={size}
                     onChange={(e) => {
                       setSize(e.target.value);
+                      setError("");
                     }}
                   >
-                    <option value="subType">Sub Type</option>
+                    <option value="Size">Size</option>
+                    {item.category.size.map((sizeItem) => (
+                      <option key={sizeItem} value={sizeItem}>
+                        {sizeItem}
+                      </option>
+                    ))}
                   </select>
                 )}
-              </div> */}
+              </div>
               <div className={styles.buttons}>
                 <div className={styles.addButton}>
                   {productQuantity > 0 ? (
@@ -135,15 +119,18 @@ const Productdetails = () => {
                   ) : (
                     <div
                       onClick={() => {
+                        if (!size) {
+                          setError("ზომა აირჩიეთ");
+                        } else {
                           addOneToCart(
                             id,
                             item.title,
                             item.image,
                             item.price,
                             item.name,
-                            item.category.size
+                            size
                           );
-                        // setError("ზომა არ არის მითითებული");
+                        }
                       }}
                       className={styles.addIcon}
                     >
@@ -169,7 +156,7 @@ const Productdetails = () => {
                           item.img,
                           item.price,
                           item.name,
-                          item.category.size
+                          size
                         )
                       }
                     >
@@ -183,7 +170,7 @@ const Productdetails = () => {
         );
       })}
       <div className={styles.downSections}>
-        <MainSections type={`${type}`}/>
+        <MainSections type={`${type}`} />
       </div>
     </div>
   );

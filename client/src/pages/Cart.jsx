@@ -177,6 +177,7 @@ const Cart = () => {
         <div>
           {open && (
             <div className={styles.spinner}>
+              <h1>გადადიხართ გადახდის გვერზე</h1>
               <ClipLoader
                 color="#ffffff"
                 loading={loading}

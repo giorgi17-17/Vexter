@@ -13,10 +13,6 @@
   margin-top: 10px;
 }
 
-/* .inputs > input:not(:first-child) {
-  margin-left: 10px;
-  
-} */
 
 .inputs > label {
   display: block;
@@ -42,12 +38,10 @@
 
 .inputs > select > option {
   padding: 10px;
-  /* color: brown; */
 }
 
 .categoriesContainer {
   display: flex;
-  /* flex-direction: row; */
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
@@ -56,6 +50,61 @@
 .categoriesContainer > select {
   margin-left: 10px;
 }
+
+.multiplecont{
+  position: relative;
+  max-width: 100px;
+  width: 100%;
+  /* margin: 80px auto 30px; */
+  margin: 10px;
+}
+.selectbtn{
+  border-radius: 0px;
+  border: 1px solid var(--grey);
+  padding: 10px;
+  max-width: 300px;
+  margin-top: 10px;
+}
+.selectbtn .btn-text{
+  font-size: 17px;
+  font-weight: 400;
+  color: #333;
+}
+.selectbtn .arrowDwn{
+  display: flex;
+  height: 21px;
+  width: 21px;
+  color: #fff;
+  font-size: 14px;
+  border-radius: 50%;
+  background: #6e93f7;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+}
+.selectbtn .open .arrow-dwn{
+  transform: rotate(-180deg);
+}
+
+.listItems {
+  border: 1px solid black;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.itemText {
+  padding: 3px;
+}
+
+ .selected {
+  background-color  : var(--brightOrange);
+  color: white;
+}
+
+.item {
+  margin: 5px;
+}
+
 
 @media only screen and (max-width: 600px) {
   .inputs > input {

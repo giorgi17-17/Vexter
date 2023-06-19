@@ -14,6 +14,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+}
+.spinner > h1 {
+  margin-bottom: 50px;
 }
 .cartCont {
   width: 100%;
@@ -202,5 +206,9 @@
   .totalPrice {
     width: 100%;
     margin: 0;
+  }
+
+  .spinner > h1 {
+    font-size: 20px;
   }
 }
