@@ -105,7 +105,7 @@ const StoreInformation = () => {
           </select>
         </div>
       </div>
-      <button onClick={update}>დამატება</button>
+      <button className={styles.addBtn} onClick={update}>დამატება</button>
     </div>
   );
 };

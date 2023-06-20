@@ -72,6 +72,7 @@ const UserDashboard = ({ user }) => {
                         <div key={i} className={styles.orders}>
                           {e.orders
                             ? e.orders.map((e) => {
+                                console.log(e);
                                 return (
                                   <div
                                     className={styles.productCont}
@@ -86,20 +87,25 @@ const UserDashboard = ({ user }) => {
                                           <p>{e.title}</p>
                                         </div>
                                       </div>
-                                      <div className={styles.price}>
-                                        <p>₾ {e.price}</p>
+                                      <div className={styles.right}>
+                                        <div className={styles.price}>
+                                          <p>₾ {e.price}</p>
+                                        </div>
+                                        <div className={styles.storeName}>
+                                          <p>{e.name}</p>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
                                 );
                               })
                             : null}
-                          <div className={styles.price}>
+                          <div className={styles.purchaseTime}>
                             <p>შეკვეთის დრო: </p>
                             <p>{time(e.purchaseTime)}</p>
                           </div>
                           <div className={styles.totalAmount}>
-                            გადახდილი თანხა:{e.amount}
+                            <p>გადახდილი თანხა:{e.amount}</p>
                           </div>
                         </div>
                       );

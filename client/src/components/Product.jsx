@@ -1,16 +1,12 @@
 import styles from "./css/product.module.css";
-import { AiOutlineCheck, AiOutlineHeart } from "react-icons/ai";
-// import { ShoppingCart } from "../Context/CartContext";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { Link, useLocation } from "react-router-dom";
 import { Favorites } from "../Context/FavoritesContext";
 import ReactGA from "react-ga4";
 
-const Product = ({ title, name, img, price, id, storeLocation, size }) => {
-  // const { getPoductQuantity, addOneToCart, removeOneFromCart } = ShoppingCart();
-  const { getFavoritesQuantity, addOneToFavorites, deleteOneFromFavorites } =
-    Favorites();
+const Product = ({ title, name, img, price, id }) => {
+  const { getFavoritesQuantity, addOneToFavorites, deleteOneFromFavorites } = Favorites();
   const productQuantity = getFavoritesQuantity(id);
-  // console.log(items)
 
   const eventClick = (title, price) => {
     ReactGA.gtag('event', 'added to favotites', {
@@ -19,55 +15,32 @@ const Product = ({ title, name, img, price, id, storeLocation, size }) => {
       value: price
     });
   };
-  
 
   let location = useLocation();
+
   return (
     <div className={styles.container}>
       <Link className={styles.imageContainer} to={`/detail/${id}`}>
-        <div className={styles.image}>
-          <img src={img} alt={title} loading="lazy" />
-        </div>
+        <img className={styles.image} src={img} alt={title} loading="lazy" />
       </Link>
 
       <div className={styles.info}>
-        <div className={styles.upPart}>
-          <div className={styles.left}>
-            <h1>{title}</h1>
-          </div>
-          <div className={styles.right}>
-            <p>{name}</p>
-            {/* <p>{storeLocation}</p> */}
-          </div>
-        </div>
-        <div className={styles.down}>
-          <div className={styles.price}>
-            <p>₾ {price}</p>
-          </div>
-          <div className={styles.btn}>
-            {location.pathname !== "/cart" ? (
-              <div className={styles.addButton}>
-                {productQuantity > 0 ? (
-                  <div
-                    onClick={() => deleteOneFromFavorites(id)}
-                    className={styles.checkIcon}
-                  >
-                    <AiOutlineCheck size={"1.5rem"} />
-                  </div>
-                ) : (
-                  <div
-                    onClick={() => {
-                      addOneToFavorites(id, title, img, price, name, size);
-                      eventClick(title, price, img);
-                    }}
-                    className={styles.addIcon}
-                  >
-                    <AiOutlineHeart size={"1.5rem"} />
-                  </div>
-                )}
-              </div>
-            ) : null}
-          </div>
+        <h1 className={styles.title}>{title}</h1>
+        <p className={styles.name}>{name}</p>
+
+        <div className={styles.bottom}>
+          <p className={styles.price}>₾ {price}</p>
+          {location.pathname !== "/cart" && (
+            <button
+              onClick={productQuantity > 0 ? () => deleteOneFromFavorites(id) : () => {
+                addOneToFavorites(id, title, img, price);
+                eventClick(title, price);
+              }}
+              className={productQuantity > 0 ? styles.favoriteButtonActive : styles.favoriteButton}
+            >
+              {productQuantity > 0 ? <AiFillHeart size={"1.5rem"} /> : <AiOutlineHeart size={"1.5rem"} />}
+            </button>
+          )}
         </div>
       </div>
     </div>

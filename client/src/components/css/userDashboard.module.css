@@ -54,13 +54,27 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  padding: 5px;
 }
+.storeName {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 5px;
 
+}
 .left {
   display: flex;
   align-items: center;
 }
 
+.right {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+}
 .image {
   width: 80px;
   height: 80px;
@@ -97,10 +111,14 @@
   font-size: 17px;
   margin: 0;
 }
+.purchaseTime {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
 
 .totalAmount {
-  float: right;
-  font-weight: bold;
   margin-top: 10px;
 }
 

@@ -41,7 +41,7 @@ const FavoriteProducts = () => {
                     <div className={styles.price}>
                       <p>$ {item.price}</p>
                     </div>
-                    <div className={styles.btn}>
+                    {/* <div className={styles.btn}>
                       {productQuantity > 0 ? (
                         <div
                           onClick={() => deleteOneFromCart(item.id)}
@@ -66,7 +66,7 @@ const FavoriteProducts = () => {
                           <BsFillBagPlusFill size={"1.5rem"} />
                         </div>
                       )}
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <button
