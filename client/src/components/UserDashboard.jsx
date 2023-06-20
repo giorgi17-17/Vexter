@@ -57,11 +57,7 @@ const UserDashboard = ({ user }) => {
               გასვლა
             </button>
           </div>
-          {/* <div>
-            <button className={styles.btn} onClick={handleLogOut}>
-              გასვლა
-            </button>
-          </div> */}
+         
 
           {products.map((item) => {
             return (
@@ -72,7 +68,6 @@ const UserDashboard = ({ user }) => {
                         <div key={i} className={styles.orders}>
                           {e.orders
                             ? e.orders.map((e) => {
-                                console.log(e);
                                 return (
                                   <div
                                     className={styles.productCont}

@@ -122,6 +122,8 @@
   text-decoration: none;
   position: relative;
   display: inline-block;
+  font-family: var(--geoFontArialGeo);
+
 }
 
 .nav_items {
@@ -129,6 +131,7 @@
   text-decoration: none;
   position: relative;
   display: inline-block;
+
 }
 .apparelType {
   color: brown;
@@ -137,6 +140,8 @@
   color: rgb(0, 0, 0);
   text-decoration: none;
   position: relative;
+  font-family: var(--geoFontArialGeo);
+
 }
 
 .linkk {
@@ -155,6 +160,7 @@
 .linkItems {
   color: rgb(0, 0, 0);
   text-decoration: none;
+  font-family: var(--geoFontArialGeo);
 }
 .linkItems:hover {
   /* text-decoration: underline; */

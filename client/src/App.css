@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@100;300;400;700;800&display=swap");
+@import url("//cdn.web-fonts.ge/fonts/arial-geo/css/arial-geo.min.css");
 
 *{
   margin: 0;
@@ -19,7 +20,8 @@
   --grey: rgba(0, 0, 0, 0.65);
   --black: #030303;
   --white:#ffffff;
-  --fontInter: "Inter"
+  --fontInter: "Inter";
+  --geoFontArialGeo: "Arial GEO";
 }
 
 body {

@@ -29,9 +29,12 @@
 .sectionName > p {
   font-size: 20px;
   padding: 5px;
+  font-family: var(--geoFontArialGeo);
+
 }
 
 .seeMore {
+  font-family: var(--geoFontArialGeo);
   color: black;
   font-size: 15px;
   text-decoration: none;

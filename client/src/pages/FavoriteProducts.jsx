@@ -1,13 +1,13 @@
-import { AiOutlineCheck } from "react-icons/ai";
-import { BsFillBagPlusFill } from "react-icons/bs";
+// import { AiOutlineCheck } from "react-icons/ai";
+// import { BsFillBagPlusFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import styles from "../components/css/favoriteProducts.module.css";
-import { ShoppingCart } from "../Context/CartContext";
+// import { ShoppingCart } from "../Context/CartContext";
 import { Favorites } from "../Context/FavoritesContext";
 
 const FavoriteProducts = () => {
   const { removeOneFromFavorites, favoriteItems } = Favorites();
-  const { addOneToCart, getPoductQuantity, deleteOneFromCart } = ShoppingCart();
+  // const {  getPoductQuantity } = ShoppingCart();
   let favoriteStorage = JSON.parse(localStorage.getItem("favorites"));
 
   return (
@@ -15,7 +15,7 @@ const FavoriteProducts = () => {
       {favoriteStorage.length > 0 ? (
         <div>
           {favoriteItems.map((item, i) => {
-            const productQuantity = getPoductQuantity(item.id);
+            // const productQuantity = getPoductQuantity(item.id);
             return (
               <div className={styles.productContainer} key={i}>
                 <Link

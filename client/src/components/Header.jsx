@@ -177,10 +177,12 @@ const Header = () => {
   const { user } = UserAuth();
 
   const [open, setOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState(null);
   const { pathname } = useLocation();
 
   useEffect(() => {
     setOpen(() => false); // close menu if path changes!
+    setActiveCategory(null); // reset active category
   }, [pathname]);
 
   const hamburgerIcon = (
@@ -215,84 +217,35 @@ const Header = () => {
     0
   );
 
+  const handleCategoryClick = (index) => {
+    if (activeCategory === index) {
+      setActiveCategory(null);
+    } else {
+      setActiveCategory(index);
+    }
+  };
+
   return (
     <HelmetProvider>
-      <header className={styles.container}>
-        <Helmet>
-
-          <title>Vexter - იშოპინგე ონლაინ</title>
-          {/* <meta name="description" content="My Page Description" /> */}
-        </Helmet>
-        <div className={styles.demo}>საიტი არის ტესტირების რეჟიმში</div>
-        {open && (
-          <nav className={styles.sideBar}>
-            <div className={styles.topBar}>
-              <div className={styles.closeIcon}>
-                {open ? closeIcon : hamburgerIcon}
-              </div>
+    <header className={styles.container}>
+      <Helmet>
+        <title>Vexter - იშოპინგე ონლაინ</title>
+      </Helmet>
+      <div className={styles.demo}>საიტი არის ტესტირების რეჟიმში</div>
+      {open && (
+        <nav className={styles.sideBar}>
+          <div className={styles.topBar}>
+            <div className={styles.closeIcon}>
+              {open ? closeIcon : hamburgerIcon}
             </div>
-            <div className={styles.gendreButtons}>
-              {nav_link.map((item, i) => (
-                <button key={i} className={styles.nav_item}>
-                  <NavLink
-                    to={item.path}
-                    className={(navClass) =>
-                      navClass.isActive
-                        ? `${styles.nav_active}`
-                        : `${styles.nav_item}`
-                    }
-                  >
-                    {item.display}
-                  </NavLink>
-                </button>
-              ))}
-            </div>
-            {/* ---------------------- */}
-            <div className={styles.mobile_categories}>
-              {apparelTypes.map((item, i) => {
-                return (
-                  <div key={i} className={styles.nav_items}>
-                    <div className={styles.mobileCat}>
-                      <Link className={styles.link} to={item.path}>
-                        {item.display}
-                      </Link>
-                      <span className={styles.arrowDown}>
-                        <IoIosArrowDown size={"1.5rem"} />
-                      </span>
-                    </div>
-                    <div className={styles.mobileItemsCont}>
-                      {item.subMenu
-                        ? item.subMenu.map((e, i) => {
-                            // console.log(e.title)
-                            return (
-                              <div className={styles.items} key={i}>
-                                <Link
-                                  className={styles.linkItems}
-                                  to={`${item.path}/${e.path}`}
-                                >
-                                  <p>{e.title}</p>
-                                </Link>
-                              </div>
-                            );
-                          })
-                        : null}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </nav>
-        )}
-        <nav className={styles.upHeader}>
-          <div className={styles.buttons}>
+          </div>
+          <div className={styles.gendreButtons}>
             {nav_link.map((item, i) => (
               <button key={i} className={styles.nav_item}>
                 <NavLink
                   to={item.path}
                   className={(navClass) =>
-                    navClass.isActive
-                      ? `${styles.nav_active}`
-                      : `${styles.nav_item}`
+                    navClass.isActive ? `${styles.nav_active}` : `${styles.nav_item}`
                   }
                 >
                   {item.display}
@@ -300,48 +253,95 @@ const Header = () => {
               </button>
             ))}
           </div>
-          <div className={styles.logo}>
-            <Link className="link" to={`/${path}`}>
-              <h1 className={styles.mainName}>Vexter</h1>
-            </Link>
-          </div>
-          <div className={styles.additional}>
-            <span>
-              {user ? (
-                <div>
-                  <Link className="link" to="/account">
-                    <CgProfile size={"1.5rem"} className={styles.icon} />
+          {/* ---------------------- */}
+          <div className={styles.mobile_categories}>
+            {apparelTypes.map((item, i) => (
+              <div key={i} className={styles.nav_items}>
+                <div className={styles.mobileCat}>
+                  <Link className={styles.link} to={item.path}>
+                    {item.display}
                   </Link>
+                  <span
+                    className={styles.arrowDown}
+                    onClick={() => handleCategoryClick(i)}
+                  >
+                    <IoIosArrowDown size={"1.5rem"} />
+                  </span>
                 </div>
-              ) : (
-                <div>
-                  <Link className="login" to="/login">
-                    <button>შესვლა</button>
-                  </Link>
+                <div className={styles.mobileItemsCont}>
+                  {activeCategory === i &&
+                    item.subMenu &&
+                    item.subMenu.map((e, j) => (
+                      <div className={styles.items} key={j}>
+                        <Link
+                          className={styles.linkItems}
+                          to={`${item.path}/${e.path}`}
+                        >
+                          <p>{e.title}</p>
+                        </Link>
+                      </div>
+                    ))}
                 </div>
-              )}
-            </span>
-            <span className={styles.fav_icon}>
-              {/* favorites */}
-              <Link className="link" to="/favorites">
-                <AiOutlineHeart size={"1.5rem"} className={styles.icon} />
-                <span className={styles.badge}>{favoritesCount}</span>
-              </Link>
-            </span>
-            <span className={styles.fav_icon}>
-              {/* cart */}
-              <Link className="link" to="/cart">
-                <BsBag size={"1.5rem"} className={styles.icon} />
-                <span className={styles.badge}>{productsCount}</span>
-              </Link>
-            </span>
-            <div className={styles.hamburger}>
-              <span>{open ? closeIcon : hamburgerIcon}</span>
-            </div>
+              </div>
+            ))}
           </div>
         </nav>
-        <main className={styles.downHeader}>
-          <div className={styles.categories}>
+      )}
+      <nav className={styles.upHeader}>
+        <div className={styles.buttons}>
+          {nav_link.map((item, i) => (
+            <button key={i} className={styles.nav_item}>
+              <NavLink
+                to={item.path}
+                className={(navClass) =>
+                  navClass.isActive ? `${styles.nav_active}` : `${styles.nav_item}`
+                }
+              >
+                {item.display}
+              </NavLink>
+            </button>
+          ))}
+        </div>
+        <div className={styles.logo}>
+          <Link className="link" to={`/${path}`}>
+            <h1 className={styles.mainName}>Vexter</h1>
+          </Link>
+        </div>
+        <div className={styles.additional}>
+          <span>
+            {user ? (
+              <div>
+                <Link className="link" to="/account">
+                  <CgProfile size={"1.5rem"} className={styles.icon} />
+                </Link>
+              </div>
+            ) : (
+              <div>
+                <Link className="login" to="/login">
+                  <button>შესვლა</button>
+                </Link>
+              </div>
+            )}
+          </span>
+          <span className={styles.fav_icon}>
+            <Link className="link" to="/favorites">
+              <AiOutlineHeart size={"1.5rem"} className={styles.icon} />
+              <span className={styles.badge}>{favoritesCount}</span>
+            </Link>
+          </span>
+          <span className={styles.fav_icon}>
+            <Link className="link" to="/cart">
+              <BsBag size={"1.5rem"} className={styles.icon} />
+              <span className={styles.badge}>{productsCount}</span>
+            </Link>
+          </span>
+          <div className={styles.hamburger}>
+            <span>{open ? closeIcon : hamburgerIcon}</span>
+          </div>
+        </div>
+      </nav>
+      <main className={styles.downHeader}>
+      <div className={styles.categories}>
             {apparelTypes.map((item, i) => {
               return (
                 <div key={i} className={styles.appaerlItems}>
@@ -371,9 +371,9 @@ const Header = () => {
               );
             })}
           </div>
-        </main>
-      </header>
-    </HelmetProvider>
+      </main>
+    </header>
+  </HelmetProvider>
   );
 };
 
