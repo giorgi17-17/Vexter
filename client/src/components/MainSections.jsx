@@ -7,6 +7,8 @@ import { db } from "../firebase/firebase";
 import Product from "./Product";
 import { Link } from "react-router-dom";
 import { ProductsSkeleton } from "./ProductsSkeleton";
+import { Splide, SplideSlide } from "@splidejs/react-splide";
+import "@splidejs/splide/dist/css/themes/splide-default.min.css";
 
 const MainSections = ({ type }) => {
   const [products, setProducts] = useState([]);
@@ -17,9 +19,7 @@ const MainSections = ({ type }) => {
   const localgender = localStorage.getItem("gender");
 
   if (localgender) {
-    //'splited' make gender to array and removes first and last charaqter
     const splited = localgender.split("").slice(1, -1);
-    //'path' joins array items into string
     var path = splited.join("");
   }
 
@@ -53,14 +53,12 @@ const MainSections = ({ type }) => {
       });
       setProducts(items);
       setLoading(false);
-      //   console.log(items);
     });
 
     return () => {
       getProducts();
     };
   }, [localgender, path, type]);
-  // console.log(windowSize.width)
 
   var gender;
   if (firstPath === "man") {
@@ -82,44 +80,88 @@ const MainSections = ({ type }) => {
     apparelType = "ჩანთები";
   }
 
+  const getSlidesPerView = () => {
+    if (windowSize.width >= 1280) {
+      return 5;
+    } else if (windowSize.width >= 960) {
+      return 3;
+    } else if (windowSize.width >= 600) {
+      return 3;
+    } else {
+      return 2;
+    }
+  };
+
   return (
     <section className={styles.container}>
-    <header className={styles.sectionName}>
-      <p>
-        {gender} {apparelType}
-      </p>
-      <Link className={styles.seeMore} to={`/${path}/${type}`}>
-        მეტის ნახვა
-      </Link>
-    </header>
-    <main className={styles.products}>
-      {loading && windowSize.width < 600 ? (
-        <ProductsSkeleton cards={2} />
-      ) : null}
-      {loading && windowSize.width > 600 ? (
-        <ProductsSkeleton cards={7} />
-      ) : null}
+      <header className={styles.sectionName}>
+        <p>
+          {gender} {apparelType}
+        </p>
+        <Link className={styles.seeMore} to={`/${path}/${type}`}>
+          მეტის ნახვა
+        </Link>
+      </header>
+      <main className={styles.products}>
+        {loading && windowSize.width < 600 ? (
+          <ProductsSkeleton cards={2} />
+        ) : null}
+        {loading && windowSize.width > 600 ? (
+          <ProductsSkeleton cards={7} />
+        ) : null}
 
-      {products
-        .filter((item) => item.quantity !== 0)
-        .map((item) => {
-          return (
-            <article key={item.id} className={styles.prod}>
-              <Product
-                title={item.category.brand}
-                name={item.name}
-                img={item.image}
-                price={item.price}
-                id={item.id}
-                storeLocation={item.location}
-                size={item.category.size}
-                alt={`${item.name} image`} // alt attribute for image
-              />
-            </article>
-          );
-        })}
-    </main>
-  </section>
+        {!loading && (
+          <div className={styles.splideContainer}>
+            <Splide
+              options={{
+                // type: "loop",
+                gap: "1rem",
+                autoplay: false,
+                pagination: true,
+                arrows: true,
+                perPage: getSlidesPerView(),
+                breakpoints: {
+                  600: {
+                    perPage: 2,
+                  },
+                  1024: {
+                    perPage: 3,
+                  },
+                  1280: {
+                    perPage: 5,
+                  },
+                },
+                classes: {
+                  arrow: `splide__arrow ${styles.yourClassArrow}`,
+                  prev: `splide__arrow--prev ${styles.yourClassPrev}`,
+                  next: `splide__arrow--next ${styles.yourClassNext}`,
+                },
+              }}
+            >
+              {products
+                .slice(0, 20)
+                .filter((item) => item.quantity !== 0)
+                .map((item) => (
+                  <SplideSlide key={item.id}>
+                    <div className={styles.prod}>
+                      <Product
+                        title={item.category.brand}
+                        name={item.name}
+                        img={item.image}
+                        price={item.price}
+                        id={item.id}
+                        storeLocation={item.location}
+                        size={item.category.size}
+                        alt={`${item.name} image`}
+                      />
+                    </div>
+                  </SplideSlide>
+                ))}
+            </Splide>
+          </div>
+        )}
+      </main>
+    </section>
   );
 };
 

@@ -18,6 +18,13 @@
   display: none; /* Safari and Chrome */
 }
 
+.prod {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
 .sectionName {
   display: flex;
   align-items: center;
@@ -45,4 +52,26 @@
 
 .seeMore:hover {
   border-bottom: 2px solid black;
+}
+
+.swiper-button-next,
+
+
+.splideContainer {
+  width: 100%;
+}
+
+
+
+.yourClassArrow {
+  font-size: 20px; /* replace with your size */
+  background-color: var(--brightOrange);
+}
+
+.yourClassPrev {
+  font-size: 20px; /* replace with your size */
+}
+
+.yourClassNext {
+  font-size: 20px; /* replace with your size */
 }
