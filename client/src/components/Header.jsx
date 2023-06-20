@@ -318,7 +318,7 @@ const Header = () => {
             ) : (
               <div>
                 <Link className="login" to="/login">
-                  <button>შესვლა</button>
+                  <button className={styles.loginBtn}>შესვლა</button>
                 </Link>
               </div>
             )}
