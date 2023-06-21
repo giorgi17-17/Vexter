@@ -27,8 +27,6 @@ const Categories = ({ setProducts }) => {
   const [subType, setSubType] = useState("");
   const [sortBy, setSortBy] = useState("");
   const [value, setValue] = useState([0, 1000]);
-  // const [apparelPath, setApparelPath] = useState("");
-  // console.log(`${firstPath}/${secondPath}`);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -59,7 +57,6 @@ const Categories = ({ setProducts }) => {
   }
   useEffect(() => {
     const collRef = collection(db, "products");
-    // setApparelPath(secondPath);
     setType(secondPath);
     // 
 
@@ -67,9 +64,7 @@ const Categories = ({ setProducts }) => {
     if (subType !== "")
       q = query(q, where("category.subType", "==", `${subType}`));
     if (brand !== "") q = query(q, where("category.brand", "==", `${brand}`));
-    // if (price !== "") q = query(q, where("price", "==", `${price}`));
-    if (size !== "") q = query(q, where("category.size", "==", `${size}`));
-    // if (type !== "") q = query(q, where("category.type", "==", `${type}`));
+    if (size !== "") q = query(q, where("category.size", "array-contains", size));
     if (color !== "") q = query(q, where("category.color", "==", `${color}`));
     if (path !== "") q = query(q, where("category.gender", "==", `${path}`));
 
@@ -81,7 +76,6 @@ const Categories = ({ setProducts }) => {
       if (value[0] >= 1) q = query(q, where("price", ">=", value[0]));
       if (value[1] >= 1) q = query(q, where("price", "<=", value[1]));
     }
-
 
     if (sortBy === "asc" || sortBy === "desc") {
       if (sortBy) q = query(q, orderBy("price", `${sortBy}`));

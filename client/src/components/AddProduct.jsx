@@ -18,7 +18,7 @@ import { Slide, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { apparelTypes } from "./Header.jsx";
 
-const shoeSize = [39, 40, 41, 42, 43, 44];
+const shoeSize = ["39", "40", "41", "42", "43", "44"];
 const clotheSize = ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL"];
 // setSelectedItems
 const AddProduct = () => {

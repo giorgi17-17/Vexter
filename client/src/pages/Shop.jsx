@@ -7,12 +7,15 @@ import { ShoppingCart } from "../Context/CartContext";
 import Categories from "../components/Categories";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { ProductsSkeleton } from "../components/ProductsSkeleton";
+import MobileCategories from "../components/MobileCategories";
 
 const Shop = () => {
   const { firstPath, secondPath } = ShoppingCart();
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [windowSize, setWindowSize] = useState({ width: undefined });
+
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -21,7 +24,7 @@ const Shop = () => {
     const q = query(
       collRef,
       where("category.gender", "==", `${firstPath}`),
-      where("category.type", "==", `${secondPath}`),
+      where("category.type", "==", `${secondPath}`)
       // where("quantity", "!=", 0)
     );
 
@@ -32,24 +35,38 @@ const Shop = () => {
       });
       setProducts(items);
       setLoading(false);
-
     });
-    // if (products.length > 0 || products.length === 0) {
-    //   setLoading(false);
-    //   console.log(products.length);
-    // }
 
     return () => {
       unsub();
     };
     // products.length იწვევს პრობლემას
-  }, [firstPath, secondPath, ]);
-  console.log(products);
+  }, [firstPath, secondPath]);
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowSize({
+        width: window.innerWidth,
+      });
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // console.log(products)
 
   return (
     <div className={styles.container}>
       <div className={styles.categories}>
-        <Categories setProducts={setProducts} />
+        {windowSize.width < 600 ? (
+          <MobileCategories setProducts={setProducts} />
+        ) : (
+          <Categories setProducts={setProducts} />
+        )}
       </div>
       <div className={styles.products}>
         {loading && <ProductsSkeleton cards={8} />}
