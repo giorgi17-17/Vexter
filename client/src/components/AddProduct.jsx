@@ -17,14 +17,11 @@ import { useRef } from "react";
 import { Slide, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { apparelTypes } from "./Header.jsx";
+import { colors, shoeSize, clotheSize } from "./assets";
 
-const shoeSize = ["39", "40", "41", "42", "43", "44"];
-const clotheSize = ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL"];
-// setSelectedItems
 const AddProduct = () => {
   const [type, setType] = useState("");
   const [brand, setBrand] = useState("");
-  const [color, setColor] = useState("");
   const [gender, setGender] = useState("");
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
@@ -33,6 +30,9 @@ const AddProduct = () => {
   const [imageUpload, setImageUpload] = useState("");
   const [selectedSizes, setSelectedSizes] = useState([]);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isColorExpanded, setIsColorExpanded] = useState(false);
+  const [selectedColors, setSelectedColors] = useState([]);
+
   // const [clickedItem, setClickedItem] = useState(null);
   const imageInputRef = useRef();
 
@@ -61,6 +61,22 @@ const AddProduct = () => {
       ]);
     }
   };
+  const handleColorClick = (event, colorValue) => {
+    if (selectedColors.includes(colorValue)) {
+      setSelectedColors(
+        selectedColors.filter((selectedColor) => selectedColor !== colorValue)
+      );
+    } else {
+      setSelectedColors((prevSelectedColors) => [
+        ...prevSelectedColors,
+        colorValue,
+      ]);
+    }
+  };
+
+  const toggleColorExpansion = () => {
+    setIsColorExpanded(!isColorExpanded);
+  };
 
   var productId;
   const addProduct = async () => {
@@ -74,7 +90,14 @@ const AddProduct = () => {
       name: user.displayName,
       id: uniqid(),
       quantity: Number(quantity),
-      category: { type, color, brand, gender, size: selectedSizes, subType },
+      category: {
+        type,
+        color: selectedColors,
+        brand,
+        gender,
+        size: selectedSizes,
+        subType,
+      },
       createdAt: serverTimestamp(),
       location: getStoreLocation,
     });
@@ -90,7 +113,7 @@ const AddProduct = () => {
       setPrice("");
       setType("");
       setBrand("");
-      setColor("");
+      setSelectedColors([]);
       setGender("");
       setTitle("");
       setPrice("");
@@ -259,20 +282,34 @@ const AddProduct = () => {
             <option value="hand-made">ხელნაკეთი</option>
             <option value="New Balance">New Balance</option>
           </select>
-          <select
-            onChange={(e) => {
-              setColor(e.target.value);
-            }}
-          >
-            <option value="color">ფერი</option>
-            <option value="white">თეთრი</option>
-            <option value="red">წითელი</option>
-            <option value="blue">ლურჯი</option>
-            <option value="black">შავი</option>
-            <option value="yellow">ყვითელი</option>
-            <option value="orange">ნარინჯისფერი</option>
-            <option value="green">მწვანე</option>
-          </select>
+          <div className={styles.multiplecont}>
+            <div className={styles.selectbtn} onClick={toggleColorExpansion}>
+              <span className={styles.btnText}>Color</span>
+            </div>
+            {isColorExpanded && (
+              <ul className={styles.listItems}>
+                {colors.map((colorItem) => (
+                  <li
+                    className={styles.item}
+                    onClick={(event) => handleColorClick(event, colorItem)}
+                    value={colorItem}
+                    key={colorItem}
+                  >
+                    <span
+                      className={`${styles.itemText} ${
+                        selectedColors.includes(colorItem)
+                          ? styles.selected
+                          : ""
+                      }`}
+                    >
+                      {colorItem}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
           <select
             onChange={(e) => {
               setGender(e.target.value);

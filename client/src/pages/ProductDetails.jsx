@@ -14,7 +14,7 @@ const Productdetails = () => {
   const { id } = useParams();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [color, setColor] = useState("");
   const [images, setImages] = useState([]);
   const [size, setSize] = useState("");
   const [error, setError] = useState("");
@@ -64,8 +64,23 @@ const Productdetails = () => {
                 <p className={styles.brand}>{item.category.brand}</p>
                 <p className={styles.title}>{item.title}</p>
                 <p className={styles.price}>₾ {item.price}</p>
-                <p className={styles.color}>ფერი: {item.category.color}</p>
+                {/* <p className={styles.color}>ფერი: {item.category.color}</p> */}
                 <p className={styles.color}>რაოდენობა: {item.quantity}</p>
+                <div className={styles.selectContainer}>
+              <label className={styles.selectLabel}>ფერი:</label>
+              <select
+                value={color}
+                onChange={(e) => setColor(e.target.value)}
+                className={styles.select}
+              >
+                <option value="">Select color</option>
+                {item.category.color.map((colorItem) => (
+                  <option key={colorItem} value={colorItem}>
+                    {colorItem}
+                  </option>
+                ))}
+              </select>
+            </div>
 
                 {/* <p className={styles.color}>ზომა: {item.category.size}</p> */}
                 <Link className={styles.link} to={`/storepage/${item.name}`}>

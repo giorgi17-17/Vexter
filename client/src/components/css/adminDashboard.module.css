@@ -1,3 +1,11 @@
+.mainContainer {
+  width: 100%;
+  position: relative;
+  display: flex;
+  /* align-items: center; */
+  justify-content: center;
+}
+
 .container {
   width: 100%;
   display: flex;
@@ -62,7 +70,6 @@
   align-items: flex-start;
   justify-content: flex-start;
   flex-direction: row;
-  
 }
 
 .top {
@@ -176,9 +183,15 @@
   color: black;
 }
 .additionalInfo {
-    display: flex;
-    flex-direction: column;
-  }
+  display: flex;
+  flex-direction: column;
+}
+
+/* .productPopUpContainer {
+  position: relative;
+  background-color: aqua;
+  padding: 20px;
+} */
 
 @media only screen and (max-width: 600px) {
   .main {

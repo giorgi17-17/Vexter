@@ -12,7 +12,7 @@ const Baner = () => {
   return (
     <div>
       {loading && <Skeleton height={300} />}
-      <img style={{ width: "100%" }} src={vexter} alt="Baner" onLoad={handleImageLoad}/>
+      <img style={{ width: "100%" }} src={vexter} alt="აღმოაჩინე ახალი მაღაზიები, იშოპინგე ონლაინ" onLoad={handleImageLoad}/>
     </div>
   );
 };

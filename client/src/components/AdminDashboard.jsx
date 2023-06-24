@@ -3,7 +3,6 @@ import styles from "./css/adminDashboard.module.css";
 import { UserAuth } from "../Context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import AddProduct from "./AddProduct";
-// import { AiOutlinePlus } from "react-icons/ai";
 import { db } from "../firebase/firebase";
 import {
   collection,
@@ -15,6 +14,8 @@ import {
 } from "firebase/firestore";
 import { ShoppingCart } from "../Context/CartContext";
 import { AiFillSetting } from "react-icons/ai";
+import ProductModal from "./ProductModal";
+
 
 const AdminDashboard = () => {
   const [store, setStore] = useState([]);
@@ -23,6 +24,7 @@ const AdminDashboard = () => {
   const [deleteId, setDeleteId] = useState("");
   const { user, logOut } = UserAuth();
   const { setStoreLocation, getStoreLocation } = ShoppingCart();
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -67,9 +69,7 @@ const AdminDashboard = () => {
     const unsubb = onSnapshot(q, (snap) => {
       let items = "";
       snap.forEach((doc) => {
-        // items.push(doc.data());
         items = doc.data().storeLocation;
-        // console.log(doc.data().storeLocation)
       });
       setStoreLocation(items);
     });
@@ -99,8 +99,16 @@ const AdminDashboard = () => {
     setShow(true);
   };
 
+ 
+
   return (
-    <div className={styles.container}>
+    <div className={styles.mainContainer}>
+      {selectedProduct && (
+        <ProductModal
+          product={selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+        />
+      )}
       {show && (
         <div className={styles.popUp}>
           <div className={styles.popUpHeading}>
@@ -169,15 +177,12 @@ const AdminDashboard = () => {
               {store.map((item, i) => {
                 return (
                   <div key={i} className={styles.prodContainer}>
-                    <Link
-                      className={styles.imageContainer}
-                      to={`/detail/${item.id}`}
+                    <div
+                      className={styles.image}
+                      onClick={() => setSelectedProduct(item)}
                     >
-                      <div className={styles.image}>
-                        <img src={item.image} alt="" />
-                      </div>
-                    </Link>
-
+                      <img src={item.image} alt="" />
+                    </div>
                     <div className={styles.info}>
                       <div className={styles.upPart}>
                         <div className={styles.left}>

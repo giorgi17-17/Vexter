@@ -152,6 +152,30 @@
 .link:hover {
   color: var(--brightOrange);
 }
+.selectContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.selectLabel {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.select {
+  width: 100%;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 4px;
+  background: #f5f5f5;
+  font-size: 1rem;
+  color: #333;
+}
+
+
+
 
 @media only screen and (max-width: 600px) {
   .cont {

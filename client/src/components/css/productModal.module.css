@@ -1,0 +1,162 @@
+.modal {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 100%;
+  height: 600px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.left {
+  flex-basis: 40%;
+  margin-right: 20px;
+}
+
+.right {
+  flex-basis: 60%;
+}
+
+.right p, .right h2 {
+  width: 50%;
+}
+
+.modal img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.btnContainer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.editbtn {
+  cursor: pointer;
+  padding: 15px;
+  background-color: var(--brightOrange);
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  font-family: var(--geoFontArialGeo);
+}
+
+.closebtn {
+  cursor: pointer;
+  padding: 10px;
+  background-color: var(--black);
+  border: none;
+  border-radius: 5px;
+  color: white;
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+form label {
+  margin-bottom: 10px;
+}
+
+form input {
+  margin-top: 5px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+form button {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #45a049;
+}
+
+.multiplecont {
+  position: relative;
+  max-width: 100px;
+  width: 100%;
+  margin: 10px;
+}
+
+.selectbtn {
+  border-radius: 0px;
+  border: 1px solid var(--grey);
+  padding: 10px;
+  max-width: 300px;
+  margin-top: 10px;
+}
+
+.selectbtn .btn-text {
+  font-size: 17px;
+  font-weight: 400;
+  color: #333;
+}
+
+.selectbtn .arrowDwn {
+  display: flex;
+  height: 21px;
+  width: 21px;
+  color: #fff;
+  font-size: 14px;
+  border-radius: 50%;
+  background: #6e93f7;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+}
+
+.selectbtn .open .arrow-dwn {
+  transform: rotate(-180deg);
+}
+
+.listItems {
+  border: 1px solid black;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.itemText {
+  padding: 3px;
+}
+
+.selected {
+  background-color: var(--brightOrange);
+  color: white;
+}
+
+.item {
+  margin: 5px;
+}
+
+@media only screen and (max-width: 600px) {
+  .modal {
+    flex-wrap: wrap;
+  }
+}
