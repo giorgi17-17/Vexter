@@ -10,11 +10,14 @@ import {
   where,
 } from "firebase/firestore";
 import { ShoppingCart } from "../Context/CartContext";
-import { apparelTypes } from "./Header.jsx";
+// import { apparelTypes } from "./Header.jsx";
+import { apparelTypesArray } from "./assets";
 
 function valuetext(value) {
   return `${value}`;
 }
+
+
 const Categories = ({ setProducts }) => {
   const { firstPath, secondPath, thirdPath } = ShoppingCart();
   const [priceArray, setPriceArray] = useState([]);
@@ -39,6 +42,7 @@ const Categories = ({ setProducts }) => {
     //'path' joins array items into string
     var path = splited.join("");
   }
+  const apparelTypes = apparelTypesArray(path);
 
   let minElement = priceArray[0];
 

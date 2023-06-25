@@ -16,8 +16,7 @@ import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { useRef } from "react";
 import { Slide, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { apparelTypes } from "./Header.jsx";
-import { colors, shoeSize, clotheSize } from "./assets";
+import { colors, shoeSize, clotheSize, apparelTypesArray } from "./assets";
 
 const AddProduct = () => {
   const [type, setType] = useState("");
@@ -45,6 +44,8 @@ const AddProduct = () => {
     //'path' joins array items into string
     var path = splited.join("");
   }
+  const apparelTypes = apparelTypesArray(path);
+
   const toggleExpansion = () => {
     setIsExpanded(!isExpanded);
   };

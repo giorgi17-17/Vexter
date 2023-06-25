@@ -10,8 +10,8 @@ import {
   where,
 } from "firebase/firestore";
 import { ShoppingCart } from "../Context/CartContext";
-import { apparelTypes } from "./Header.jsx";
 import styles from "../components/css/mobileCategories.module.css";
+import { apparelTypesArray } from "./assets";
 
 function valuetext(value) {
   return `${value}`;
@@ -44,6 +44,7 @@ const MobileCategories = ({ setProducts }) => {
     //'path' joins array items into string
     var path = splited.join("");
   }
+  const apparelTypes = apparelTypesArray(path);
 
   let minElement = priceArray[0];
 
