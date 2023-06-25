@@ -17,20 +17,33 @@ let storeName;
 let email;
 let amount;
 let newOrder;
+let name;
+let surName;
+let address;
+let city;
+let postalCode;
+let homeStatus;
+let number;
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const client = require("twilio")(accountSid, authToken);
+// const accountSid = process.env.TWILIO_ACCOUNT_SID;
+// const authToken = process.env.TWILIO_AUTH_TOKEN;
+// const client = require("twilio")(accountSid, authToken);
 
 app.post("/checkout", async (req, res) => {
   console.log("succ from checkout");
-  
 
   // console.log("checkout");
   email = req.body.email;
-  // console.log(email);
   prods = req.body.cartItems;
   amount = req.body.amount;
+  // console.log(email);
+  name = req.body.name;
+  surName = req.body.surName;
+  address = req.body.address;
+  city = req.body.city;
+  postalCode = req.body.postalCode;
+  homeStatus = req.body.homeStatus;
+  number = req.body.number;
 
   newOrder = prods.map((item) => {
     return {
@@ -136,7 +149,7 @@ app.post("/cart", async (req, res) => {
   // console.log(req.body.finalAmount);
   // console.log(req.body.status);
   // console.log(`in cart ${email}`);
- 
+
   if (req.body.status === "Committed") {
     console.log(`in commited ${email}`);
 
@@ -188,7 +201,6 @@ app.post("/cart", async (req, res) => {
 
       snap.forEach((doc) => {
         let oldOrders = doc.data().order;
-        let phoneNUmber = doc.data().number;
         let telegramId = doc.data().telegramId;
         // console.log(oldOrders);
         let ord = {
@@ -196,28 +208,24 @@ app.post("/cart", async (req, res) => {
           orders: newOrder,
           buyer: email,
           purchaseTime: Date.now(),
-          amount: req.body.amount,
+          // amount: req.body.amount,
+          userInfo: {
+            name,
+            surName,
+            address,
+            city,
+            postalCode,
+            homeStatus,
+            number,
+          },
         };
 
-        //  onsole.log(telegramId);
-          bot.telegram.sendMessage(
-            telegramId,
-            "თქვენი პროდუქტი წარმატევით გაიყიდა ❤️"
-          ).catch(error => {
-            console.error('Error sending message:', error);
-          }); 
+        bot.telegram
+          .sendMessage(telegramId, "თქვენი პროდუქტი წარმატევით გაიყიდა ❤️")
+          .catch((error) => {
+            console.error("Error sending message:", error);
+          });
 
-        // twilio sms
-
-        // client.messages
-        //   .create({
-        //     body: "თქვენი პროდუქტი წარმატებით გაიყიდა ❤️",
-        //     from: "+13203346949",
-        //     to: phoneNUmber,
-        //   })
-        //   .then((message) => console.log(message.sid));
-
-        // twilio sms
 
         if (oldOrders) {
           db.collection("store")

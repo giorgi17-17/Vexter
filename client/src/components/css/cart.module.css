@@ -19,6 +19,7 @@
 .spinner > h1 {
   margin-bottom: 50px;
 }
+/*  */
 .cartCont {
   width: 100%;
   display: flex;
@@ -28,12 +29,7 @@
 .cartProducts {
   background-color: var(--white);
   width: 70%;
-  /* margin: 10px; */
 }
-
-/* .cartProduct  {
-  
-} */
 
 .totalPrice {
   width: 30%;

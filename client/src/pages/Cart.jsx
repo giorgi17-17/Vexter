@@ -7,7 +7,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 // import io from "socket.io-client"
 import { UserAuth } from "../Context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
-import { toast, ToastContainer,Slide } from "react-toastify";
+import { toast, ToastContainer, Slide } from "react-toastify";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 
@@ -15,7 +15,6 @@ const Cart = () => {
   const { items, deleteOneFromCart, totalAmount, cost, delivery } =
     ShoppingCart();
 
-  const [link, setLink] = useState("");
   const [checkUser, setCheckUser] = useState(true);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -35,41 +34,12 @@ const Cart = () => {
     borderColor: "red",
   };
 
-  useEffect(() => {
-    if (link) {
-      setLoading(false);
-      setOpen(false);
-      // window.open(link);
-      window.location.href = link;
-    }
-  }, [link, open]);
-  // https://vexter.onrender.com/checkout
-  // http://localhost:4000/checkout
+
   const handleSendInfo = async () => {
     if (user) {
       setCheckUser(true);
       setOpen(true);
       setLoading(true);
-      await fetch("https://vexter.onrender.com/checkout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          amount: totalAmount,
-          cartItems: items,
-          email: user.email,
-        }),
-      })
-        .then((res) => {
-          return res.json();
-        })
-        .then((data) => {
-          setLink(data.transactionUrl.transactionUrl);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
     } else {
       setCheckUser(false);
       setBox(true);
@@ -232,11 +202,11 @@ const Cart = () => {
                     <p>{totalAmount}</p>
                   </div>
                 </div>
-                {/* <Link to="/checkout"> */}
-                <button onClick={handleSendInfo} className={styles.btn}>
-                  ყიდვა
-                </button>
-                {/* </Link> */}
+                <Link to="/checkout">
+                  <button onClick={handleSendInfo} className={styles.btn}>
+                    ყიდვა
+                  </button>
+                </Link>
               </div>
             </div>
           ) : (
@@ -313,7 +283,7 @@ const Cart = () => {
             </div>
           )}
           {signupPopUp && (
-              <div className={styles.signUpPopUpcontainer}>
+            <div className={styles.signUpPopUpcontainer}>
               <ToastContainer
                 position="top-right"
                 autoClose={5000}
@@ -332,7 +302,10 @@ const Cart = () => {
               <form onSubmit={handleSignUp}>
                 <div className={styles.email}>
                   <label>Email</label>
-                  <input onChange={(e) => setEmail(e.target.value)} type="text" />
+                  <input
+                    onChange={(e) => setEmail(e.target.value)}
+                    type="text"
+                  />
                 </div>
                 <div className={styles.password}>
                   <label>Password</label>
