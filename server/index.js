@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const dotenv = require("dotenv").config();
 const { Telegraf } = require("telegraf");
 const { db } = require("./firebase.js");
-const { Firestore } = require("firebase-admin/firestore");
+// const { Firestore } = require("firebase-admin/firestore");
 const port = 4000;
 
 app.use(express.json());
@@ -14,10 +14,10 @@ app.use(cors());
 app.use(bodyParser.json());
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
-const firestore = new Firestore({
-  projectId: 'your-project-id',
-  ignoreUndefinedProperties: true,
-});
+// const firestore = new Firestore({
+//   projectId: 'your-project-id',
+//   ignoreUndefinedProperties: true,
+// });
 
 //2 ბაგი
 //1 ბოლო ცვლილების მერე ფაიარბეისი არ იცვლება
@@ -225,7 +225,7 @@ app.post("/cart", async (req, res) => {
           orders: newOrder,
           buyer: email,
           purchaseTime: Date.now(),
-          // amount: req.body.amount,
+          amount: req.body.amount,
           userInfo: {
             name,
             surName,

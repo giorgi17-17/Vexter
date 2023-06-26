@@ -75,7 +75,7 @@ const Orders = () => {
                             );
                           })
                         : null}
-                      <div className={styles.price}>
+                      <div className={styles.purchaseTime}>
                         <p>შეკვეთის დრო: </p>
                         <p>{time(e.purchaseTime)}</p>
                       </div>

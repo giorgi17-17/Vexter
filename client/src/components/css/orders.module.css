@@ -82,6 +82,12 @@
     font-size: 17px;
     margin: 0;
   }
+
+  .purchaseTime {
+    font-weight: 700;
+    font-size: 17px;
+    margin: 0;
+  }
   
   .totalAmount {
     float: right;
