@@ -33,12 +33,12 @@ const Checkout = () => {
     }
   }, [link, open]);
 
-
-
   // https://vexter.onrender.com/checkout
   // http://localhost:4000/checkout
   const handleSendInfo = async () => {
     setOpen(true);
+    console.log(name);
+
     setLoading(true);
     await fetch("https://vexter.onrender.com/checkout", {
       method: "POST",
@@ -52,11 +52,11 @@ const Checkout = () => {
         userInfo: {
           name,
           surName,
-          address,
+          number,
           city,
           postalCode,
+          address,
           homeStatus,
-          number,
         },
       }),
     })

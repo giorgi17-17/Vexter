@@ -6,12 +6,22 @@ const bodyParser = require("body-parser");
 const dotenv = require("dotenv").config();
 const { Telegraf } = require("telegraf");
 const { db } = require("./firebase.js");
+const { Firestore } = require("firebase-admin/firestore");
 const port = 4000;
 
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
 const bot = new Telegraf(process.env.BOT_TOKEN);
+
+const firestore = new Firestore({
+  projectId: 'your-project-id',
+  ignoreUndefinedProperties: true,
+});
+
+//2 ბაგი
+//1 ბოლო ცვლილების მერე ფაიარბეისი არ იცვლება
+//2 ორჯერ ამატებს მაღაზიასთან პროდუქტს
 
 let storeName;
 let email;
@@ -37,13 +47,20 @@ app.post("/checkout", async (req, res) => {
   prods = req.body.cartItems;
   amount = req.body.amount;
   // console.log(email);
-  name = req.body.name;
-  surName = req.body.surName;
-  address = req.body.address;
-  city = req.body.city;
-  postalCode = req.body.postalCode;
-  homeStatus = req.body.homeStatus;
-  number = req.body.number;
+  name = req.body.userInfo.name;
+  surName = req.body.userInfo.surName;
+  address = req.body.userInfo.address;
+  city = req.body.userInfo.city;
+  postalCode = req.body.userInfo.postalCode;
+  homeStatus = req.body.userInfo.homeStatus;
+  number = req.body.userInfo.number;
+  // console.log(name,surName,city,postalCode,homeStatus,number)
+  // console.log(name)
+  // console.log(surName)
+  // console.log(city)
+  // console.log(postalCode)
+  // console.log(homeStatus)
+  // console.log(number)
 
   newOrder = prods.map((item) => {
     return {

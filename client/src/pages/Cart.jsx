@@ -1,7 +1,7 @@
 import { ShoppingCart } from "../Context/CartContext";
 // import Product from "../components/Product";
 import styles from "../components/css/cart.module.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 // import { Link } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 // import io from "socket.io-client"
