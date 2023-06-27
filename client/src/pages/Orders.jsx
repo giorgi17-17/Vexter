@@ -18,7 +18,6 @@ const Orders = () => {
     const collRef = collection(db, "store");
 
     const q = query(collRef, where("email", "==", `${user.email}`));
-    console.log(user.email);
 
     const getProducts = onSnapshot(q, (snap) => {
       const items = [];
@@ -26,7 +25,6 @@ const Orders = () => {
         items.push(doc.data());
       });
       setProducts(items);
-      //   console.log(items);
     });
 
     return () => {
@@ -34,15 +32,7 @@ const Orders = () => {
     };
   }, [user.email]);
 
-  // console.log(products)
-
-  // products.map(item => {
-  //   console.log(item)
-  //   item.map(e => {
-  //     // console.log(e.title)
-  //   })
-  // })
-
+ 
   return (
     <div className={styles.container}>
       {products.map((item, i) => {
@@ -50,12 +40,10 @@ const Orders = () => {
           <div key={i} className={styles.allOrder}>
             {item.order
               ? item.order.map((e, i) => {
-                  // console.log(e);
                   return (
                     <div key={i} className={styles.orders}>
                       {e.orders
                         ? e.orders.map((item) => {
-                            // console.log(e);
                             return (
                               <div className={styles.productCont} key={item.id}>
                                 <div className={styles.product}>

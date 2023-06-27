@@ -53,6 +53,7 @@ const StoreInformation = () => {
       city,
       number,
       postalCode,
+      storeStatus
     });
   }
 
@@ -100,6 +101,7 @@ const StoreInformation = () => {
             value={storeStatus}
           >
             <option value=""></option>
+            <option value="bina">კომერციული ფართი</option>
             <option value="bina">ბინა</option>
             <option value="saxli">სახლი</option>
           </select>

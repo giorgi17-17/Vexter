@@ -79,10 +79,11 @@ const ProductModal = ({ product, onClose }) => {
           </div>
         </>
       ) : (
-        <form className="form" onSubmit={submitEdit}>
-          <label className="label">
+        <form className={styles.form} onSubmit={submitEdit}>
+          <label className={styles.label}>
             სახელი:
             <input
+              className={styles.input}
               type="text"
               name="title"
               value={editProductData.title}
@@ -90,9 +91,10 @@ const ProductModal = ({ product, onClose }) => {
             />
           </label>
 
-          <label className="label">
+          <label className={styles.label}>
             რაოდენობა:
             <input
+              className={styles.input}
               type="text"
               name="quantity"
               value={editProductData.quantity}
@@ -100,9 +102,10 @@ const ProductModal = ({ product, onClose }) => {
             />
           </label>
 
-          <label className="label">
+          <label className={styles.label}>
             ფასი:
             <input
+              className={styles.input}
               type="text"
               name="price"
               value={editProductData.price}
@@ -110,9 +113,10 @@ const ProductModal = ({ product, onClose }) => {
             />
           </label>
 
-          <label className="label">
+          <label className={styles.label}>
             ზომა:
             <input
+              className={styles.input}
               type="text"
               name="size"
               value={editProductData.category.size.join(",")}
@@ -151,9 +155,15 @@ const ProductModal = ({ product, onClose }) => {
             )}
           </div>
 
-          <button type="submit">Save</button>
-          <button type="button" onClick={() => setIsEditing(false)}>
-            Cancel
+          <button type="submit" className={styles.save}>
+            შენახვა
+          </button>
+          <button
+            type="button"
+            className={styles.cancel}
+            onClick={() => setIsEditing(false)}
+          >
+            გაუქმება
           </button>
         </form>
       )}
