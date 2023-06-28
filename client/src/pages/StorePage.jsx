@@ -25,11 +25,11 @@ const StorePage = () => {
       setProducts(items);
       setLoading(false);
     });
-    
+
     return () => {
       unsub();
     };
-  }, [secondPath,products.length]);
+  }, [secondPath, products.length]);
 
   return (
     <div className={styles.container}>
@@ -42,21 +42,27 @@ const StorePage = () => {
 
         <div className={styles.productsTrue}>
           <p className={styles.productsCount}>{products.length} პროდუქტი</p>
-          {products.map((item) => {
-            return (
-              <div key={item.id} className={styles.prod}>
-                <Product
-                  title={item.title}
-                  name={item.name}
-                  img={item.image}
-                  price={item.price}
-                  id={item.id}
-                  size={item.category.size}
-                  storeLocation={item.location}
-                />
-              </div>
-            );
-          })}
+          {products
+            .filter(
+              (item) =>
+                item.variants &&
+                item.variants.find((variant) => variant.quantity > 0)
+            )
+            .map((item) => {
+              return (
+                <div key={item.id} className={styles.prod}>
+                  <Product
+                    title={item.title}
+                    name={item.name}
+                    img={item.image}
+                    price={item.price}
+                    id={item.id}
+                    size={item.category.size}
+                    storeLocation={item.location}
+                  />
+                </div>
+              );
+            })}
         </div>
       </div>
     </div>

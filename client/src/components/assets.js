@@ -1,24 +1,101 @@
-export const colors = ["Red", "Blue", "Green", "Yellow", "Black", "White"];
+// export const colors = ["Red", "Blue", "Green", "Yellow", "Black", "White"];
 export const shoeSize = ["39", "40", "41", "42", "43", "44"];
 export const clotheSize = ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL"];
 
+export const brands = [
+  "Nike",
+  "Adidas",
+  "New Balance",
+  "Fila",
+  "Puma",
+  "Reebok",
+  "Vans",
+  "Converse",
+  "Under Armour",
+  "Skechers",
+  "ASICS",
+  "Jordan",
+  "Timberland",
+  "DC Shoes",
+  "Lacoste",
+  "Tommy Hilfiger",
+  "Calvin Klein",
+  "Levi's",
+  "H&M",
+  "Zara",
+  "Forever 21",
+  "Topshop",
+  "Mango",
+  "Guess",
+  "Diesel",
+  "Wrangler",
+  "Lee",
+  "Quiksilver",
+  "Roxy",
+  "Hurley",
+  "Billabong",
+  "Volcom",
+  "Ralph Lauren",
+  "Tommy Bahama",
+  "Hollister",
+  "Abercrombie & Fitch",
+  "American Eagle",
+  "Banana Republic",
+  "Old Navy",
+  "Gap",
+  "Express",
+  "Victoria's Secret",
+  "Hanes",
+  "Champion",
+  "Fruit of the Loom",
+  "Gildan",
+  "Hugo Boss",
+];
+
+
+export const colors = [
+  {
+    color: "Red",
+    displayColor: "წითელი",
+  },
+  {
+    color: "Blue",
+    displayColor: "ლურჯი",
+  },
+  {
+    color: "Green",
+    displayColor: "მწვანე",
+  },
+  {
+    color: "Yellow",
+    displayColor: "ყვითელი",
+  },
+  {
+    color: "Black",
+    displayColor: "შავი",
+  },
+  {
+    color: "White",
+    displayColor: "თეთრი",
+  },
+];
+
 export const nav_link = [
-    {
-      path: "man",
-      display: "კაცი",
-    },
-    {
-      path: "woman",
-      display: "ქალი",
-    },
-    {
-      path: "kids",
-      display: "ბავშვი",
-    },
-  ];
+  {
+    path: "man",
+    display: "კაცი",
+  },
+  {
+    path: "woman",
+    display: "ქალი",
+  },
+  {
+    path: "kids",
+    display: "ბავშვი",
+  },
+];
 
-
-  export const apparelTypesArray = (path) => [
+export const apparelTypesArray = (path) => [
   {
     path: `${path}/clothe`,
     display: "ტანსაცმელი",

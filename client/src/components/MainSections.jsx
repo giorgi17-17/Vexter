@@ -140,7 +140,7 @@ const MainSections = ({ type }) => {
             >
               {products
                 .slice(0, 20)
-                .filter((item) => item.quantity !== 0)
+                .filter((item) => item.variants && item.variants.find(variant => variant.quantity > 0))
                 .map((item) => (
                   <SplideSlide key={item.id}>
                     <div className={styles.prod}>

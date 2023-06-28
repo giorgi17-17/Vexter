@@ -111,11 +111,11 @@
 
 
 
-@media (min-width: 768px) {
+@media only screen and (max-width: 600px) {
 
   .filterButton {
     margin: 20px;
-    padding: 20px 40px;
+    /* padding: 20px 40px; */
   }
 
   .price {

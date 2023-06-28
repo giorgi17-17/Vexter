@@ -33,10 +33,10 @@ const Shop = () => {
       setLoading(false);
       // console.log(items);
     });
-    if (productsType.length > 0) {
-      setLoading(false);
-      console.log(productsType.length);
-    }
+    // if (productsType.length > 0) {
+    //   setLoading(false);
+    //   console.log(productsType.length);
+    // }
 
     return () => {
       unsub();
@@ -60,7 +60,7 @@ const Shop = () => {
               {productsType.length} პროდუქტი
             </p>
             {productsType
-              .filter((item) => item.quantity !== 0)
+              .filter((item) => item.variants && item.variants.find(variant => variant.quantity > 0))
               .map((item) => {
                 return (
                   <div key={item.id} className={styles.prod}>

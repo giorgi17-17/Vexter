@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 // import { useRef } from "react";
-import "../App.css";
 import styles from "./css/imageCarousel.module.css";
 
 const ImageCarousel = ({ images }) => {

@@ -1,0 +1,61 @@
+.brandSelectorWrapper {
+    /* width: 100%; */
+    max-width: 300px;
+    min-width: 100px;
+
+    position: relative;
+    display: inline-block;
+    margin-left: 10px;
+    margin-top: 10px;
+  }
+  
+  .brandSelectorHeader {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff;
+    border: 1px solid #000;
+    /* border-radius: 4px; */
+  }
+  
+  .brandSelectorDropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  
+  .brandSelectorInput {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    outline: none;
+    font-size: 14px;
+  }
+  
+  .brandSelectorOption {
+    padding: 8px;
+    cursor: pointer;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .brandSelectorOption:last-child {
+    border-bottom: none;
+  }
+  
+
+  @media only screen and (max-width: 600px){
+    .brandSelectorWrapper {
+        /* padding: 10px; */
+        max-width: 300px;
+        width: 100%;
+        margin-top: 0;
+        margin-left: 0px;
+    }
+  }

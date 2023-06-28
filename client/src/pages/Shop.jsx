@@ -75,7 +75,7 @@ const Shop = () => {
           <div className={styles.productsTrue}>
             <p className={styles.productsCount}>{products.length} პროდუქტი</p>
             {products
-              .filter((item) => item.quantity !== 0)
+              .filter((item) => item.variants && item.variants.find(variant => variant.quantity > 0))
               .map((item) => {
                 return (
                   <div key={item.id} className={styles.prod}>

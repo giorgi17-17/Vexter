@@ -10,13 +10,18 @@ import {
   where,
 } from "firebase/firestore";
 import { ShoppingCart } from "../Context/CartContext";
-// import { apparelTypes } from "./Header.jsx";
-import { apparelTypesArray } from "./assets";
+import {
+  apparelTypesArray,
+  colors,
+  clotheSize,
+  shoeSize,
+  brands,
+} from "./assets";
+import BrandSelector from "./BrandSelector";
 
 function valuetext(value) {
   return `${value}`;
 }
-
 
 const Categories = ({ setProducts }) => {
   const { firstPath, secondPath, thirdPath } = ShoppingCart();
@@ -33,6 +38,10 @@ const Categories = ({ setProducts }) => {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+
+  const handleBrandSelect = (brand) => {
+    setBrand(brand);
   };
 
   const gender = localStorage.getItem("gender");
@@ -62,14 +71,15 @@ const Categories = ({ setProducts }) => {
   useEffect(() => {
     const collRef = collection(db, "products");
     setType(secondPath);
-    // 
 
     let q = query(collRef);
     if (subType !== "")
       q = query(q, where("category.subType", "==", `${subType}`));
     if (brand !== "") q = query(q, where("category.brand", "==", `${brand}`));
-    if (size !== "") q = query(q, where("category.size", "array-contains", size));
-    if (color !== "") q = query(q, where("category.color", "==", `${color}`));
+    if (size !== "")
+      q = query(q, where("category.sizes", "array-contains", size));
+    if (color !== "")
+      q = query(q, where("category.colors", "array-contains", color));
     if (path !== "") q = query(q, where("category.gender", "==", `${path}`));
 
     if (firstPath === "man" || firstPath === "woman" || firstPath === "kids") {
@@ -154,38 +164,25 @@ const Categories = ({ setProducts }) => {
             type.subMenu &&
             type.subMenu.length > 0
               ? type.subMenu.map((subMenuOption) => (
-                  <option
-                    key={subMenuOption.path}
-                    value={subMenuOption.path}
-                  >
+                  <option key={subMenuOption.path} value={subMenuOption.path}>
                     {subMenuOption.title}
                   </option>
                 ))
               : null
           )}
-
-        
         </select>
       ) : null}
-      <select
-        onChange={(e) => {
-          setBrand(e.target.value);
-        }}
-      >
-        <option value="">ბრენდი</option>
-        <option value="nike">Nike</option>
-        <option value="addidas">Adiddas</option>
-        <option value="puma">Puma</option>
-        <option value="hand-made">Hand made</option>
-        <option value="New Balance">New Balance</option>
-      </select>
+
+      <BrandSelector brands={brands} onSelect={handleBrandSelect} />
 
       <div className={styles.price}>
         {!dropDown ? (
-          <button onClick={() => {
-            setDropDown(!dropDown) 
-            setSave(false)
-          }}>
+          <button
+            onClick={() => {
+              setDropDown(!dropDown);
+              setSave(false);
+            }}
+          >
             {dropDown ? null : "ფასი"}
           </button>
         ) : null}
@@ -209,8 +206,7 @@ const Categories = ({ setProducts }) => {
             <div
               className={styles.save}
               onClick={() => {
-                // Do something when "Save" button is clicked
-                setDropDown(false); // Close the dropdown
+                setDropDown(false);
                 setSave(true);
               }}
             >
@@ -226,9 +222,11 @@ const Categories = ({ setProducts }) => {
         }}
       >
         <option value="">ფერი</option>
-        <option value="white">White</option>
-        <option value="red">Red</option>
-        <option value="blue">Blue</option>
+        {colors.map((color, i) => (
+          <option value={color.color} key={i}>
+            {color.displayColor}
+          </option>
+        ))}
       </select>
 
       {secondPath !== "shoe" ? (
@@ -238,9 +236,11 @@ const Categories = ({ setProducts }) => {
           }}
         >
           <option value="">ზომა</option>
-          <option value="s">S</option>
-          <option value="m">M</option>
-          <option value="l">L</option>
+          {clotheSize.map((size, i) => (
+            <option value={size} key={i}>
+              {size}
+            </option>
+          ))}
         </select>
       ) : (
         <select
@@ -249,19 +249,13 @@ const Categories = ({ setProducts }) => {
           }}
         >
           <option value="">ზომა</option>
-          <option value="36">36</option>
-          <option value="37">37</option>
-          <option value="38">38</option>
-          <option value="39">39</option>
-          <option value="40">40</option>
-          <option value="41">41</option>
-          <option value="42">42</option>
-          <option value="43">43</option>
-          <option value="44">44</option>
-          <option value="45">45</option>
+          {shoeSize.map((size, i) => (
+            <option value={size} key={i}>
+              {size}
+            </option>
+          ))}
         </select>
       )}
-      {/* <input type="range" min="0" max="10" /> */}
     </div>
   );
 };

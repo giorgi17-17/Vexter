@@ -4,24 +4,25 @@ import { db } from "../firebase/firebase";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import styles from "../components/css/productDetails.module.css";
 import { ShoppingCart } from "../Context/CartContext";
-import { AiOutlineCheck, AiOutlineHeart } from "react-icons/ai";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import ImageCarousel from "../components/ImageCarousel";
 import { Favorites } from "../Context/FavoritesContext";
 import MainSections from "../components/MainSections";
 import { ProductsDetailsSkeleton } from "../components/ProductsSkeleton";
+import { colors } from "../components/assets.js";
+
 
 const Productdetails = () => {
   const { id } = useParams();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [color, setColor] = useState("");
-  const [images, setImages] = useState([]);
   const [size, setSize] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState("მიუთითეთ ზომა");
+  const [images, setImages] = useState([]);
   const { getFavoritesQuantity, addOneToFavorites, deleteOneFromFavorites } =
     Favorites();
-  const favoritesQuantity = getFavoritesQuantity(id);
 
+  const favoritesQuantity = getFavoritesQuantity(id);
   const { addOneToCart, getPoductQuantity, removeOneFromCart } = ShoppingCart();
   const productQuantity = getPoductQuantity(id);
 
@@ -41,6 +42,13 @@ const Productdetails = () => {
       setProducts(items);
       setImages(imgs[0]);
       setLoading(false);
+      if (
+        items.length > 0 &&
+        items[0].variants &&
+        items[0].variants.length > 0
+      ) {
+        setSize(items[0].variants[0].size); // Set the first variant's size as the default size
+      }
     });
 
     return () => {
@@ -48,12 +56,19 @@ const Productdetails = () => {
     };
   }, [id]);
 
-  let type;
+  const getDisplayColor = (color) => {
+    const colorMappingItem = colors.find((item) => item.color === color);
+    return colorMappingItem ? colorMappingItem.displayColor : color;
+  };
+
   return (
     <div className={styles.container}>
       {loading && <ProductsDetailsSkeleton cards={1} />}
       {products.map((item) => {
-        type = item.category.type;
+        const selectedVariant = item.variants?.find(
+          (variant) => variant.size === size
+        );
+
         return (
           <div key={item.id} className={styles.cont}>
             <div className={styles.productImages} key={item.id}>
@@ -64,128 +79,94 @@ const Productdetails = () => {
                 <p className={styles.brand}>{item.category.brand}</p>
                 <p className={styles.title}>{item.title}</p>
                 <p className={styles.price}>₾ {item.price}</p>
-                {/* <p className={styles.color}>ფერი: {item.category.color}</p> */}
-                <p className={styles.color}>რაოდენობა: {item.quantity}</p>
-                <div className={styles.selectContainer}>
-              <label className={styles.selectLabel}>ფერი:</label>
-              <select
-                value={color}
-                onChange={(e) => setColor(e.target.value)}
-                className={styles.select}
-              >
-                <option value="">Select color</option>
-                {item.category.color.map((colorItem) => (
-                  <option key={colorItem} value={colorItem}>
-                    {colorItem}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-                {/* <p className={styles.color}>ზომა: {item.category.size}</p> */}
                 <Link className={styles.link} to={`/storepage/${item.name}`}>
                   <p className={styles.color}>მაღაზია: {item.name}</p>
                 </Link>
-              </div>
-              <div className={styles.input}>
-                {!size && <p className={styles.sizeError}>{error}</p>}
+                <div className={styles.input}>
+                  {!size && <p className={styles.sizeError}>{error}</p>}
+                  <label className={styles.selectLabel}>Size:</label>
+                  <select
+                    value={size}
+                    onChange={(e) => setSize(e.target.value)}
+                    className={styles.select}
+                  >
+                    <option value="">Select Size</option>
+                    {item.variants?.map((variant, index) => (
+                      <option key={index} value={variant.size}>
+                        {variant.size}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-                {item.category.type === "shoe" ? (
-                  <select
-                    value={size}
-                    onChange={(e) => {
-                      setSize(e.target.value);
-                      setError("");
-                    }}
-                  >
-                    <option value="">Size</option>
-                    {item.category.size.map((sizeItem) => (
-                      <option key={sizeItem} value={sizeItem}>
-                        {sizeItem}
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-                  <select
-                    value={size}
-                    onChange={(e) => {
-                      setSize(e.target.value);
-                      setError("");
-                    }}
-                  >
-                    <option value="Size">Size</option>
-                    {item.category.size.map((sizeItem) => (
-                      <option key={sizeItem} value={sizeItem}>
-                        {sizeItem}
-                      </option>
-                    ))}
-                  </select>
+                {selectedVariant && (
+                  <div>
+                    <p>ფერი: {getDisplayColor(selectedVariant.color)}</p>
+                    <p>რაოდენობა: {selectedVariant.quantity}</p>
+                  </div>
                 )}
               </div>
               <div className={styles.buttons}>
-                <div className={styles.addButton}>
-                  {productQuantity > 0 ? (
-                    <div
-                      onClick={() => removeOneFromCart(id)}
-                      className={styles.checkIcon}
-                    >
-                      კალათიდან წაშლა
-                    </div>
-                  ) : (
-                    <div
-                      onClick={() => {
-                        if (!size) {
-                          setError("ზომა აირჩიეთ");
-                        } else {
-                          addOneToCart(
-                            id,
-                            item.title,
-                            item.image,
-                            item.price,
-                            item.name,
-                            size
-                          );
-                        }
-                      }}
-                      className={styles.addIcon}
-                    >
-                      კალათაში დამატება
-                    </div>
-                  )}
-                </div>
-                <div className={styles.favButton}>
-                  {favoritesQuantity > 0 ? (
-                    <div
-                      onClick={() => deleteOneFromFavorites(id)}
-                      className={styles.checkIcon}
-                    >
-                      <AiOutlineCheck size={"1.5rem"} />
-                    </div>
-                  ) : (
-                    <div
-                      className={styles.favIcon}
-                      onClick={() =>
-                        addOneToFavorites(
+                {productQuantity > 0 ? (
+                  <div
+                    onClick={() => removeOneFromCart(id)}
+                    className={styles.checkIcon}
+                  >
+                    კალათიდან წაშლა
+                  </div>
+                ) : (
+                  <div
+                    onClick={() => {
+                      if (!size) {
+                        setError("ზომა აირჩიეთ");
+                      } else {
+                        addOneToCart(
                           id,
                           item.title,
-                          item.img,
+                          item.image,
                           item.price,
                           item.name,
                           size
-                        )
+                        );
                       }
-                    >
-                      <AiOutlineHeart size={"2rem"} />
-                    </div>
-                  )}
-                </div>
+                    }}
+                    className={styles.addIcon}
+                  >
+                    კალათაში დამატება
+                  </div>
+                )}
+
+                {favoritesQuantity > 0 ? (
+                  <div
+                    onClick={() => deleteOneFromFavorites(id)}
+                    className={styles.favIconFill}
+                  >
+                    <AiFillHeart size={"2rem"} />
+                  </div>
+                ) : (
+                  <div
+                    className={styles.favIcon}
+                    onClick={() =>
+                      addOneToFavorites(
+                        id,
+                        item.title,
+                        item.img,
+                        item.price,
+                        item.name,
+                        size
+                      )
+                    }
+                  >
+                    <AiOutlineHeart size={"2rem"} />
+                  </div>
+                )}
               </div>
             </div>
           </div>
         );
       })}
       <div className={styles.downSections}>
-        <MainSections type={`${type}`} />
+        <MainSections type={products[0]?.category.type || ""} />
       </div>
     </div>
   );

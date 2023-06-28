@@ -16,7 +16,14 @@ import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { useRef } from "react";
 import { Slide, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { colors, shoeSize, clotheSize, apparelTypesArray } from "./assets";
+import {
+  colors,
+  shoeSize,
+  clotheSize,
+  apparelTypesArray,
+  brands,
+} from "./assets";
+import BrandSelector from "./BrandSelector";
 
 const AddProduct = () => {
   const [type, setType] = useState("");
@@ -24,14 +31,18 @@ const AddProduct = () => {
   const [gender, setGender] = useState("");
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
-  const [quantity, setQuantity] = useState("");
+  // const [quantity, setQuantity] = useState("");
   const [subType, setSubType] = useState("");
   const [imageUpload, setImageUpload] = useState("");
-  const [selectedSizes, setSelectedSizes] = useState([]);
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isColorExpanded, setIsColorExpanded] = useState(false);
-  const [selectedColors, setSelectedColors] = useState([]);
+  // const [selectedBrand, setSelectedBrand] = useState("");
 
+  // const [selectedSizes, setSelectedSizes] = useState([]);
+  // const [isExpanded, setIsExpanded] = useState(false);
+  // const [isColorExpanded, setIsColorExpanded] = useState(false);
+  // const [selectedColors, setSelectedColors] = useState([]);
+  const [variants, setVariants] = useState([
+    { size: "", color: "", quantity: 0 },
+  ]);
   // const [clickedItem, setClickedItem] = useState(null);
   const imageInputRef = useRef();
 
@@ -46,38 +57,81 @@ const AddProduct = () => {
   }
   const apparelTypes = apparelTypesArray(path);
 
-  const toggleExpansion = () => {
-    setIsExpanded(!isExpanded);
+  // const toggleExpansion = () => {
+  //   setIsExpanded(!isExpanded);
+  // };
+
+  const handleBrandSelect = (brand) => {
+    setBrand(brand);
   };
 
-  const handleItemClick = (event, itemValue) => {
-    if (selectedSizes.includes(itemValue)) {
-      setSelectedSizes(
-        selectedSizes.filter((selectedItem) => selectedItem !== itemValue)
-      );
-    } else {
-      setSelectedSizes((prevSelectedItems) => [
-        ...prevSelectedItems,
-        itemValue,
-      ]);
-    }
-  };
-  const handleColorClick = (event, colorValue) => {
-    if (selectedColors.includes(colorValue)) {
-      setSelectedColors(
-        selectedColors.filter((selectedColor) => selectedColor !== colorValue)
-      );
-    } else {
-      setSelectedColors((prevSelectedColors) => [
-        ...prevSelectedColors,
-        colorValue,
-      ]);
-    }
+  const addVariant = () => {
+    setVariants((oldVariants) => [
+      ...oldVariants,
+      { size: "", color: "", quantity: 0 },
+    ]);
   };
 
-  const toggleColorExpansion = () => {
-    setIsColorExpanded(!isColorExpanded);
+  const removeVariant = (indexToRemove) => {
+    setVariants((oldVariants) =>
+      oldVariants.filter((_, index) => index !== indexToRemove)
+    );
   };
+
+  const updateVariantSize = (index, newSize) => {
+    setVariants((oldVariants) => {
+      const newVariants = [...oldVariants];
+      newVariants[index].size = newSize;
+      return newVariants;
+    });
+  };
+
+  const updateVariantColor = (index, newColor) => {
+    setVariants((oldVariants) => {
+      const newVariants = [...oldVariants];
+      newVariants[index].color = newColor;
+      return newVariants;
+    });
+  };
+
+  const updateVariantQuantity = (index, newQuantity) => {
+    setVariants((oldVariants) => {
+      const newVariants = [...oldVariants];
+      newVariants[index].quantity = newQuantity;
+      return newVariants;
+    });
+  };
+
+  // console.log(variants);
+
+  // const handleItemClick = (event, itemValue) => {
+  //   if (selectedSizes.includes(itemValue)) {
+  //     setSelectedSizes(
+  //       selectedSizes.filter((selectedItem) => selectedItem !== itemValue)
+  //     );
+  //   } else {
+  //     setSelectedSizes((prevSelectedItems) => [
+  //       ...prevSelectedItems,
+  //       itemValue,
+  //     ]);
+  //   }
+  // };
+  // const handleColorClick = (event, colorValue) => {
+  //   if (selectedColors.includes(colorValue)) {
+  //     setSelectedColors(
+  //       selectedColors.filter((selectedColor) => selectedColor !== colorValue)
+  //     );
+  //   } else {
+  //     setSelectedColors((prevSelectedColors) => [
+  //       ...prevSelectedColors,
+  //       colorValue,
+  //     ]);
+  //   }
+  // };
+
+  // const toggleColorExpansion = () => {
+  //   setIsColorExpanded(!isColorExpanded);
+  // };
 
   var productId;
   const addProduct = async () => {
@@ -90,17 +144,21 @@ const AddProduct = () => {
       price: Number(price),
       name: user.displayName,
       id: uniqid(),
-      quantity: Number(quantity),
+      // quantity: Number(quantity),
       category: {
         type,
-        color: selectedColors,
+        // color: selectedColors,
         brand,
         gender,
-        size: selectedSizes,
+        // size: selectedSizes,
         subType,
+        sizes: variants.map((variant) => variant.size),
+        colors: variants.map((variant) => variant.color),
+        quantities: variants.map((variant) => variant.quantity),
       },
       createdAt: serverTimestamp(),
       location: getStoreLocation,
+      variants,
     });
     productId = newItem.id;
 
@@ -114,13 +172,13 @@ const AddProduct = () => {
       setPrice("");
       setType("");
       setBrand("");
-      setSelectedColors([]);
+      // setSelectedColors([]);
       setGender("");
       setTitle("");
       setPrice("");
-      setQuantity("");
+      // setQuantity("");
       setSubType("");
-      setSelectedSizes([]);
+      // setSelectedSizes([]);
 
       if (imageUpload.length > 0) {
         for (let i = 0; i < imageUpload.length; i++) {
@@ -217,16 +275,9 @@ const AddProduct = () => {
           }}
           value={price}
         />
-        <label>რაოდენობა</label>
-        <input
-          type="number"
-          placeholder="quantity"
-          onChange={(e) => {
-            setQuantity(e.target.value);
-          }}
-          value={quantity}
-        />
+        
         <label>კატეგორიები</label>
+
         <div className={styles.categoriesContainer}>
           <select
             onChange={(e) => {
@@ -270,46 +321,9 @@ const AddProduct = () => {
               <option value="">ქვე კატეგორია</option>
             </select>
           )}
+          <BrandSelector brands={brands}  onSelect={handleBrandSelect} />
 
-          <select
-            onChange={(e) => {
-              setBrand(e.target.value);
-            }}
-          >
-            <option value="brand">ბრენდი</option>
-            <option value="nike">Nike</option>
-            <option value="addidas">Adiddas</option>
-            <option value="puma">Puma</option>
-            <option value="hand-made">ხელნაკეთი</option>
-            <option value="New Balance">New Balance</option>
-          </select>
-          <div className={styles.multiplecont}>
-            <div className={styles.selectbtn} onClick={toggleColorExpansion}>
-              <span className={styles.btnText}>Color</span>
-            </div>
-            {isColorExpanded && (
-              <ul className={styles.listItems}>
-                {colors.map((colorItem) => (
-                  <li
-                    className={styles.item}
-                    onClick={(event) => handleColorClick(event, colorItem)}
-                    value={colorItem}
-                    key={colorItem}
-                  >
-                    <span
-                      className={`${styles.itemText} ${
-                        selectedColors.includes(colorItem)
-                          ? styles.selected
-                          : ""
-                      }`}
-                    >
-                      {colorItem}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+      
 
           <select
             onChange={(e) => {
@@ -321,69 +335,76 @@ const AddProduct = () => {
             <option value="woman">ქალი</option>
             <option value="kids">ბავშვი</option>
           </select>
+          
+          <div className={styles.variants}>
+            {variants.map((variant, index) => (
+              <div className={styles.variantsCont} key={index}>
+                <div className={styles.size}>
+                  <label>ზომა</label>
 
-          {type !== "shoe" ? (
-            <div className={styles.multiplecont}>
-              <div className={styles.selectbtn} onClick={toggleExpansion}>
-                <span className={styles.btnText}>ზომა</span>
+                  <select
+                    onChange={(e) => updateVariantSize(index, e.target.value)}
+                    value={variant.size}
+                  >
+                    <option value=""></option>
+
+                    {type === "shoe" ? (
+                      <>
+                        {shoeSize.map((sizeItem, i) => (
+                          <option key={i}> {sizeItem}</option>
+                        ))}
+                      </>
+                    ) : (
+                      <>
+                        {clotheSize.map((sizeItem, i) => (
+                          <option key={i}> {sizeItem}</option>
+                        ))}
+                      </>
+                    )}
+                  </select>
+                </div>
+                <div className={styles.color}>
+                  <label>ფერი</label>
+
+                  <select
+                    onChange={(e) => updateVariantColor(index, e.target.value)}
+                    value={variant.color}
+                  >
+                    <option value=""></option>
+                    {colors.map((color, i) => (
+                      <option value={color.color} key={i}>
+                        {color.displayColor}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className={styles.quantity}>
+                  <label>რაოდენობა</label>
+                  <input
+                    type="number"
+                    placeholder="რაოდენობა"
+                    onChange={(e) =>
+                      updateVariantQuantity(index, Number(e.target.value))
+                    }
+                    value={variant.quantity || ""}
+                  />
+                </div>
+
+                <button
+                  className={styles.removebtn}
+                  onClick={() => removeVariant(index)}
+                >
+                  წაშლა
+                </button>
               </div>
-              {isExpanded && (
-                <ul className={styles.listItems}>
-                  {clotheSize.map((sizeItem) => (
-                    <li
-                      className={styles.item}
-                      onClick={(event) => handleItemClick(event, sizeItem)}
-                      // data-value={sizeItem}
-                      value={sizeItem}
-                      key={sizeItem}
-                    >
-                      <span
-                        className={`${styles.itemText} ${
-                          selectedSizes.includes(sizeItem)
-                            ? styles.selected
-                            : ""
-                        }`}
-                      >
-                        {sizeItem}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          ) : (
-            <div className={styles.multiplecont}>
-              <div className={styles.selectbtn} onClick={toggleExpansion}>
-                <span className={styles.btnText}>ზომა</span>
-              </div>
-              {isExpanded && (
-                <ul className={styles.listItems}>
-                  {shoeSize.map((sizeItem) => (
-                    <li
-                      className={styles.item}
-                      onClick={(event) => handleItemClick(event, sizeItem)}
-                      // data-value={sizeItem}
-                      value={sizeItem}
-                      key={sizeItem}
-                    >
-                      <span
-                        className={`${styles.itemText} ${
-                          selectedSizes.includes(sizeItem)
-                            ? styles.selected
-                            : ""
-                        }`}
-                      >
-                        {sizeItem}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          )}
+            ))}
+            <button className={styles.addVariantbtn} onClick={addVariant}>
+              ახალი ვარიანტი
+            </button>
+          </div>
         </div>
         <div className={styles.btn}>
-          <button onClick={addProduct}>Add</button>
+          <button onClick={addProduct}>პროდუქტის დამატება</button>
         </div>
       </div>
     </div>
