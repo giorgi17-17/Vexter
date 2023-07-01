@@ -36,7 +36,7 @@
   border: 1px solid var(--grey);
   padding: 10px;
   max-width: 300px;
-  margin-top: 10px;
+  /* margin-top: 10px; */
 }
 
 .inputs > select > option {
@@ -48,6 +48,7 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
+  margin-top: 10px;
 }
 
 .categoriesContainer > select {

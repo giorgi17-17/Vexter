@@ -32,10 +32,8 @@
   width: 100%;
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
   flex-wrap: wrap;
-
-
 }
 .categoriesContainer > select > option {
   padding: 10px;
@@ -57,12 +55,12 @@
   }
   .categoriesContainer {
     display: flex;
-    overflow: scroll;
+    /* overflow: scroll; */
     justify-content: flex-start;
   }
 }
 
 
 .categoriesContainer::-webkit-scrollbar { 
-  display: none;  /* Safari and Chrome */
+  display: none;  
 }

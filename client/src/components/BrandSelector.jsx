@@ -49,20 +49,26 @@ const BrandSelector = ({ brands, onSelect }) => {
         <div className={styles.brandSelectorDropdown}>
           <input
             type="text"
-            placeholder="Search brands"
+            placeholder="მოძებნე ბრენდები"
             value={searchTerm}
             onChange={handleSearch}
             className={styles.brandSelectorInput}
           />
-          {filteredBrands.map((brand, index) => (
-            <div
-              key={index}
-              onClick={() => handleBrandClick(brand)}
-              className={styles.brandSelectorOption}
-            >
-              {brand}
+          {filteredBrands.length > 0 ? (
+            filteredBrands.map((brand, index) => (
+              <div
+                key={index}
+                onClick={() => handleBrandClick(brand)}
+                className={styles.brandSelectorOption}
+              >
+                {brand}
+              </div>
+            ))
+          ) : (
+            <div className={styles.brandSelectorOption}>
+              მსგავსი ბრენდი არ მოიძებნა
             </div>
-          ))}
+          )}
         </div>
       )}
     </div>
