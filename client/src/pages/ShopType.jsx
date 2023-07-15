@@ -7,12 +7,14 @@ import { ShoppingCart } from "../Context/CartContext";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import Categories from "../components/Categories";
 import { ProductsSkeleton } from "../components/ProductsSkeleton";
+import MobileCategories from "../components/MobileCategories";
 
 const Shop = () => {
   const { firstPath, secondPath, thirdPath } = ShoppingCart();
 
   const [productsType, setProductsType] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [windowSize, setWindowSize] = useState({ width: undefined });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -42,14 +44,31 @@ const Shop = () => {
       unsub();
     };
     // productsType.length იწვევს პრობლემას
-
-  }, [firstPath, secondPath, thirdPath, ]);
+  }, [firstPath, secondPath, thirdPath]);
   // console.log(productsType);
 
+  useEffect(() => {
+    function handleResize() {
+      setWindowSize({
+        width: window.innerWidth,
+      });
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+console.log(productsType)
   return (
     <div className={styles.container}>
       <div className={styles.categories}>
-        <Categories setProducts={setProductsType} />
+        {windowSize.width < 600 ? (
+          <MobileCategories setProducts={setProductsType} />
+        ) : (
+          <Categories setProducts={setProductsType} />
+        )}
       </div>
       <div className={styles.products}>
         {loading && <ProductsSkeleton cards={8} />}
@@ -60,7 +79,11 @@ const Shop = () => {
               {productsType.length} პროდუქტი
             </p>
             {productsType
-              .filter((item) => item.variants && item.variants.find(variant => variant.quantity > 0))
+              .filter(
+                (item) =>
+                  item.variants &&
+                  item.variants.find((variant) => variant.quantity > 0)
+              )
               .map((item) => {
                 return (
                   <div key={item.id} className={styles.prod}>
@@ -78,7 +101,7 @@ const Shop = () => {
               })}
           </div>
         )}
-        {productsType.length < 0 && loading === false && (
+        {productsType.length === 0 && loading === false && (
           <div className={styles.productsFalse}>
             <h1>პროდუქტები ვერ მოიძებნა</h1>
           </div>

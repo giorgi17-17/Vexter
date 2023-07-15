@@ -38,8 +38,16 @@ const MobileCategories = ({ setProducts }) => {
   const [value, setValue] = useState([0, 1000]);
   const [filterButton, setFilterButton] = useState(false);
 
-  // ...Rest of your component logic goes here...
-
+  const resetFilters = () => {
+    setSubType("");
+    setBrand("");
+    setColor("");
+    setSize("");
+    setSortBy("");
+    setValue([0, 1000]);
+    setSave(false);
+    setDropDown(false);
+  };
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -195,7 +203,7 @@ const MobileCategories = ({ setProducts }) => {
               )}
             </select>
           ) : null}
-        
+
           <BrandSelector brands={brands} onSelect={handleBrandSelect} />
 
           <div className={styles.price}>
@@ -280,12 +288,24 @@ const MobileCategories = ({ setProducts }) => {
               ))}
             </select>
           )}
-          <div
-            className={styles.showBtn}
-            onClick={() => setFilterButton(false)}
-          >
-            ნახვა
+          <div className={styles.filterButtons}>
+            <div
+              className={styles.closeBtn}
+              onClick={() => {
+                setFilterButton(false);
+                resetFilters();
+              }}
+            > 
+              ფილტრის წაშლა
+            </div>
+            <div
+              className={styles.showBtn}
+              onClick={() => setFilterButton(false)}
+            >
+              ნახვა
+            </div>
           </div>
+
           {/* <input type="range" min="0" max="10" /> */}
         </div>
       )}

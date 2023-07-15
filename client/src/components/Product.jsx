@@ -5,18 +5,21 @@ import { Favorites } from "../Context/FavoritesContext";
 import ReactGA from "react-ga4";
 
 const Product = ({ title, name, img, price, id }) => {
-  const { getFavoritesQuantity, addOneToFavorites, deleteOneFromFavorites } = Favorites();
+  const { getFavoritesQuantity, addOneToFavorites, deleteOneFromFavorites } =
+    Favorites();
   const productQuantity = getFavoritesQuantity(id);
 
+  let location = useLocation();
+
+
   const eventClick = (title, price) => {
-    ReactGA.gtag('event', 'added to favotites', {
-      event_category: 'favotites',
-      event_label: title,
-      value: price
+    ReactGA.gtag("event", {
+      action: "added_to_favorites",
+      event_category: "favotites",
+      label: title,
+      value: price,
     });
   };
-
-  let location = useLocation();
 
   return (
     <div className={styles.container}>
@@ -32,13 +35,25 @@ const Product = ({ title, name, img, price, id }) => {
           <p className={styles.price}>₾ {price}</p>
           {location.pathname !== "/cart" && (
             <button
-              onClick={productQuantity > 0 ? () => deleteOneFromFavorites(id) : () => {
-                addOneToFavorites(id, title, img, price);
-                eventClick(title, price);
-              }}
-              className={productQuantity > 0 ? styles.favoriteButtonActive : styles.favoriteButton}
+              onClick={
+                productQuantity > 0
+                  ? () => deleteOneFromFavorites(id)
+                  : () => {
+                      addOneToFavorites(id, title, img, price);
+                      eventClick(title, price);
+                    }
+              }
+              className={
+                productQuantity > 0
+                  ? styles.favoriteButtonActive
+                  : styles.favoriteButton
+              }
             >
-              {productQuantity > 0 ? <AiFillHeart size={"1.5rem"} /> : <AiOutlineHeart size={"1.5rem"} />}
+              {productQuantity > 0 ? (
+                <AiFillHeart size={"1.5rem"} />
+              ) : (
+                <AiOutlineHeart size={"1.5rem"} />
+              )}
             </button>
           )}
         </div>
