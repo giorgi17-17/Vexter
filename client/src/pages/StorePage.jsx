@@ -12,10 +12,10 @@ const StorePage = () => {
   const [products, setProducts] = useState([]);
   const { secondPath } = ShoppingCart();
   const [loading, setLoading] = useState(true);
-
+  let changedSecondPath = secondPath.replace(/_/g, ' ') // replace underScore with space
   useEffect(() => {
     const collRef = collection(db, "products");
-    const q = query(collRef, where("name", "==", `${secondPath}`));
+    const q = query(collRef, where("category.brand", "==", `${changedSecondPath}`));
 
     const unsub = onSnapshot(q, (snap) => {
       const items = [];
@@ -29,14 +29,14 @@ const StorePage = () => {
     return () => {
       unsub();
     };
-  }, [secondPath, products.length]);
+  }, [changedSecondPath, products.length]);
 
   return (
     <div className={styles.container}>
       <div className={styles.categories}>
         <Categories setProducts={setProducts} />
       </div>
-      <h1>{secondPath}</h1>
+      <h1>{changedSecondPath}</h1> 
       <div className={styles.products}>
         {loading && <ProductsSkeleton cards={8} />}
 

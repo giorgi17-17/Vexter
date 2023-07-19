@@ -11,7 +11,6 @@ import MainSections from "../components/MainSections";
 import { ProductsDetailsSkeleton } from "../components/ProductsSkeleton";
 import { colors } from "../components/assets.js";
 
-
 const Productdetails = () => {
   const { id } = useParams();
   const [products, setProducts] = useState([]);
@@ -76,21 +75,28 @@ const Productdetails = () => {
             </div>
             <div className={styles.infoContainer}>
               <div className={styles.info}>
-                <p className={styles.brand}>{item.category.brand}</p>
+                {/* <Link className={styles.link} to={`/storepage/${item.name}`}>
+                  <p className={styles.color}>{item.name}</p>
+                </Link> */}
+                <Link
+                  className={styles.link}
+                  to={`/storepage/${item.category.brand.replace(/\s+/g, "_")}`}
+                >
+                  <p className={styles.brandLink}>{item.category.brand}</p>
+                </Link>
+                {/* <p className={styles.brand}>{item.category.brand}</p> */}
                 <p className={styles.title}>{item.title}</p>
                 <p className={styles.price}>₾ {item.price}</p>
-                <Link className={styles.link} to={`/storepage/${item.name}`}>
-                  <p className={styles.color}>მაღაზია: {item.name}</p>
-                </Link>
+
                 <div className={styles.input}>
                   {!size && <p className={styles.sizeError}>{error}</p>}
-                  <label className={styles.selectLabel}>Size:</label>
+                  <label className={styles.selectLabel}>ზომა:</label>
                   <select
                     value={size}
                     onChange={(e) => setSize(e.target.value)}
                     className={styles.select}
                   >
-                    <option value="">Select Size</option>
+                    <option value="">მიუთითეთ ზომა</option>
                     {item.variants?.map((variant, index) => (
                       <option key={index} value={variant.size}>
                         {variant.size}
