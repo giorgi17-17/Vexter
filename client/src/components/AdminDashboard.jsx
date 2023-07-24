@@ -56,6 +56,8 @@ const AdminDashboard = () => {
   }, [user]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     let storeName;
     if (user) {
       storeName = user.displayName;
@@ -77,7 +79,7 @@ const AdminDashboard = () => {
     return () => {
       unsubb();
     };
-  }, [setStoreLocation, user]);
+  }, [setStoreLocation, user,selectedProduct]);
 
   const handleLogOut = async () => {
     try {

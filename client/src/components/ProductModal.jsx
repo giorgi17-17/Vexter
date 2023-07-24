@@ -4,21 +4,26 @@ import { AiOutlineClose } from "react-icons/ai";
 import { db } from "../firebase/firebase";
 import styles from "./css/productModal.module.css";
 import { colors } from "./assets";
+import uniqid from "uniqid";
 
 const ProductModal = ({ product, onClose }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editProductData, setEditProductData] = useState({ ...product });
-  const [selectedColors, setSelectedColors] = useState([]);
-  const [isExpanded, setIsExpanded] = useState(false);
+
+  // Add a new state variable to store the id of the selected variant to edit
+  const [selectedVariantId, setSelectedVariantId] = useState(null);
 
   const handleInputChange = (event) => {
     if (event.target.name === "size" || event.target.name === "color") {
+      // Copy the existing variants array from the editProductData
+      const updatedVariants = [...editProductData.variants];
+      // Update the selected variant with the new data
+      updatedVariants[selectedVariantId][event.target.name] =
+        event.target.value;
+      // Update the editProductData with the modified variants array
       setEditProductData({
         ...editProductData,
-        category: {
-          ...editProductData.category,
-          [event.target.name]: event.target.value.split(","),
-        },
+        variants: updatedVariants,
       });
     } else {
       setEditProductData({
@@ -28,27 +33,17 @@ const ProductModal = ({ product, onClose }) => {
     }
   };
 
-  const handleColorClick = (event, itemValue) => {
-    if (selectedColors.includes(itemValue)) {
-      setSelectedColors(
-        selectedColors.filter((selectedItem) => selectedItem !== itemValue)
-      );
-    } else {
-      setSelectedColors((prevSelectedItems) => [
-        ...prevSelectedItems,
-        itemValue,
-      ]);
-    }
+  const getSelectedDisplayColor = (variantColor) => {
+    const matchingColor = colors.find(
+      (colorObj) => colorObj.color === variantColor
+    );
+    return matchingColor ? matchingColor.displayColor : "";
   };
 
   const submitEdit = async (event) => {
     event.preventDefault();
     await setDoc(doc(db, "products", product.id), editProductData);
     setIsEditing(false);
-  };
-
-  const toggleExpansion = () => {
-    setIsExpanded(!isExpanded);
   };
 
   return (
@@ -61,21 +56,54 @@ const ProductModal = ({ product, onClose }) => {
           <div className={styles.right}>
             <h2>{product.title}</h2>
             <p>{product.name}</p>
-            <p>რაოდენობა {product.quantity}</p>
             <p>ფასი {product.price}</p>
-            <p>ზომები {product.category.size}</p>
-            <p>ფერი {product.category.color}</p>
-          </div>
-          <div className={styles.btnContainer}>
-            <button className={styles.closebtn} onClick={onClose}>
-              <AiOutlineClose size={"1.5rem"} />
-            </button>
-            <button
-              className={styles.editbtn}
-              onClick={() => setIsEditing(true)}
-            >
-              შეცვლა
-            </button>
+            {/* Display the selected color */}
+            {/* <p>
+              {getSelectedDisplayColor(
+                editProductData.variants[selectedVariantId]?.color
+              )}
+            </p> */}
+            <div className={styles.chooseVarint}>
+              <p className={styles.chooseVarintText}>
+                აირჩიეთ ვარინატი რომლის შეცვლაც გსურთ
+              </p>
+              <div className={styles.varintBoxes}>
+                {/* Render variant boxes */}
+                {editProductData.variants.map((variant, index) => {
+                  // Generate a unique id for the variant if it doesn't have one
+                  const variantId = variant.id || uniqid();
+                  const variantColor = variant.color;
+                  return (
+                    <div key={variantId} className={styles.variantBox}>
+                      <div>ზომა: {variant.size}</div>
+                      {/* Display the selected color */}
+                      <div>ფერი: {getSelectedDisplayColor(variantColor)}</div>
+                      <div>რაოდენობა: {variant.quantity}</div>
+                      <button
+                        className={styles.updaeBtn}
+                        onClick={() => {
+                          // Set the selected variant id when the "Update" button is clicked
+                          setSelectedVariantId(index);
+                          // Also set the form data to the selected variant for editing
+                          setEditProductData({
+                            ...editProductData,
+                            ...variant,
+                          });
+                          setIsEditing(true);
+                        }}
+                      >
+                        შეცვლა
+                      </button>
+                      <div className={styles.btnContainer}>
+                        <button className={styles.closebtn} onClick={onClose}>
+                          <AiOutlineClose size={"1.5rem"} />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </>
       ) : (
@@ -119,52 +147,56 @@ const ProductModal = ({ product, onClose }) => {
               className={styles.input}
               type="text"
               name="size"
-              value={editProductData.category.size.join(",")}
+              value={editProductData.variants[selectedVariantId]?.size || ""}
               onChange={handleInputChange}
             />
-            <p style={{ color: "red" }}>
-              ზომები შეიყვანეთ მძიმის დაშორებით. მაგ(41,42,43 ან s,l,m).
-            </p>
           </label>
-
-          <div className={styles.multiplecont}>
-            <div className={styles.selectbtn} onClick={toggleExpansion}>
-              <span className={styles.btnText}>ფერი</span>
-            </div>
-            {isExpanded && (
-              <ul className={styles.listItems}>
-                {colors.map((colorItem) => (
-                  <li
-                    className={styles.item}
-                    onClick={(event) => handleColorClick(event, colorItem)}
-                    value={colorItem}
-                    key={colorItem}
-                  >
-                    <span
-                      className={`${styles.itemText} ${
-                        selectedColors.includes(colorItem)
-                          ? styles.selected
-                          : ""
-                      }`}
-                    >
-                      {colorItem}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            )}
+          <label className={styles.colorlabel}>
+            ფერი
+            <select
+              className={styles.select}
+              onChange={(e) => {
+                const selectedColor = e.target.value;
+                // Update the selected variant's color with the new color value
+                const updatedVariants = [...editProductData.variants];
+                updatedVariants[selectedVariantId].color = selectedColor;
+                setEditProductData({
+                  ...editProductData,
+                  variants: updatedVariants,
+                });
+              }}
+              value={editProductData.variants[selectedVariantId]?.color || ""}
+            >
+              <option value="">აირჩიე ფერი</option>
+              {colors.map((color, i) => (
+                <option value={color.color} key={i}>
+                  {color.displayColor}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className={styles.label}>
+            რაოდენობა:
+            <input
+              className={styles.input}
+              type="text"
+              name="quantity"
+              value={editProductData.quantity}
+              onChange={handleInputChange}
+            />
+          </label>
+          <div className={styles.formBtns}>
+            <button type="submit" className={styles.save}>
+              შენახვა
+            </button>
+            <button
+              type="button"
+              className={styles.cancel}
+              onClick={() => setIsEditing(false)}
+            >
+              გაუქმება
+            </button>
           </div>
-
-          <button type="submit" className={styles.save}>
-            შენახვა
-          </button>
-          <button
-            type="button"
-            className={styles.cancel}
-            onClick={() => setIsEditing(false)}
-          >
-            გაუქმება
-          </button>
         </form>
       )}
     </div>

@@ -41,7 +41,7 @@ const AddProduct = () => {
   // const [isColorExpanded, setIsColorExpanded] = useState(false);
   // const [selectedColors, setSelectedColors] = useState([]);
   const [variants, setVariants] = useState([
-    { size: "", color: "", quantity: 0 },
+    { size: "", color: "", quantity: 0,  id: uniqid(), },
   ]);
   // const [clickedItem, setClickedItem] = useState(null);
   const imageInputRef = useRef();
@@ -68,7 +68,7 @@ const AddProduct = () => {
   const addVariant = () => {
     setVariants((oldVariants) => [
       ...oldVariants,
-      { size: "", color: "", quantity: 0 },
+      { size: "", color: "", quantity: 0,id: uniqid(), },
     ]);
   };
 
